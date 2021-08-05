@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="100">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/routeType"
+        android:background="@drawable/baseline_commute_24"
+        android:layout_marginHorizontal="10sp"
+        android:layout_marginVertical="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="703"
+        android:id="@+id/savedroute_name"
+        android:layout_marginHorizontal="10sp"
+        android:layout_marginVertical="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Oakleigh - Box Hill via Clayton"
+        android:id="@+id/savedroute_direction"
+        android:layout_marginHorizontal="10sp"
+        android:layout_marginVertical="5dp"/>
+
+</LinearLayout>
