@@ -49,9 +49,11 @@ public class DisruptionsListAdapter extends ArrayAdapter<Disruptions> {
 
         tvTitle.setText(disruption_title);
         tvTime.setText(disruption_time);
+        tvcolor1.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        tvcolor1.setBackgroundColor(Color.parseColor("#FFFFFF"));
         if (disruption_type == 0){ // Metro
             tvcolor1.setBackgroundColor(Color.parseColor("#3D9CE3"));
-            tvcolor2.setBackgroundColor(Color.parseColor("#3D9CE3");
+            tvcolor2.setBackgroundColor(Color.parseColor("#3D9CE3"));
         }
         if (disruption_type == 1){ // Tram
             tvcolor1.setBackgroundColor(Color.parseColor("#64B46B"));
@@ -65,6 +67,7 @@ public class DisruptionsListAdapter extends ArrayAdapter<Disruptions> {
             tvcolor1.setBackgroundColor(Color.parseColor("#B464A9"));
             tvcolor2.setBackgroundColor(Color.parseColor("#B464A9"));
         }
+
 
         return convertView;
     }
