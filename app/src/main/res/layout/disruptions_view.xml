@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<!--    Train: "#3D9CE3", Tram: #64B46B, Buses: #E88A20, Vline: #B464A9-->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/dis_color1"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:background="#3D9CE3"/>
+
+        <TextView
+            android:id="@+id/dis_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The 5:17pm Frankston to Stony Point service has been cancelled due to an equipment fault near Hastings." />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/dis_color2"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:background="#3D9CE3"/>
+
+        <TextView
+            android:id="@+id/dis_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Last Update: Sun 08 Aug 2021  04:50 pm" />
+    </TableRow>
+
+</TableLayout>
