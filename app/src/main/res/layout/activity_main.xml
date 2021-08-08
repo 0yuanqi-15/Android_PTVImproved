@@ -8,10 +8,18 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/nearbystopLabel"
+        android:id="@+id/homelabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:text="Home"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <TextView
+        android:id="@+id/nearbystopLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/homelabel"
         android:text="Nearby Stops:"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
