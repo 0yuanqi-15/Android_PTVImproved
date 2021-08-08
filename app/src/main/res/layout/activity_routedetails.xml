@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/routed_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/route_details"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/routed_routemap"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_below="@id/routed_title"
+        android:minHeight="400dp" />
+
+    <ListView
+        android:id="@+id/route_directionlist"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@id/routed_routemap" />
+
+
+</RelativeLayout>
