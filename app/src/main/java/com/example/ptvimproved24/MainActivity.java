@@ -2,6 +2,7 @@ package com.example.ptvimproved24;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -10,8 +11,6 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
-
     private static final String TAG = "MainActivity";
 
     @Override
@@ -23,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         generateNearStopList();
         generateSavedStopList();
         generateSavedRouteList();
+
     }
 
     public void generateNearStopList(){
