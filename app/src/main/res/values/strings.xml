@@ -1,4 +1,12 @@
 <resources>
-    <string name="app_name">PTVImproved24</string>
+    <string name="app_name">MyTimetable</string>
     <string name="route_details">Route Details</string>
+    <string name="title_activity_stopselection">stopselection</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="home">Home</string>
+    <string name="title_activity_stops">Stop's Name</string>
+    <string name="action_settings">Settings</string>
 </resources>
