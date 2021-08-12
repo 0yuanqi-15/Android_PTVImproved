@@ -3,23 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_distuptions">
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.ptvimproved24.ui.home.HomeFragment"
+        android:name="com.example.ptvimproved24.Fragment_Home"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
-
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.ptvimproved24.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
+        android:id="@+id/navigation_distuptions"
+        android:name="com.example.ptvimproved24.Fragment_Disruptions"
+        android:label="@string/title_disruptions"
+        tools:layout="@layout/fragment_disruptions" />
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.ptvimproved24.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_mapselect"
+        android:name="com.example.ptvimproved24.Fragment_StopSelect"
+        android:label="fragment_navigation_mapselect"
+        tools:layout="@layout/fragment_navigation_mapselect" />
+    <fragment
+        android:id="@+id/navigation_journeyPlanner"
+        android:name="com.example.ptvimproved24.Fragment_JourneyPlanner"
+        android:label="fragment_journey_planner"
+        tools:layout="@layout/fragment_journey_planner" />
 </navigation>

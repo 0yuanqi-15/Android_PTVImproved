@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
@@ -17,61 +18,16 @@
         android:layout_alignParentStart="true"
         app:menu="@menu/bottom_nav_menu" />
 
-    <TextView
-        android:id="@+id/homelabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:text="@string/home"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        />
-
-    <TextView
-        android:id="@+id/nearbystopLabel"
+    <fragment
+        android:id="@+id/nav_host_fragment_activity_main"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/homelabel"
-        android:text="Nearby Stops:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-    <ListView
-        android:id="@+id/nearStops_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxHeight="190sp"
-        android:layout_below="@+id/nearbystopLabel"
-        android:dividerHeight="2px" />
-
-    <TextView
-        android:id="@+id/SavedStopLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/nearStops_view"
-        android:layout_marginTop="10dp"
-        android:text="Saved Stops:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-    <ListView
-        android:id="@+id/SavedStop_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxHeight="190sp"
-        android:layout_below="@+id/SavedStopLabel" />
-
-    <TextView
-        android:id="@+id/savedRoute_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/SavedStop_view"
-        android:text="Saved Routes:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:layout_marginTop="10dp"/>
-
-    <ListView
-        android:id="@+id/savedRoutes_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxHeight="190sp"
-        android:layout_below="@+id/savedRoute_label" />
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/nav_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/mobile_navigation" />
 
 </RelativeLayout>

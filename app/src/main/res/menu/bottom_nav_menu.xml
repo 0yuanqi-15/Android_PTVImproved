@@ -12,7 +12,7 @@
         android:title="Maps" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_distuptions"
         android:icon="@drawable/baseline_multiple_stop_24"
         android:title="Journey Planner" />
 

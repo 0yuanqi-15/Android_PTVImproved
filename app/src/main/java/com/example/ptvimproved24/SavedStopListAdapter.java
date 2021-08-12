@@ -21,7 +21,6 @@ public class SavedStopListAdapter extends ArrayAdapter<SavedStop> {
         mResource = resource;
     }
 
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
