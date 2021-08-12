@@ -7,18 +7,18 @@
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation_map"
+        android:id="@+id/navigation_mapselect"
         android:icon="@drawable/outline_map_24"
-        android:title="Maps" />
+        android:title="@string/title_ss" />
+
+    <item
+        android:id="@+id/navigation_journey_planner"
+        android:icon="@drawable/baseline_multiple_stop_24"
+        android:title="@string/title_jp" />
 
     <item
         android:id="@+id/navigation_distuptions"
-        android:icon="@drawable/baseline_multiple_stop_24"
-        android:title="Journey Planner" />
-
-    <item
-        android:id="@+id/navigation_disruptions"
         android:icon="@drawable/baseline_bus_alert_24"
-        android:title="Disruptions" />
+        android:title="@string/title_disruptions" />
 
 </menu>

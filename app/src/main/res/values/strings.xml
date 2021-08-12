@@ -6,6 +6,8 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_disruptions">Disruptions</string>
+    <string name="title_jp">Journey Planner</string>
+    <string name="title_ss">Stop Selection</string>
     <string name="home">Home</string>
     <string name="large_text">To be replaced in strings xml</string>
     <string name="title_activity_stops">Stop Name</string>

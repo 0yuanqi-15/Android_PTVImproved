@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/navigation_distuptions">
+    app:startDestination="@id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -18,11 +18,11 @@
     <fragment
         android:id="@+id/navigation_mapselect"
         android:name="com.example.ptvimproved24.Fragment_StopSelect"
-        android:label="fragment_navigation_mapselect"
+        android:label="@string/title_ss"
         tools:layout="@layout/fragment_navigation_mapselect" />
     <fragment
-        android:id="@+id/navigation_journeyPlanner"
+        android:id="@+id/navigation_journey_planner"
         android:name="com.example.ptvimproved24.Fragment_JourneyPlanner"
-        android:label="fragment_journey_planner"
+        android:label="@string/title_jp"
         tools:layout="@layout/fragment_journey_planner" />
 </navigation>
