@@ -55,6 +55,7 @@ public class Fragment_Disruptions extends Fragment {
             System.out.println(commonDataRequest.disruptions());
             String url = commonDataRequest.disruptions();
             Request request = new Request.Builder().url(url).build();
+            StringBuilder builder = new StringBuilder();
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -65,8 +66,17 @@ public class Fragment_Disruptions extends Fragment {
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()){
                         System.out.println(response.body().string());
-                        Gson gson=new Gson();
+                        try {
+                            JSONObject alldisruptions = new JSONObject(builder.toString());
+//                            JSONArray array = alldisruptions.getJSONArray();
 
+
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             });

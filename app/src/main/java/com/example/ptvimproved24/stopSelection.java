@@ -2,6 +2,7 @@ package com.example.ptvimproved24;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,9 +44,10 @@ public class stopSelection extends FragmentActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng melb = new LatLng(-37.840935, 144.946457);
+        mMap.addMarker(new MarkerOptions().position(melb).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(melb));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(16.9f));
     }
+
 }
