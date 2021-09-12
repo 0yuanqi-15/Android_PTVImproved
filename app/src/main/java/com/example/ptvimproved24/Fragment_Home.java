@@ -5,23 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.ListFragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.ptvimproved24.NearStop;
-import com.example.ptvimproved24.NearStopListAdapter;
-import com.example.ptvimproved24.R;
-import com.example.ptvimproved24.SavedRoute;
-import com.example.ptvimproved24.SavedRouteListAdapter;
-import com.example.ptvimproved24.SavedStop;
-import com.example.ptvimproved24.SavedStopListAdapter;
 import com.example.ptvimproved24.databinding.FragmentHomeBinding;
 
 import java.util.ArrayList;
@@ -29,10 +17,11 @@ import java.util.ArrayList;
 public class Fragment_Home extends Fragment {
 
     private FragmentHomeBinding binding;
+    private StopHttpRequestHandler stopHttpRequestHandler;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
+        stopHttpRequestHandler = new StopHttpRequestHandler();
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -49,6 +38,7 @@ public class Fragment_Home extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        stopHttpRequestHandler.clear();
     }
 
     public void generateNearStopList(View v){
@@ -72,10 +62,18 @@ public class Fragment_Home extends Fragment {
         stop3time.add("Now");stop3time.add("52 mins");stop3time.add("06:29 PM");
         NearStop stop3=new NearStop("Albert Park","Graham St/ Pickles St",162,stop3route,stop3time);
 
-        ArrayList<NearStop> nearStopList = new ArrayList<>();
-        nearStopList.add(stop1);
-        nearStopList.add(stop2);
-        nearStopList.add(stop3);
+//        ArrayList<NearStop> nearStopList = new ArrayList<>();
+//        nearStopList.add(stop1);
+//        nearStopList.add(stop2);
+//        nearStopList.add(stop3);
+
+        ArrayList<NearStop> nearStopList = null;
+
+        stopHttpRequestHandler.getStopsFromLocation(-37.818078f, 144.96681f);
+
+        while (nearStopList == null) {
+            nearStopList = stopHttpRequestHandler.getNearStopArray();
+        }
 
         NearStopListAdapter adapter = new NearStopListAdapter(v.getContext(),R.layout.nearstop_view, nearStopList);
         mListView.setAdapter(adapter);
