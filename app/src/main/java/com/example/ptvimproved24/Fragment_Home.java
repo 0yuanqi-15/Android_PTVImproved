@@ -18,18 +18,23 @@ public class Fragment_Home extends Fragment {
 
     private FragmentHomeBinding binding;
     private StopHttpRequestHandler stopHttpRequestHandler;
+    ListView mListView;
+    NearStopListAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        stopHttpRequestHandler = new StopHttpRequestHandler();
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mListView = (ListView) view.findViewById(R.id.nearStops_view);
+        adapter = new NearStopListAdapter(view.getContext(),R.layout.nearstop_view, new ArrayList<>());
+        mListView.setAdapter(adapter);
+        stopHttpRequestHandler = new StopHttpRequestHandler(getActivity());
 
-        generateNearStopList(view);
+        generateNearStopList();
         generateSavedStopList(view);
         generateSavedRouteList(view);
     }
@@ -38,11 +43,9 @@ public class Fragment_Home extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        stopHttpRequestHandler.clear();
     }
 
-    public void generateNearStopList(View v){
-        ListView mListView = (ListView) v.findViewById(R.id.nearStops_view);
+    public void generateNearStopList(){
 
         ArrayList<String> stop1route = new ArrayList<>();
         stop1route.add("606");stop1route.add("606");stop1route.add("606");
@@ -67,16 +70,7 @@ public class Fragment_Home extends Fragment {
 //        nearStopList.add(stop2);
 //        nearStopList.add(stop3);
 
-        ArrayList<NearStop> nearStopList = null;
-
-        stopHttpRequestHandler.getStopsFromLocation(-37.818078f, 144.96681f);
-
-        while (nearStopList == null) {
-            nearStopList = stopHttpRequestHandler.getNearStopArray();
-        }
-
-        NearStopListAdapter adapter = new NearStopListAdapter(v.getContext(),R.layout.nearstop_view, nearStopList);
-        mListView.setAdapter(adapter);
+        stopHttpRequestHandler.getStopsFromLocation(adapter, -37.818078f, 144.96681f);
     }
 
     public void generateSavedStopList(View v){

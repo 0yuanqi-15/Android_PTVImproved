@@ -10,6 +10,7 @@ public class NearStop {
     private ArrayList<String> routes;
     private ArrayList<String> times;
     private int distance;
+    private int routeType;
 
     public NearStop(String suburb, String stopname, String stopid, ArrayList<String> routes, ArrayList<String> times) {
         this.suburb = suburb;
@@ -84,5 +85,13 @@ public class NearStop {
 
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public int getRouteType() {
+        return routeType;
+    }
+
+    public void setRouteType(int routeType) {
+        this.routeType = routeType;
     }
 }

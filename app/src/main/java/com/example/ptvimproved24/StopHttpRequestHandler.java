@@ -1,6 +1,7 @@
 package com.example.ptvimproved24;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,15 +18,11 @@ import okhttp3.Response;
 
 public class StopHttpRequestHandler {
     private OkHttpClient client;
-    private ArrayList<NearStop> nearStopArray;
+    private FragmentActivity activity;
 
-    public StopHttpRequestHandler() {
+    public StopHttpRequestHandler(FragmentActivity act) {
         client = new OkHttpClient();
-        nearStopArray = null;
-    }
-
-    public void clear() {
-        this.nearStopArray = null;
+        activity = act;
     }
 
     private ArrayList<String> getRoutesByStop(JSONArray routes) throws JSONException {
@@ -58,17 +55,18 @@ public class StopHttpRequestHandler {
                 timeArray.add("15:00");
             }
             NearStop nearStop = new NearStop(stopSuburb, stopName, distance, routesArray, timeArray);
+            nearStop.setStopid(stopId);
+            nearStop.setRouteType(routeType);
             nearStops.add(nearStop);
         }
         return nearStops;
     }
 
-    public void getStopsFromLocation(float latitude, float longitude) {
+    public void getStopsFromLocation(NearStopListAdapter adapter, float latitude, float longitude) {
         try {
             String url = commonDataRequest.nearByStops(latitude, longitude);
             System.out.println(url);
             Request request = new Request.Builder().url(url).build();
-            ArrayList<NearStop> stopArray;
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -82,7 +80,14 @@ public class StopHttpRequestHandler {
                         try {
                             JSONObject jsonObj = new JSONObject(responseBody);
                             JSONArray stops = jsonObj.getJSONArray("stops");
-                            nearStopArray = getNearStopsFromJson(stops);
+                            ArrayList<NearStop> nearStopsArray = getNearStopsFromJson(stops);
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.addAll(nearStopsArray);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -92,13 +97,5 @@ public class StopHttpRequestHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public ArrayList<NearStop> getNearStopArray() {
-        return nearStopArray;
-    }
-
-    public void setNearStopArray(ArrayList<NearStop> nearStopArray) {
-        this.nearStopArray = nearStopArray;
     }
 }

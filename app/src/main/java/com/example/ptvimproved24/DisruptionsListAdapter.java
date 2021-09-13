@@ -16,12 +16,12 @@ import org.w3c.dom.Text;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class DisruptionsListAdapter extends ArrayAdapter<Disruptions> {
+public class DisruptionListAdapter extends ArrayAdapter<Disruption> {
 
     private Context mContext;
     int mResource;
 
-    public DisruptionsListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Disruptions> objects) {
+    public DisruptionListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Disruption> objects) {
         super(context, resource, objects);
         mContext =context;
         mResource = resource;
@@ -42,7 +42,7 @@ public class DisruptionsListAdapter extends ArrayAdapter<Disruptions> {
         ArrayList<Stoppings> affectedStops = getItem(position).getAffectedStops();
         int affectedRoute_type = -1;
 
-        Disruptions disruptions = new Disruptions( disruptionid,title,referenceLink,title,disruption_status,publishDatetime,affectedRoutes,affectedStops,display_status);
+        Disruption disruptions = new Disruption(disruptionid,title,referenceLink,title,disruption_status,publishDatetime,affectedRoutes,affectedStops,display_status);
 
         if (affectedRoutes.size()>0){
             affectedRoute_type = affectedRoutes.get(0).getRoute_type();

@@ -30,6 +30,9 @@ public class Fragment_Disruptions extends Fragment {
 
     private FragmentHomeBinding binding;
     OkHttpClient client = new OkHttpClient();
+    ListView mListView;
+    DisruptionsListAdapter adapter;
+    DisruptionHttpRequestHandler disruptionsListAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,6 +45,10 @@ public class Fragment_Disruptions extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mListView = (ListView) view.findViewById(R.id.fragments_view);
+        adapter = new DisruptionsListAdapter(view.getContext(),R.layout.disruptions_view, new ArrayList<>());
+        mListView.setAdapter(adapter);
+        disruptionsListAdapter = new DisruptionHttpRequestHandler(getActivity());
         getDisruptionInfo(view);
     }
 
@@ -50,6 +57,7 @@ public class Fragment_Disruptions extends Fragment {
         super.onDestroyView();
     }
 
+    // From Wenkai
     private ArrayList<Routes> getRoutesListFromJSONArray(JSONArray routesArray) throws JSONException{
         ArrayList<Routes> routes = new ArrayList<>();
 
@@ -185,5 +193,10 @@ public class Fragment_Disruptions extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // From Mutian
+    public void getDisruptionInfo(){
+        disruptionsListAdapter.getAllDisruptions(adapter);
+
     }
 }
