@@ -108,7 +108,7 @@ public class commonDataRequest {
     }
 
     public static String nearByStops(float latitude, float longtitude) throws Exception {    // View all stops near a specific location
-        return buildAPIrequest("/v3/stops/location/"+latitude+","+longtitude+"?max_results=3&max_distance=1500");
+        return buildAPIrequest("/v3/stops/location/"+latitude+","+longtitude+"?max_results=5&max_distance=2000");
     }
 
     public static String nearByStopsOnSelect(float latitude, float longtitude) throws Exception {    // View all stops near a specific location

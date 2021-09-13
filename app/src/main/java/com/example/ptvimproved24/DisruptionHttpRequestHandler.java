@@ -70,7 +70,7 @@ public class DisruptionHttpRequestHandler {
             JSONObject jsonObject = stopsArray.getJSONObject(j);
             int stops_id = jsonObject.getInt("stop_id");
             String stops_name = jsonObject.getString("stop_name");
-            Stop s = new Stop(Integer.toString(stops_id),stops_name);
+            Stop s = new Stop(stops_id,stops_name);
             stopsList.add(s);
         }
         return stopsList;

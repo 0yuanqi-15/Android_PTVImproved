@@ -52,8 +52,7 @@ public class StopHttpRequestHandler {
             }
             ArrayList<String> timeArray = new ArrayList<>();
             for (int j = 0; j < routesArray.size(); j ++) {
-
-                timeArray.add("15:00");
+                timeArray.add("15:00"); // 再次异步请求Departure,根据Stop id,route type; 获得后续的班车信息
             }
             Stop stop = new Stop(stopSuburb, stopName, distance, routesArray, timeArray);
             stop.setStopid(stopId);
