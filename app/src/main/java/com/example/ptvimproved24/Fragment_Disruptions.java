@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.ptvimproved24.databinding.FragmentHomeBinding;
 
@@ -41,7 +42,7 @@ public class Fragment_Disruptions extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getDisruptionInfo();
+        getDisruptionInfo(view);
     }
 
     @Override
@@ -49,28 +50,65 @@ public class Fragment_Disruptions extends Fragment {
         super.onDestroyView();
     }
 
+    private ArrayList<Routes> getRoutesListFromJSONArray(JSONArray routesArray) throws JSONException{
+        ArrayList<Routes> routes = new ArrayList<>();
+
+        for (int j=0;j<routesArray.length();j++){
+            JSONObject jsonobject = routesArray.getJSONObject(j);
+            int route_type = jsonobject.getInt("route_type");
+            int route_id = jsonobject.getInt("route_id");
+            String route_name = jsonobject.getString("route_name");
+            String route_number = jsonobject.getString("route_number");
+            String route_gtfs_id = jsonobject.getString("route_gtfs_id");
+            String direction = jsonobject.getString("direction");
+            Routes r = new Routes(route_type,route_id,route_name,route_number,route_gtfs_id,direction);
+            routes.add(r);
+        }
+
+        return routes;
+    }
+
+    private ArrayList<Stoppings> getStopsListFromJSArray(JSONArray stopsArray) throws JSONException{
+        ArrayList<Stoppings> stopsList = new ArrayList<>();
+        for (int j=0; j<stopsArray.length();j++){
+            JSONObject jsonObject = stopsArray.getJSONObject(j);
+            int stops_id = jsonObject.getInt("stops_id");
+            String stops_name = jsonObject.getString("stops_name");
+            Stoppings s = new Stoppings(stops_id,stops_name);
+            stopsList.add(s);
+        }
+        return stopsList;
+    }
     private ArrayList<Disruptions> getArrayListFromJsonArray(JSONArray jsonArray) throws JSONException {
         ArrayList<Disruptions> result = new ArrayList<>();
+
         for(int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             int id = jsonObject.getInt("disruption_id");
             String title = jsonObject.getString("title");
-            String details = jsonObject.getString("description");
-            String status = jsonObject.getString("disruption_status");
-            String dateTime = jsonObject.getString("from_date");
             String reflink = jsonObject.getString("url");
-            String type = jsonObject.getString("disruption_type");
+            String description = jsonObject.getString("description");
+            String disruption_status = jsonObject.getString("disruption_status");
+            String published_on = jsonObject.getString("published_on");
+            String from_date = jsonObject.getString("from_date");
+            String to_date = jsonObject.getString("to_date");
+            String disruption_type = jsonObject.getString("disruption_type");
+            ArrayList<Routes> routesinfo = getRoutesListFromJSONArray(jsonObject.getJSONArray("routes"));
+            ArrayList<Stoppings> stopsList = getStopsListFromJSArray(jsonObject.getJSONArray("stops"));
+            boolean display_on_board = jsonObject.getBoolean("display_on_board");
+            boolean display_status = jsonObject.getBoolean("display_status");
+
             //TODO: create mapping between type String and int
-            Disruptions d = new Disruptions(id, title, dateTime, 1);
-            d.setDetails(details);
-            d.setStatus(status);
+            Disruptions d = new Disruptions(id,title,reflink,description,disruption_status,published_on,routesinfo,stopsList,display_status);
+            d.setDescription(description);
+            d.setDisplay_status(display_status);
             d.setReflink(reflink);
             result.add(d);
         }
         return result;
     }
 
-    public void getDisruptionInfo(){
+    public void getDisruptionInfo(View v){
         try {
             System.out.println(commonDataRequest.disruptions());
             String url = commonDataRequest.disruptions();
@@ -119,6 +157,9 @@ public class Fragment_Disruptions extends Fragment {
                             ArrayList<Disruptions> skybusArray = getArrayListFromJsonArray(skybus);
                             ArrayList<Disruptions> taxiArray = getArrayListFromJsonArray(taxi);
 
+//                            ListView disruptionListview = v.findViewById(R.id.disruptions_listview);
+//                            DisruptionsListAdapter adapter = new DisruptionsListAdapter(v.getContext(),R.layout.disruptions_view,selectedDisruptionList);
+
 //                            System.out.println(generalArray.size());
 //                            System.out.println(metroTrainArray.size());
 //                            System.out.println(metroTramArray.size());
@@ -133,10 +174,10 @@ public class Fragment_Disruptions extends Fragment {
 //                            System.out.println(interstateTrainArray.size());
 //                            System.out.println(skybusArray.size());
 //                            System.out.println(taxiArray.size());
-
                             //TODO: add the data to UI
-                        } catch (JSONException e) {
+                        } catch (JSONException e){
                             e.printStackTrace();
+
                         }
                     }
                 }
