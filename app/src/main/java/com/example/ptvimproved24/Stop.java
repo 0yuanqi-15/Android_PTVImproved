@@ -6,13 +6,13 @@ public class Stop {
 
     private String suburb;
     private String stopname;
-    private String stopid;
+    private int stopid;
     private ArrayList<String> routes;
     private ArrayList<String> times;
     private int distance;
     private int routeType;
 
-    public Stop(String suburb, String stopname, String stopid, ArrayList<String> routes, ArrayList<String> times) {
+    public Stop(String suburb, int stopid, String stopname, ArrayList<String> routes, ArrayList<String> times) {
         this.suburb = suburb;
         this.stopname = stopname;
         this.stopid = stopid;
@@ -28,13 +28,13 @@ public class Stop {
         this.distance = distance;
     }
 
-    public Stop(String suburb, String stopname, String stopid) {
+    public Stop(String suburb, String stopname, int stopid) {
         this.suburb = suburb;
         this.stopname = stopname;
         this.stopid = stopid;
     }
 
-    public Stop (String stopId, String stopName) {
+    public Stop (int stopId, String stopName) {
         this.stopid = stopId;
         this.stopname = stopName;
     }
@@ -55,11 +55,11 @@ public class Stop {
         this.stopname = stopname;
     }
 
-    public String getStopid() {
+    public int getStopid() {
         return stopid;
     }
 
-    public void setStopid(String stopid) {
+    public void setStopid(int stopid) {
         this.stopid = stopid;
     }
 

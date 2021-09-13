@@ -41,7 +41,7 @@ public class StopHttpRequestHandler {
             int distance = currentStop.getInt("stop_distance");
             String stopSuburb = currentStop.getString("stop_suburb");
             String stopName = currentStop.getString("stop_name");
-            String stopId = currentStop.getString("stop_id");
+            int stopId = currentStop.getInt("stop_id");
             int routeType = currentStop.getInt("route_type");
             JSONArray routes = currentStop.getJSONArray("routes");
             ArrayList<String> routesArray = new ArrayList<>();
@@ -52,6 +52,7 @@ public class StopHttpRequestHandler {
             }
             ArrayList<String> timeArray = new ArrayList<>();
             for (int j = 0; j < routesArray.size(); j ++) {
+
                 timeArray.add("15:00");
             }
             Stop stop = new Stop(stopSuburb, stopName, distance, routesArray, timeArray);
@@ -81,10 +82,25 @@ public class StopHttpRequestHandler {
                             JSONObject jsonObj = new JSONObject(responseBody);
                             JSONArray stops = jsonObj.getJSONArray("stops");
                             ArrayList<Stop> stopsArray = getNearStopsFromJson(stops);
+                            ArrayList<Stop> dedupStopsArray = new ArrayList<>();
+
+                            for (int i=0;i<stopsArray.size();i++){
+                                boolean duplicate = false;
+                                for (int j=0;j<dedupStopsArray.size();j++){
+                                    if (stopsArray.get(i).getStopid()==dedupStopsArray.get(j).getStopid()){
+                                        duplicate= true;
+                                        break;
+                                    }
+                                }
+                                if (!duplicate){
+                                    dedupStopsArray.add(stopsArray.get(i));
+                                }
+                            }
+
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    adapter.addAll(stopsArray);
+                                    adapter.addAll(dedupStopsArray);
                                     adapter.notifyDataSetChanged();
                                 }
                             });
