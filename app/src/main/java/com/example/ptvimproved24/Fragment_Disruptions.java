@@ -12,18 +12,9 @@ import android.widget.ListView;
 
 import com.example.ptvimproved24.databinding.FragmentHomeBinding;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 
 public class Fragment_Disruptions extends Fragment {
@@ -32,7 +23,7 @@ public class Fragment_Disruptions extends Fragment {
     OkHttpClient client = new OkHttpClient();
     ListView mListView;
     DisruptionListAdapter adapter;
-    DisruptionHttpRequestHandler disruptionsListAdapter;
+    DisruptionHttpRequestHandler disruptionHttpRequestHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +39,7 @@ public class Fragment_Disruptions extends Fragment {
         mListView = (ListView) view.findViewById(R.id.fragments_view);
         adapter = new DisruptionListAdapter(view.getContext(),R.layout.disruptions_view, new ArrayList<>());
         mListView.setAdapter(adapter);
-        disruptionsListAdapter = new DisruptionHttpRequestHandler(getActivity());
+        disruptionHttpRequestHandler = new DisruptionHttpRequestHandler(getActivity());
         getDisruptionInfo();
     }
 
@@ -59,7 +50,7 @@ public class Fragment_Disruptions extends Fragment {
 
         // From Mutian
     public void getDisruptionInfo(){
-        disruptionsListAdapter.getAllDisruptions(adapter);
+        disruptionHttpRequestHandler.getAllDisruptions(adapter);
 
     }
 }
