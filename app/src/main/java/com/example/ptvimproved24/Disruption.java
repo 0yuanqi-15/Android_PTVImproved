@@ -32,7 +32,7 @@ public class Disruption {
         this.display_status = display_status;
     }
 
-    public Disruption(int disruptionid, String title, String datetime, int type) {
+    public Disruption(int disruptionid, String title, String reflink, String description, String disruption_status, String publishDatetime, ArrayList<Routes> affectedRoutes, ArrayList<Stoppings> affectedStops, boolean display_status) {
         this.disruptionid = disruptionid;
         this.title = title;
         this.reflink = reflink;
@@ -44,14 +44,13 @@ public class Disruption {
         this.display_status = display_status;
     }
 
+    public Disruption(int disruptionid, String title, String datetime, int type) {
         this.disruptionid = disruptionid;
         this.title = title;
         this.reflink = reflink;
         this.description = description;
         this.disruption_status = disruption_status;
         this.publishDatetime = publishDatetime;
-        this.affectDatetimeFrom = affectDatetimeFrom;
-        this.affectDatetimeUntil = affectDatetimeUntil;
         this.affectedRoutes = affectedRoutes;
         this.affectedStops = affectedStops;
         this.display_status = display_status;
@@ -158,11 +157,11 @@ public class Disruption {
         return "Disruptions{" +
                 "disruptionid=" + disruptionid +
                 ", title='" + title + '\'' +
-                ", details='" + details + '\'' +
-                ", status='" + status + '\'' +
-                ", datetime='" + datetime + '\'' +
+                ", details='" + description + '\'' +
+                ", status='" + disruption_status + '\'' +
+                ", datetime='" + publishDatetime + '\'' +
                 ", reflink='" + reflink + '\'' +
-                ", type=" + type +
+                ", type=" + disruption_type +
                 '}';
     }
 }

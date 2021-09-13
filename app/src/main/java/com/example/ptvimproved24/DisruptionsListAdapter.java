@@ -16,7 +16,7 @@ import org.w3c.dom.Text;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class DisruptionListAdapter extends ArrayAdapter<Disruption> {
+class DisruptionListAdapter extends ArrayAdapter<Disruption> {
 
     private Context mContext;
     int mResource;
