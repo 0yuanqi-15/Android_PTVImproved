@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class DisruptionsListAdapter extends ArrayAdapter<Disruptions> {
@@ -31,13 +32,21 @@ public class DisruptionsListAdapter extends ArrayAdapter<Disruptions> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 //        return super.getView(position, convertView, parent);
 
-        String disruption_title = getItem(position).getTitle();
-        String disruption_time = getItem(position).getDatetime();
-        int disruption_id = getItem(position).getDisruptionid();
-        int disruption_type = getItem(position).getType();
+        String title = getItem(position).getTitle();
+        String publishDatetime = getItem(position).getPublishDatetime();
+        String disruption_status = getItem(position).getDisruption_status();
+        String referenceLink = getItem(position).getReflink();
+        int disruptionid = getItem(position).getDisruptionid();
+        boolean display_status = getItem(position).isDisplay_status();
+        ArrayList<Routes> affectedRoutes = getItem(position).getAffectedRoutes();
+        ArrayList<Stoppings> affectedStops = getItem(position).getAffectedStops();
+        int affectedRoute_type = -1;
 
+        Disruptions disruptions = new Disruptions( disruptionid,title,referenceLink,title,disruption_status,publishDatetime,affectedRoutes,affectedStops,display_status);
 
-        Disruptions disruptions = new Disruptions(disruption_id,disruption_title,disruption_time,disruption_type);
+        if (affectedRoutes.size()>0){
+            affectedRoute_type = affectedRoutes.get(0).getRoute_type();
+        }
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
@@ -47,23 +56,23 @@ public class DisruptionsListAdapter extends ArrayAdapter<Disruptions> {
         TextView tvcolor1 = convertView.findViewById(R.id.dis_color1);
         TextView tvcolor2 = convertView.findViewById(R.id.dis_color2);
 
-        tvTitle.setText(disruption_title);
-        tvTime.setText(disruption_time);
+        tvTitle.setText(title);
+        tvTime.setText(publishDatetime);
         tvcolor1.setBackgroundColor(Color.parseColor("#FFFFFF"));
         tvcolor1.setBackgroundColor(Color.parseColor("#FFFFFF"));
-        if (disruption_type == 0){ // Metro
+        if (affectedRoute_type == 0){ // Metro
             tvcolor1.setBackgroundColor(Color.parseColor("#3D9CE3"));
             tvcolor2.setBackgroundColor(Color.parseColor("#3D9CE3"));
         }
-        if (disruption_type == 1){ // Tram
+        if (affectedRoute_type == 1){ // Tram
             tvcolor1.setBackgroundColor(Color.parseColor("#64B46B"));
             tvcolor2.setBackgroundColor(Color.parseColor("#64B46B"));
         }
-        if (disruption_type == 2){ // Bus
+        if (affectedRoute_type == 2 || affectedRoute_type == 4){ // Bus, Regional Bus, Night Bus
             tvcolor1.setBackgroundColor(Color.parseColor("#E88A20"));
             tvcolor2.setBackgroundColor(Color.parseColor("#E88A20"));
         }
-        if (disruption_type == 3){ // Vline
+        if (affectedRoute_type == 3){ // Vline
             tvcolor1.setBackgroundColor(Color.parseColor("#B464A9"));
             tvcolor2.setBackgroundColor(Color.parseColor("#B464A9"));
         }

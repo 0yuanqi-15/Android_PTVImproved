@@ -1,33 +1,69 @@
 package com.example.ptvimproved24;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Disruptions {
     private int disruptionid;
     private String title;
-    private String details;
-    private String status;
-    private String datetime;
     private String reflink;
-    private int type;
+    private String description;
+    private String disruption_status;
+    private String disruption_type;
+    private String publishDatetime;
+    private String affectDatetimeFrom;
+    private String affectDatetimeUntil;
+    private ArrayList<Routes> affectedRoutes;
+    private ArrayList<Stoppings> affectedStops;
+    private boolean display_status;
 
-    public Disruptions(int disruptionid, String title, String details, String status, String datetime, String reflink, int type) {
+    public Disruptions(int disruptionid, String title, String reflink, String description, String disruption_status, String disruption_type, String publishDatetime, String affectDatetimeFrom, String affectDatetimeUntil, ArrayList<Routes> affectedRoutes, ArrayList<Stoppings> affectedStops, boolean display_status) {
         this.disruptionid = disruptionid;
         this.title = title;
-        this.details = details;
-        this.status = status;
-        this.datetime = datetime;
         this.reflink = reflink;
-        this.type = type;
+        this.description = description;
+        this.disruption_status = disruption_status;
+        this.disruption_type = disruption_type;
+        this.publishDatetime = publishDatetime;
+        this.affectDatetimeFrom = affectDatetimeFrom;
+        this.affectDatetimeUntil = affectDatetimeUntil;
+        this.affectedRoutes = affectedRoutes;
+        this.affectedStops = affectedStops;
+        this.display_status = display_status;
     }
 
-    public Disruptions(int disruptionid, String title, String datetime, int type) {
+    public Disruptions(int disruptionid, String title, String reflink, String description, String disruption_status, String publishDatetime, ArrayList<Routes> affectedRoutes, ArrayList<Stoppings> affectedStops, boolean display_status) {
         this.disruptionid = disruptionid;
         this.title = title;
-        this.datetime = datetime;
-        this.type = type;
+        this.reflink = reflink;
+        this.description = description;
+        this.disruption_status = disruption_status;
+        this.publishDatetime = publishDatetime;
+        this.affectedRoutes = affectedRoutes;
+        this.affectedStops = affectedStops;
+        this.display_status = display_status;
+    }
+
+    public Disruptions(int disruptionid, String title, String reflink, String description, String disruption_status, String publishDatetime, String affectDatetimeFrom, String affectDatetimeUntil, ArrayList<Routes> affectedRoutes, ArrayList<Stoppings> affectedStops, boolean display_status) {
+        this.disruptionid = disruptionid;
+        this.title = title;
+        this.reflink = reflink;
+        this.description = description;
+        this.disruption_status = disruption_status;
+        this.publishDatetime = publishDatetime;
+        this.affectDatetimeFrom = affectDatetimeFrom;
+        this.affectDatetimeUntil = affectDatetimeUntil;
+        this.affectedRoutes = affectedRoutes;
+        this.affectedStops = affectedStops;
+        this.display_status = display_status;
     }
 
     public int getDisruptionid() {
         return disruptionid;
+    }
+
+    public void setDisruptionid(int disruptionid) {
+        this.disruptionid = disruptionid;
     }
 
     public String getTitle() {
@@ -38,34 +74,6 @@ public class Disruptions {
         this.title = title;
     }
 
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getDatetime() {
-        return datetime;
-    }
-
-    public void setDatetime(String datetime) {
-        this.datetime = datetime;
-    }
-
     public String getReflink() {
         return reflink;
     }
@@ -74,7 +82,75 @@ public class Disruptions {
         this.reflink = reflink;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDisruption_status() {
+        return disruption_status;
+    }
+
+    public void setDisruption_status(String disruption_status) {
+        this.disruption_status = disruption_status;
+    }
+
+    public String getDisruption_type() {
+        return disruption_type;
+    }
+
+    public void setDisruption_type(String disruption_type) {
+        this.disruption_type = disruption_type;
+    }
+
+    public String getPublishDatetime() {
+        return publishDatetime;
+    }
+
+    public void setPublishDatetime(String publishDatetime) {
+        this.publishDatetime = publishDatetime;
+    }
+
+    public String getAffectDatetimeFrom() {
+        return affectDatetimeFrom;
+    }
+
+    public void setAffectDatetimeFrom(String affectDatetimeFrom) {
+        this.affectDatetimeFrom = affectDatetimeFrom;
+    }
+
+    public String getAffectDatetimeUntil() {
+        return affectDatetimeUntil;
+    }
+
+    public void setAffectDatetimeUntil(String affectDatetimeUntil) {
+        this.affectDatetimeUntil = affectDatetimeUntil;
+    }
+
+    public ArrayList<Routes> getAffectedRoutes() {
+        return affectedRoutes;
+    }
+
+    public void setAffectedRoutes(ArrayList<Routes> affectedRoutes) {
+        this.affectedRoutes = affectedRoutes;
+    }
+
+    public ArrayList<Stoppings> getAffectedStops() {
+        return affectedStops;
+    }
+
+    public void setAffectedStops(ArrayList<Stoppings> affectedStops) {
+        this.affectedStops = affectedStops;
+    }
+
+    public boolean isDisplay_status() {
+        return display_status;
+    }
+
+    public void setDisplay_status(boolean display_status) {
+        this.display_status = display_status;
     }
 }
