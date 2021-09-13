@@ -32,6 +32,15 @@ public class Routes {
         this.route_gtfs_id = route_gtfs_id;
     }
 
+    public Routes(int route_id, String route_gtfs_id){
+        this.route_id = route_id;
+        this.route_gtfs_id = route_gtfs_id;
+    }
+
+    public Routes(int route_type){
+        this.route_type = route_type;
+    }
+
     public int getRoute_type() {
         return route_type;
     }

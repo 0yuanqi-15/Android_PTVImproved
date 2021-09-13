@@ -105,6 +105,7 @@ public class Disruption {
     }
 
     public String getPublishDatetime() {
+        publishDatetime = publishDatetime.replace("T"," ").replace("Z","");
         return publishDatetime;
     }
 

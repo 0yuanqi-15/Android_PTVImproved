@@ -48,9 +48,7 @@ public class Fragment_Disruptions extends Fragment {
         super.onDestroyView();
     }
 
-        // From Mutian
     public void getDisruptionInfo(){
         disruptionHttpRequestHandler.getAllDisruptions(adapter);
-
     }
 }
