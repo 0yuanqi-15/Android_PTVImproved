@@ -11,16 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
-public class DisruptionsListAdapter extends ArrayAdapter<Disruptions> {
+public class DisruptionsListAdapter extends ArrayAdapter<Disruption> {
 
     private Context mContext;
     int mResource;
 
-    public DisruptionsListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Disruptions> objects) {
+    public DisruptionsListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Disruption> objects) {
         super(context, resource, objects);
         mContext =context;
         mResource = resource;
@@ -37,7 +35,7 @@ public class DisruptionsListAdapter extends ArrayAdapter<Disruptions> {
         int disruption_type = getItem(position).getType();
 
 
-        Disruptions disruptions = new Disruptions(disruption_id,disruption_title,disruption_time,disruption_type);
+        Disruption disruption = new Disruption(disruption_id,disruption_title,disruption_time,disruption_type);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);

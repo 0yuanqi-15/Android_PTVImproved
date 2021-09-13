@@ -1,6 +1,6 @@
 package com.example.ptvimproved24;
 
-public class Disruptions {
+public class Disruption {
     private int disruptionid;
     private String title;
     private String details;
@@ -9,7 +9,7 @@ public class Disruptions {
     private String reflink;
     private int type;
 
-    public Disruptions(int disruptionid, String title, String details, String status, String datetime, String reflink, int type) {
+    public Disruption(int disruptionid, String title, String details, String status, String datetime, String reflink, int type) {
         this.disruptionid = disruptionid;
         this.title = title;
         this.details = details;
@@ -19,7 +19,7 @@ public class Disruptions {
         this.type = type;
     }
 
-    public Disruptions(int disruptionid, String title, String datetime, int type) {
+    public Disruption(int disruptionid, String title, String datetime, int type) {
         this.disruptionid = disruptionid;
         this.title = title;
         this.datetime = datetime;
@@ -76,5 +76,18 @@ public class Disruptions {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Disruptions{" +
+                "disruptionid=" + disruptionid +
+                ", title='" + title + '\'' +
+                ", details='" + details + '\'' +
+                ", status='" + status + '\'' +
+                ", datetime='" + datetime + '\'' +
+                ", reflink='" + reflink + '\'' +
+                ", type=" + type +
+                '}';
     }
 }
