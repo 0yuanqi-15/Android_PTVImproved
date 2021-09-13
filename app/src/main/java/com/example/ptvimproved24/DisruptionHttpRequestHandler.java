@@ -47,8 +47,8 @@ public class DisruptionHttpRequestHandler {
         ArrayList<Stoppings> stopsList = new ArrayList<>();
         for (int j=0; j<stopsArray.length();j++){
             JSONObject jsonObject = stopsArray.getJSONObject(j);
-            int stops_id = jsonObject.getInt("stops_id");
-            String stops_name = jsonObject.getString("stops_name");
+            int stops_id = jsonObject.getInt("stop_id");
+            String stops_name = jsonObject.getString("stop_name");
             Stoppings s = new Stoppings(stops_id,stops_name);
             stopsList.add(s);
         }
