@@ -14,7 +14,7 @@ public class Disruption {
     private String affectDatetimeFrom;
     private String affectDatetimeUntil;
     private ArrayList<Routes> affectedRoutes;
-    private ArrayList<Stoppings> affectedStops;
+    private ArrayList<Stop> affectedStops;
     private boolean display_status;
 
     public Disruption(int disruptionid, String title, String details, String status, String datetime, String reflink, int type) {
@@ -32,7 +32,7 @@ public class Disruption {
         this.display_status = display_status;
     }
 
-    public Disruption(int disruptionid, String title, String reflink, String description, String disruption_status, String publishDatetime, ArrayList<Routes> affectedRoutes, ArrayList<Stoppings> affectedStops, boolean display_status) {
+    public Disruption(int disruptionid, String title, String reflink, String description, String disruption_status, String publishDatetime, ArrayList<Routes> affectedRoutes, ArrayList<Stop> affectedStops, boolean display_status) {
         this.disruptionid = disruptionid;
         this.title = title;
         this.reflink = reflink;
@@ -136,11 +136,11 @@ public class Disruption {
         this.affectedRoutes = affectedRoutes;
     }
 
-    public ArrayList<Stoppings> getAffectedStops() {
+    public ArrayList<Stop> getAffectedStops() {
         return affectedStops;
     }
 
-    public void setAffectedStops(ArrayList<Stoppings> affectedStops) {
+    public void setAffectedStops(ArrayList<Stop> affectedStops) {
         this.affectedStops = affectedStops;
     }
 

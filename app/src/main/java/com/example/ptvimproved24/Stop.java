@@ -2,7 +2,7 @@ package com.example.ptvimproved24;
 
 import java.util.ArrayList;
 
-public class NearStop {
+public class Stop {
 
     private String suburb;
     private String stopname;
@@ -12,7 +12,7 @@ public class NearStop {
     private int distance;
     private int routeType;
 
-    public NearStop(String suburb, String stopname, String stopid, ArrayList<String> routes, ArrayList<String> times) {
+    public Stop(String suburb, String stopname, String stopid, ArrayList<String> routes, ArrayList<String> times) {
         this.suburb = suburb;
         this.stopname = stopname;
         this.stopid = stopid;
@@ -20,7 +20,7 @@ public class NearStop {
         this.times = times;
     }
 
-    public NearStop(String suburb, String stopname, int distance, ArrayList<String> routes, ArrayList<String> times) {
+    public Stop(String suburb, String stopname, int distance, ArrayList<String> routes, ArrayList<String> times) {
         this.suburb = suburb;
         this.stopname = stopname;
         this.routes = routes;
@@ -28,15 +28,15 @@ public class NearStop {
         this.distance = distance;
     }
 
-    public NearStop(String suburb, String stopname, String stopid) {
+    public Stop(String suburb, String stopname, String stopid) {
         this.suburb = suburb;
         this.stopname = stopname;
         this.stopid = stopid;
     }
 
-    public NearStop(String suburb, String stopname) {
-        this.suburb = suburb;
-        this.stopname = stopname;
+    public Stop (String stopId, String stopName) {
+        this.stopid = stopId;
+        this.stopname = stopName;
     }
 
     public String getSuburb() {

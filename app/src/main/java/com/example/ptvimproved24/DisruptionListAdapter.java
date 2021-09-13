@@ -39,7 +39,7 @@ class DisruptionListAdapter extends ArrayAdapter<Disruption> {
         int disruptionid = getItem(position).getDisruptionid();
         boolean display_status = getItem(position).isDisplay_status();
         ArrayList<Routes> affectedRoutes = getItem(position).getAffectedRoutes();
-        ArrayList<Stoppings> affectedStops = getItem(position).getAffectedStops();
+        ArrayList<Stop> affectedStops = getItem(position).getAffectedStops();
         int affectedRoute_type = -1;
 
         Disruption disruptions = new Disruption(disruptionid,title,referenceLink,title,disruption_status,publishDatetime,affectedRoutes,affectedStops,display_status);

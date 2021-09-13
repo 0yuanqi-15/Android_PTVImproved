@@ -34,8 +34,8 @@ public class StopHttpRequestHandler {
         return result;
     }
 
-    private ArrayList<NearStop> getNearStopsFromJson(JSONArray jsonArray) throws JSONException {
-        ArrayList<NearStop> nearStops = new ArrayList<>();
+    private ArrayList<Stop> getNearStopsFromJson(JSONArray jsonArray) throws JSONException {
+        ArrayList<Stop> stops = new ArrayList<>();
         for(int i = 0; i < jsonArray.length(); i++) {
             JSONObject currentStop = jsonArray.getJSONObject(i);
             int distance = currentStop.getInt("stop_distance");
@@ -54,12 +54,12 @@ public class StopHttpRequestHandler {
             for (int j = 0; j < routesArray.size(); j ++) {
                 timeArray.add("15:00");
             }
-            NearStop nearStop = new NearStop(stopSuburb, stopName, distance, routesArray, timeArray);
-            nearStop.setStopid(stopId);
-            nearStop.setRouteType(routeType);
-            nearStops.add(nearStop);
+            Stop stop = new Stop(stopSuburb, stopName, distance, routesArray, timeArray);
+            stop.setStopid(stopId);
+            stop.setRouteType(routeType);
+            stops.add(stop);
         }
-        return nearStops;
+        return stops;
     }
 
     public void getStopsFromLocation(NearStopListAdapter adapter, float latitude, float longitude) {
@@ -80,11 +80,11 @@ public class StopHttpRequestHandler {
                         try {
                             JSONObject jsonObj = new JSONObject(responseBody);
                             JSONArray stops = jsonObj.getJSONArray("stops");
-                            ArrayList<NearStop> nearStopsArray = getNearStopsFromJson(stops);
+                            ArrayList<Stop> stopsArray = getNearStopsFromJson(stops);
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    adapter.addAll(nearStopsArray);
+                                    adapter.addAll(stopsArray);
                                     adapter.notifyDataSetChanged();
                                 }
                             });
