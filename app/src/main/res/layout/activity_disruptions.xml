@@ -17,7 +17,7 @@
         app:menu="@menu/bottom_nav_menu" />
 
     <TextView
-        android:id="@+id/disruptions"
+        android:id="@+id/disruption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -26,9 +26,10 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <ListView
+        android:id="@+id/disruptions_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/disruptions"
+        android:layout_below="@id/disruption"
         android:layout_above="@id/nav_view"
         android:layout_alignParentBottom="true"
         android:layout_marginVertical="5dp"

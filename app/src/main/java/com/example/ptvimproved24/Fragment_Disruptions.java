@@ -8,28 +8,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.ptvimproved24.databinding.FragmentHomeBinding;
-import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
 
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 
 public class Fragment_Disruptions extends Fragment {
 
     private FragmentHomeBinding binding;
     OkHttpClient client = new OkHttpClient();
+    ListView mListView;
+    DisruptionListAdapter adapter;
+    DisruptionHttpRequestHandler disruptionHttpRequestHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,7 +36,11 @@ public class Fragment_Disruptions extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getDistruptionInfo();
+        mListView = (ListView) view.findViewById(R.id.fragments_view);
+        adapter = new DisruptionListAdapter(view.getContext(),R.layout.disruptions_view, new ArrayList<>());
+        mListView.setAdapter(adapter);
+        disruptionHttpRequestHandler = new DisruptionHttpRequestHandler(getActivity());
+        getDisruptionInfo();
     }
 
     @Override
@@ -50,38 +48,7 @@ public class Fragment_Disruptions extends Fragment {
         super.onDestroyView();
     }
 
-    public void getDistruptionInfo(){
-        try {
-            System.out.println(commonDataRequest.disruptions());
-            String url = commonDataRequest.disruptions();
-            Request request = new Request.Builder().url(url).build();
-            StringBuilder builder = new StringBuilder();
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    e.printStackTrace();
-                }
-
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    if (response.isSuccessful()){
-                        System.out.println(response.body().string());
-                        try {
-                            JSONObject alldisruptions = new JSONObject(builder.toString());
-//                            JSONArray array = alldisruptions.getJSONArray();
-
-
-
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void getDisruptionInfo(){
+        disruptionHttpRequestHandler.getAllDisruptions(adapter);
     }
 }

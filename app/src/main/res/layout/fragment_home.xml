@@ -18,9 +18,9 @@
         android:id="@+id/nearStops_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxHeight="190sp"
         android:layout_below="@+id/nearbystopLabel"
-        android:dividerHeight="2px" />
+        android:dividerHeight="2px"
+        android:maxHeight="190sp" />
 
     <TextView
         android:id="@+id/SavedStopLabel"

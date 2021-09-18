@@ -12,11 +12,11 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class NearStopListAdapter extends ArrayAdapter<NearStop> {
+public class NearStopListAdapter extends ArrayAdapter<Stop> {
 
     private Context mContext;
     int mResource;
-    public NearStopListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<NearStop> objects) {
+    public NearStopListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Stop> objects) {
         super(context, resource, objects);
         mContext =context;
         mResource = resource;
@@ -33,7 +33,7 @@ public class NearStopListAdapter extends ArrayAdapter<NearStop> {
         ArrayList<String> routes = getItem(position).getRoutes();
         ArrayList<String> times = getItem(position).getTimes();
 
-        NearStop nearStop = new NearStop(stopsuburb,stopname,stopdistance,routes,times);
+        Stop stop = new Stop(stopsuburb,stopname,stopdistance,routes,times);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
@@ -58,13 +58,13 @@ public class NearStopListAdapter extends ArrayAdapter<NearStop> {
         }
 
         if (routes.size()>=2 && times.size()>=2){
-            tvroute1.setText(routes.get(1));
-            tvtime1.setText(times.get(1));
+            tvroute2.setText(routes.get(1));
+            tvtime2.setText(times.get(1));
         }
 
         if (routes.size()>=3 && times.size()>=3){
-            tvroute1.setText(routes.get(2));
-            tvtime1.setText(times.get(2));
+            tvroute3.setText(routes.get(2));
+            tvtime3.setText(times.get(2));
         }
 
         return convertView;

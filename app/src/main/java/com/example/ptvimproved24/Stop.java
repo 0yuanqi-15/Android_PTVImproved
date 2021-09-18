@@ -2,16 +2,17 @@ package com.example.ptvimproved24;
 
 import java.util.ArrayList;
 
-public class NearStop {
+public class Stop {
 
     private String suburb;
     private String stopname;
-    private String stopid;
+    private int stopid;
     private ArrayList<String> routes;
     private ArrayList<String> times;
     private int distance;
+    private int routeType;
 
-    public NearStop(String suburb, String stopname, String stopid, ArrayList<String> routes, ArrayList<String> times) {
+    public Stop(String suburb, int stopid, String stopname, ArrayList<String> routes, ArrayList<String> times) {
         this.suburb = suburb;
         this.stopname = stopname;
         this.stopid = stopid;
@@ -19,7 +20,7 @@ public class NearStop {
         this.times = times;
     }
 
-    public NearStop(String suburb, String stopname, int distance, ArrayList<String> routes, ArrayList<String> times) {
+    public Stop(String suburb, String stopname, int distance, ArrayList<String> routes, ArrayList<String> times) {
         this.suburb = suburb;
         this.stopname = stopname;
         this.routes = routes;
@@ -27,15 +28,15 @@ public class NearStop {
         this.distance = distance;
     }
 
-    public NearStop(String suburb, String stopname, String stopid) {
+    public Stop(String suburb, String stopname, int stopid) {
         this.suburb = suburb;
         this.stopname = stopname;
         this.stopid = stopid;
     }
 
-    public NearStop(String suburb, String stopname) {
-        this.suburb = suburb;
-        this.stopname = stopname;
+    public Stop (int stopId, String stopName) {
+        this.stopid = stopId;
+        this.stopname = stopName;
     }
 
     public String getSuburb() {
@@ -54,11 +55,11 @@ public class NearStop {
         this.stopname = stopname;
     }
 
-    public String getStopid() {
+    public int getStopid() {
         return stopid;
     }
 
-    public void setStopid(String stopid) {
+    public void setStopid(int stopid) {
         this.stopid = stopid;
     }
 
@@ -84,5 +85,13 @@ public class NearStop {
 
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public int getRouteType() {
+        return routeType;
+    }
+
+    public void setRouteType(int routeType) {
+        this.routeType = routeType;
     }
 }
