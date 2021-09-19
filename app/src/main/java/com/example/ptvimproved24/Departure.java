@@ -2,7 +2,7 @@ package com.example.ptvimproved24;
 
 import java.util.ArrayList;
 
-public class Departures {
+public class Departure {
     private int stop_id;
     private int route_id;
     private int run_id;
@@ -16,7 +16,7 @@ public class Departures {
     private String flags;
     private int departure_sequence;
 
-    public Departures(int stop_id, int route_id, int run_id, String run_ref, int direction_id, ArrayList<Integer> disruption_ids, String scheduled_departure_utc, String estimated_departure_utc, boolean at_platform, String platform_number, String flags, int departure_sequence) {
+    public Departure(int stop_id, int route_id, int run_id, String run_ref, int direction_id, ArrayList<Integer> disruption_ids, String scheduled_departure_utc, String estimated_departure_utc, boolean at_platform, String platform_number, String flags, int departure_sequence) {
         this.stop_id = stop_id;
         this.route_id = route_id;
         this.run_id = run_id;
@@ -31,13 +31,13 @@ public class Departures {
         this.departure_sequence = departure_sequence;
     }
 
-    public Departures(int stop_id, int route_id, int run_id) {
+    public Departure(int stop_id, int route_id, int run_id) {
         this.stop_id = stop_id;
         this.route_id = route_id;
         this.run_id = run_id;
     }
 
-    public Departures(int stop_id, int route_id, int run_id, int direction_id) {
+    public Departure(int stop_id, int route_id, int run_id, int direction_id) {
         this.stop_id = stop_id;
         this.route_id = route_id;
         this.run_id = run_id;

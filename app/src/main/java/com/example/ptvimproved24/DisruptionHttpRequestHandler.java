@@ -25,8 +25,8 @@ public class DisruptionHttpRequestHandler {
         activity = act;
     }
 
-    private ArrayList<Routes> getRoutesListFromJSONArray(JSONArray routesArray) throws JSONException{
-        ArrayList<Routes> routes = new ArrayList<>();
+    private ArrayList<Route> getRoutesListFromJSONArray(JSONArray routesArray) throws JSONException{
+        ArrayList<Route> routes = new ArrayList<>();
 
         for (int j=0;j<routesArray.length();j++){
             JSONObject jsonobject = routesArray.getJSONObject(j);
@@ -36,14 +36,14 @@ public class DisruptionHttpRequestHandler {
             String route_number = jsonobject.getString("route_number");
             String route_gtfs_id = jsonobject.getString("route_gtfs_id");
             String direction = jsonobject.getString("direction");
-            Routes r = new Routes(route_type,route_id,route_name,route_number,route_gtfs_id,direction);
+            Route r = new Route(route_type,route_id,route_name,route_number,route_gtfs_id,direction);
             routes.add(r);
         }
         return routes;
     }
 
-    private ArrayList<Routes> getRoutesListFromJSONArray(JSONArray routesArray, int type) throws JSONException{
-        ArrayList<Routes> routes = new ArrayList<>();
+    private ArrayList<Route> getRoutesListFromJSONArray(JSONArray routesArray, int type) throws JSONException{
+        ArrayList<Route> routes = new ArrayList<>();
 
         for (int j=0;j<routesArray.length();j++){
             JSONObject jsonobject = routesArray.getJSONObject(j);
@@ -53,11 +53,11 @@ public class DisruptionHttpRequestHandler {
             String route_number = jsonobject.getString("route_number");
             String route_gtfs_id = jsonobject.getString("route_gtfs_id");
             String direction = jsonobject.getString("direction");
-            Routes r = new Routes(route_type,route_id,route_name,route_number,route_gtfs_id,direction);
+            Route r = new Route(route_type,route_id,route_name,route_number,route_gtfs_id,direction);
             routes.add(r);
         }
         if (routesArray.length() == 0){
-            Routes r = new Routes(type);
+            Route r = new Route(type);
             routes.add(r);
         }
         return routes;
@@ -89,7 +89,7 @@ public class DisruptionHttpRequestHandler {
             String from_date = jsonObject.getString("from_date");
             String to_date = jsonObject.getString("to_date");
             String disruption_type = jsonObject.getString("disruption_type");
-            ArrayList<Routes> routesinfo = getRoutesListFromJSONArray(jsonObject.getJSONArray("routes"));
+            ArrayList<Route> routesinfo = getRoutesListFromJSONArray(jsonObject.getJSONArray("routes"));
             ArrayList<Stop> stopsList = getStopsListFromJSArray(jsonObject.getJSONArray("stops"));
             boolean display_on_board = jsonObject.getBoolean("display_on_board");
             boolean display_status = jsonObject.getBoolean("display_status");
@@ -118,7 +118,7 @@ public class DisruptionHttpRequestHandler {
             String from_date = jsonObject.getString("from_date");
             String to_date = jsonObject.getString("to_date");
             String disruption_type = jsonObject.getString("disruption_type");
-            ArrayList<Routes> routesinfo = getRoutesListFromJSONArray(jsonObject.getJSONArray("routes"),route_type);
+            ArrayList<Route> routesinfo = getRoutesListFromJSONArray(jsonObject.getJSONArray("routes"),route_type);
             ArrayList<Stop> stopsList = getStopsListFromJSArray(jsonObject.getJSONArray("stops"));
             boolean display_on_board = jsonObject.getBoolean("display_on_board");
             boolean display_status = jsonObject.getBoolean("display_status");

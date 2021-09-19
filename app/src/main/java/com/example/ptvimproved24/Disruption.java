@@ -1,6 +1,5 @@
 package com.example.ptvimproved24;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Disruption {
@@ -13,7 +12,7 @@ public class Disruption {
     private String publishDatetime;
     private String affectDatetimeFrom;
     private String affectDatetimeUntil;
-    private ArrayList<Routes> affectedRoutes;
+    private ArrayList<Route> affectedRoutes;
     private ArrayList<Stop> affectedStops;
     private boolean display_status;
 
@@ -32,7 +31,7 @@ public class Disruption {
         this.display_status = display_status;
     }
 
-    public Disruption(int disruptionid, String title, String reflink, String description, String disruption_status, String publishDatetime, ArrayList<Routes> affectedRoutes, ArrayList<Stop> affectedStops, boolean display_status) {
+    public Disruption(int disruptionid, String title, String reflink, String description, String disruption_status, String publishDatetime, ArrayList<Route> affectedRoutes, ArrayList<Stop> affectedStops, boolean display_status) {
         this.disruptionid = disruptionid;
         this.title = title;
         this.reflink = reflink;
@@ -129,11 +128,11 @@ public class Disruption {
         this.affectDatetimeUntil = affectDatetimeUntil;
     }
 
-    public ArrayList<Routes> getAffectedRoutes() {
+    public ArrayList<Route> getAffectedRoutes() {
         return affectedRoutes;
     }
 
-    public void setAffectedRoutes(ArrayList<Routes> affectedRoutes) {
+    public void setAffectedRoutes(ArrayList<Route> affectedRoutes) {
         this.affectedRoutes = affectedRoutes;
     }
 

@@ -28,7 +28,8 @@ public class StopHttpRequestHandler {
     private ArrayList<String> getRoutesByStop(JSONArray routes) throws JSONException {
         ArrayList<String> result = new ArrayList<>();
         for (int i = 0; i < routes.length(); i ++) {
-            String routeGtfsId = routes.getJSONObject(i).getString("route_gtfs_id");
+            //String routeGtfsId = routes.getJSONObject(i).getString("route_gtfs_id");
+            String routeGtfsId = "--";
             result.add(routeGtfsId);
         }
         return result;
@@ -52,7 +53,7 @@ public class StopHttpRequestHandler {
             }
             ArrayList<String> timeArray = new ArrayList<>();
             for (int j = 0; j < routesArray.size(); j ++) {
-                timeArray.add("15:00"); // 再次异步请求Departure,根据Stop id,route type; 获得后续的班车信息
+                timeArray.add("--:--"); // 再次异步请求Departure,根据Stop id,route type; 获得后续的班车信息
             }
             Stop stop = new Stop(stopSuburb, stopName, distance, routesArray, timeArray);
             stop.setStopid(stopId);
@@ -99,8 +100,12 @@ public class StopHttpRequestHandler {
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    adapter.addAll(dedupStopsArray);
+                                    adapter.addAll(dedupStopsArray.subList(0,3));
                                     adapter.notifyDataSetChanged();
+                                    for(int i = 0 ; i < 3; i ++) {
+                                        DepartureHttpRequestHandler departureHttpRequestHandler = new DepartureHttpRequestHandler(activity);
+                                        departureHttpRequestHandler.getNextDepartureByStopid(dedupStopsArray.get(i), adapter);
+                                    }
                                 }
                             });
                         } catch (JSONException e) {

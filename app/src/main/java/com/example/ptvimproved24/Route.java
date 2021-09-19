@@ -1,6 +1,6 @@
 package com.example.ptvimproved24;
 
-public class Routes {
+public class Route {
     private int route_type;
     private int route_id;
     private String route_name;
@@ -8,7 +8,7 @@ public class Routes {
     private String route_gtfs_id;
     private String direction;
 
-    public Routes(int route_type, int route_id, String route_name, String route_number, String route_gtfs_id, String direction) {
+    public Route(int route_type, int route_id, String route_name, String route_number, String route_gtfs_id, String direction) {
         this.route_type = route_type;
         this.route_id = route_id;
         this.route_name = route_name;
@@ -17,14 +17,14 @@ public class Routes {
         this.direction = direction;
     }
 
-    public Routes(int route_type, int route_id, String route_name, String route_gtfs_id) { // Train, vline train&coach, skybus
+    public Route(int route_type, int route_id, String route_name, String route_gtfs_id) { // Train, vline train&coach, skybus
         this.route_type = route_type;
         this.route_id = route_id;
         this.route_name = route_name;
         this.route_gtfs_id = route_gtfs_id;
     }
 
-    public Routes(int route_type, int route_id, String route_name, String route_number, String route_gtfs_id) { // Tram, Buses (incl. night bus)
+    public Route(int route_type, int route_id, String route_name, String route_number, String route_gtfs_id) { // Tram, Buses (incl. night bus)
         this.route_type = route_type;
         this.route_id = route_id;
         this.route_name = route_name;
@@ -32,12 +32,12 @@ public class Routes {
         this.route_gtfs_id = route_gtfs_id;
     }
 
-    public Routes(int route_id, String route_gtfs_id){
+    public Route(int route_id, String route_gtfs_id){
         this.route_id = route_id;
         this.route_gtfs_id = route_gtfs_id;
     }
 
-    public Routes(int route_type){
+    public Route(int route_type){
         this.route_type = route_type;
     }
 

@@ -9,6 +9,8 @@ public class Stop {
     private int stopid;
     private ArrayList<String> routes;
     private ArrayList<String> times;
+    private ArrayList<Departure> departuresObj;
+    private ArrayList<Route> routesObj;
     private int distance;
     private int routeType;
 
@@ -93,5 +95,21 @@ public class Stop {
 
     public void setRouteType(int routeType) {
         this.routeType = routeType;
+    }
+
+    public ArrayList<Departure> getDeparturesObj() {
+        return departuresObj;
+    }
+
+    public void setDeparturesObj(ArrayList<Departure> departuresObj) {
+        this.departuresObj = departuresObj;
+    }
+
+    public ArrayList<Route> getRoutesObj() {
+        return routesObj;
+    }
+
+    public void setRoutesObj(ArrayList<Route> routesObj) {
+        this.routesObj = routesObj;
     }
 }

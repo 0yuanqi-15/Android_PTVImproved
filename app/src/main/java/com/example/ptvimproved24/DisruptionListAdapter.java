@@ -11,11 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 
 class DisruptionListAdapter extends ArrayAdapter<Disruption> {
 
@@ -39,7 +35,7 @@ class DisruptionListAdapter extends ArrayAdapter<Disruption> {
         String referenceLink = getItem(position).getReflink();
         int disruptionid = getItem(position).getDisruptionid();
         boolean display_status = getItem(position).isDisplay_status();
-        ArrayList<Routes> affectedRoutes = getItem(position).getAffectedRoutes();
+        ArrayList<Route> affectedRoutes = getItem(position).getAffectedRoutes();
         ArrayList<Stop> affectedStops = getItem(position).getAffectedStops();
         int affectedRoute_type = -1;
 
