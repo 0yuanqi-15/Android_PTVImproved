@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:id="@+id/activity_routedetails">
+    android:id="@+id/activity_directions">
 
-<!--    android:id="@+id/routed_routemap"-->
+    <!--    android:id="@+id/routed_routemap"-->
     <FrameLayout
         android:id="@+id/map_view"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="500dp"
         app:layout_constraintDimensionRatio="1:1"
         />
 
