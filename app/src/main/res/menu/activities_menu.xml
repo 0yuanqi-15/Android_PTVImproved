@@ -18,11 +18,10 @@
 <!--        android:id="@+id/menuact_disruptions"-->
 <!--        android:icon="@drawable/baseline_bus_alert_24"-->
 <!--        android:title="Disruption_Fragment" />-->
-<!--    <item-->
-<!--        android:id="@+id/menuact_disruption"-->
-<!--        android:icon="@drawable/baseline_bus_alert_24"-->
-<!--        android:title="Disruption_Activity" />-->
-
+    <item
+        android:id="@+id/menuact_disruption"
+        android:icon="@drawable/baseline_bus_alert_24"
+        android:title="Disruption_Activity" />
     <item
         android:id="@+id/menuact_stops"
         android:icon="@drawable/ic_baseline_place_24"
