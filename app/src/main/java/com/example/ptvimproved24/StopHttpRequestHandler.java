@@ -20,6 +20,10 @@ public class StopHttpRequestHandler {
     private OkHttpClient client;
     private FragmentActivity activity;
 
+    //add this to record stops
+    private ArrayList<Stop> record = new ArrayList<>();
+    private ArrayList<Stop> recordDetail = new ArrayList<>();
+
     public StopHttpRequestHandler(FragmentActivity act) {
         client = new OkHttpClient();
         activity = act;
@@ -97,6 +101,9 @@ public class StopHttpRequestHandler {
                                 }
                             }
 
+                            //add this to record nearest stops
+                            record.addAll(dedupStopsArray.subList(0,3));
+
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -108,6 +115,9 @@ public class StopHttpRequestHandler {
                                     }
                                 }
                             });
+
+                            recordDetail.addAll(dedupStopsArray.subList(0, 3));
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -117,5 +127,14 @@ public class StopHttpRequestHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //add this getter to pass nearest stops
+    public ArrayList<Stop> getRecord() {
+        return record;
+    }
+
+    public ArrayList<Stop> getRecordDetail() {
+        return recordDetail;
     }
 }

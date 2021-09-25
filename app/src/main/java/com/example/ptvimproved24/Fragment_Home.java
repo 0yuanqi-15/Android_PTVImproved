@@ -1,9 +1,11 @@
 package com.example.ptvimproved24;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,10 @@ public class Fragment_Home extends Fragment {
     ListView mListView;
     NearStopListAdapter adapter;
 
+    //add this to get nearest stops
+    ArrayList<Stop> nearestStop = new ArrayList<>();
+    ArrayList<Stop> nearestStopDetail = new ArrayList<>();
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -37,6 +43,32 @@ public class Fragment_Home extends Fragment {
         generateNearStopList();
         generateSavedStopList(view);
         generateSavedRouteList(view);
+
+
+
+        //add listener here
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(view.getContext(), StopDetailActivity.class);
+
+                int amount = Math.min(nearestStopDetail.get(i).getRoutes().size(), nearestStopDetail.get(i).getTimes().size());
+                intent.putExtra("amount", amount);
+
+                for(int x=0; x<amount; x++) {
+                    intent.putExtra(String.valueOf(x), nearestStopDetail.get(i).getRoutes().get(x)+" "+nearestStopDetail.get(i).getTimes().get(x));
+                }
+
+                intent.putExtra("index", nearestStop.get(i).getStopid());
+                intent.putExtra("type", nearestStop.get(i).getRouteType());
+                intent.putExtra("name", nearestStop.get(i).getStopname());
+                startActivity(intent);
+
+            }
+        });
+
+
+
     }
 
     @Override
@@ -71,6 +103,10 @@ public class Fragment_Home extends Fragment {
 //        nearStopList.add(stop3);
 
         stopHttpRequestHandler.getStopsFromLocation(adapter, -37.818078f, 144.96681f);
+
+        //add this to get nearest stops
+        nearestStop = stopHttpRequestHandler.getRecord();
+        nearestStopDetail = stopHttpRequestHandler.getRecordDetail();
     }
 
     public void generateSavedStopList(View v){

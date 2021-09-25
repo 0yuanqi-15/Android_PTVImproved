@@ -31,6 +31,15 @@
         <entry key="..\:/Users/X10/AndroidStudioProjects/PTVImproved24/app/src/main/res/menu/bottom_nav_menu.xml" value="0.23783783783783785" />
         <entry key="..\:/Users/X10/AndroidStudioProjects/PTVImproved24/app/src/main/res/menu/menu_stops.xml" value="0.23783783783783785" />
         <entry key="..\:/Users/X10/AndroidStudioProjects/PTVImproved24/app/src/main/res/xml/network_security_config.xml" value="0.1331081081081081" />
+        <entry key="..\:/Users/mac/StudioProjects/Android_PTVImproved/app/src/main/res/layout/activity_main.xml" value="0.328804347826087" />
+        <entry key="..\:/Users/mac/StudioProjects/Android_PTVImproved/app/src/main/res/layout/activity_routedetails.xml" value="0.16825715720743345" />
+        <entry key="..\:/Users/mac/StudioProjects/Android_PTVImproved/app/src/main/res/layout/activity_stops.xml" value="0.328804347826087" />
+        <entry key="..\:/Users/mac/StudioProjects/Android_PTVImproved/app/src/main/res/layout/activity_stopselection.xml" value="0.328804347826087" />
+        <entry key="..\:/Users/mac/StudioProjects/Android_PTVImproved/app/src/main/res/layout/fragment_home.xml" value="0.328804347826087" />
+        <entry key="..\:/Users/mac/StudioProjects/Android_PTVImproved/app/src/main/res/layout/nearstop_view.xml" value="0.328804347826087" />
+        <entry key="..\:/Users/mac/StudioProjects/Android_PTVImproved/app/src/main/res/layout/routedetails_view.xml" value="0.328804347826087" />
+        <entry key="..\:/Users/mac/StudioProjects/Android_PTVImproved/app/src/main/res/layout/savedstops_view.xml" value="0.328804347826087" />
+        <entry key="..\:/Users/mac/StudioProjects/Android_PTVImproved/app/src/main/res/layout/stopdetail_view.xml" value="0.3179347826086957" />
       </map>
     </option>
   </component>
