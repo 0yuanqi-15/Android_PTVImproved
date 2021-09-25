@@ -71,29 +71,18 @@ public class StopDetailActivity extends AppCompatActivity {
          //   stopDetail.add(stopRoutes.get(i)+" "+stopTimes.get(i));
         //}
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.stopdetail_view, android.R.id.text1, stopDetail);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stopDetail);
 
         detail.setAdapter(adapter);
 
 
+        //android.R.id.text1,
         //Stop stop = new Stop(stopId, stopName);
 
         //adapter.add(stop);
         //adapter.notifyDataSetChanged();
         //DepartureHttpRequestHandler departureHttpRequestHandler = new DepartureHttpRequestHandler(this);
         //departureHttpRequestHandler.getNextDepartureByStopId(stop, routeType, adapter);
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
