@@ -4,28 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:id="@+id/activity_routedetails">
 
-    <TextView
-        android:id="@+id/routed_title"
+<!--    android:id="@+id/routed_routemap"-->
+    <FrameLayout
+        android:id="@+id/map_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/route_details"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/routed_routemap"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:minHeight="200dp"
+        android:layout_height="500dp"
         app:layout_constraintDimensionRatio="1:1"
-        android:layout_below="@id/routed_title" />
+        />
 
     <ListView
         android:id="@+id/route_directionlist"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:layout_below="@id/routed_routemap" />
+        android:layout_below="@id/map_view" />
 
 
 </RelativeLayout>

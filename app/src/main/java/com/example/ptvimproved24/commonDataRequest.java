@@ -76,6 +76,9 @@ public class commonDataRequest {
     public static String showRouteInfo(int routeId) throws Exception {                      // View route name and number for specific route ID
         return buildAPIrequest("/v3/routes/"+routeId);
     }
+    public static String showRouteInfoWithPath(int routeId) throws Exception{
+        return buildAPIrequest("/v3/routes/"+routeId+"?include_geopath=true");
+    }
 
     //Runs
     public static String showRouteRuns(int routeId) throws Exception {      //View all trip/service runs for a specific route ID and route type

@@ -46,6 +46,11 @@
             android:exported="true"
             android:label="@string/title_activity_stopselection" />
         <activity
+            android:name=".RouteDetails"
+            android:exported="true"
+            android:label="Route Details"
+            />
+        <activity
             android:name=".MainActivity"
             android:exported="true" >
             <intent-filter>
