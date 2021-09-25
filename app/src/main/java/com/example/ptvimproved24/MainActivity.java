@@ -9,6 +9,9 @@ import androidx.navigation.ui.NavigationUI;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -43,5 +46,47 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        String fragmentToDisplay = getIntent().getStringExtra("fragmentToDisplay");
+        if(fragmentToDisplay == MainActivity.FRAGMENTA){
+
+        }
+        if(fragmentToDisplay == MainActivity.FRAGMENTB){
+
+        }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activities_menu, menu);
+
+        // return true so that the menu pop up is opened
+        return true;
+    }
+
+    public static final String FRAGMENTA = "Fragment_Disruptions";
+    public static final String FRAGMENTB = "Fragment_StopSelect";
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menuact_home:
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("fragmentToDisplay", FRAGMENTA);
+                startActivity(intent);
+                break;
+            case R.id.menuact_stopselect:
+                break;
+            case R.id.menuact_stops:
+                break;
+            case R.id.menuact_disruptions:
+                break;
+            case R.id.menuact_routes:
+                break;
+
+        }
+        return true;
+    }
+
 }

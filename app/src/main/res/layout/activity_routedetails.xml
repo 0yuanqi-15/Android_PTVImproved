@@ -16,9 +16,10 @@
     <com.google.android.gms.maps.MapView
         android:id="@+id/routed_routemap"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_below="@id/routed_title"
-        android:minHeight="400dp" />
+        android:layout_height="100dp"
+        android:minHeight="200dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:layout_below="@id/routed_title" />
 
     <ListView
         android:id="@+id/route_directionlist"
