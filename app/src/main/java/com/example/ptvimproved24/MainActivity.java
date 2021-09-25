@@ -47,12 +47,18 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        String fragmentToDisplay = getIntent().getStringExtra("fragmentToDisplay");
-        if(fragmentToDisplay == MainActivity.FRAGMENTA){
-
+        int fragmentToDisplay = getIntent().getIntExtra("fragmentToDisplay",0);
+        if(fragmentToDisplay == 1){
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_Home()).addToBackStack(null).commit();
         }
-        if(fragmentToDisplay == MainActivity.FRAGMENTB){
-
+        if(fragmentToDisplay == 2){
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_StopSelect()).addToBackStack(null).commit();
+        }
+        if(fragmentToDisplay == 3){
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_JourneyPlanner()).addToBackStack(null).commit();
+        }
+        if(fragmentToDisplay == 4){
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_Disruptions()).addToBackStack(null).commit();
         }
     }
 
@@ -65,24 +71,43 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public static final String FRAGMENTA = "Fragment_Disruptions";
+    public static final String FRAGMENTA = "Fragment_Home";
     public static final String FRAGMENTB = "Fragment_StopSelect";
+    public static final String FRAGMENTC = "Fragment_JourneyPlanner";
+    public static final String FRAGMENTD = "Fragment_Disruptions";
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = new Intent();
         switch (item.getItemId()){
             case R.id.menuact_home:
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("fragmentToDisplay", FRAGMENTA);
+                intent = new Intent(MainActivity.this, MainActivity.class);
+                intent.putExtra("fragmentToDisplay", 1);
                 startActivity(intent);
                 break;
             case R.id.menuact_stopselect:
+                intent = new Intent(MainActivity.this, MainActivity.class );
+                intent.putExtra("fragmentToDisplay",2);
+                startActivity(intent);
+                break;
+            case R.id.menuact_journeyplanner:
+                intent = new Intent(MainActivity.this, MainActivity.class );
+                intent.putExtra("fragmentToDisplay",3);
+                startActivity(intent);
+                break;
+            case R.id.menuact_disruptions:
+                intent = new Intent(MainActivity.this, MainActivity.class);
+                intent.putExtra("fragmentToDisplay", 4);
+                startActivity(intent);
                 break;
             case R.id.menuact_stops:
                 break;
-            case R.id.menuact_disruptions:
-                break;
             case R.id.menuact_routes:
+                intent = new Intent(MainActivity.this, route)
+                break;
+            case R.id.activity_routedetails:
+                intent = new Intent(MainActivity.this,RouteDetails.class);
+                startActivity(intent);
                 break;
 
         }
