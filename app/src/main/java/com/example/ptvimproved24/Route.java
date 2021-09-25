@@ -7,6 +7,7 @@ public class Route {
     private String route_number;
     private String route_gtfs_id;
     private String direction;
+    private RouteGeopath geopath;
 
     public Route(int route_type, int route_id, String route_name, String route_number, String route_gtfs_id, String direction) {
         this.route_type = route_type;
@@ -87,5 +88,13 @@ public class Route {
 
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+
+    public RouteGeopath getGeopath() {
+        return geopath;
+    }
+
+    public void setGeopath(RouteGeopath geopath) {
+        this.geopath = geopath;
     }
 }
