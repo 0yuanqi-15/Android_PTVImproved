@@ -1,4 +1,4 @@
-package com.example.ptvimproved24;
+package com.example.ptvimproved24.datastructures;
 
 public class RouteGeopath {
     private int direction_id;

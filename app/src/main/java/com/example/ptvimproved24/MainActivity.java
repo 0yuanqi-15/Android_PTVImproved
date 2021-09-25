@@ -140,13 +140,19 @@ public class MainActivity extends AppCompatActivity {
 //                intent.putExtra("fragmentToDisplay", 4);
 //                startActivity(intent);
 //                break;
+            case R.id.menuact_disruption:
+                intent = new Intent(MainActivity.this, Disruption.class);
+                startActivity(intent);
+                break;
             case R.id.menuact_stops:
                 intent = new Intent(MainActivity.this, stops.class);
                 intent.putExtra("stopid",1000);
                 startActivity(intent);
                 break;
-            case R.id.menuact_routes:
-//                intent = new Intent(MainActivity.this, Route)
+            case R.id.menuact_routedirections:
+                intent = new Intent(MainActivity.this, RouteDirections.class);
+                intent.putExtra("routeid",1);
+                startActivity(intent);
                 break;
             case R.id.menuact_routedetails:
                 intent = new Intent(MainActivity.this,RouteDetails.class);
