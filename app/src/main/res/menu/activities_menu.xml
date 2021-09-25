@@ -5,20 +5,23 @@
         android:id="@+id/menuact_home"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
+<!--    <item-->
+<!--        android:id="@+id/menuact_stopselect"-->
+<!--        android:icon="@drawable/outline_map_24"-->
+<!--        android:title="Stop select on map" />-->
 
+<!--    <item-->
+<!--        android:id="@+id/menuact_journeyplanner"-->
+<!--        android:icon="@drawable/baseline_multiple_stop_24"-->
+<!--        android:title="JourneyPlanner" />-->
+<!--    <item-->
+<!--        android:id="@+id/menuact_disruptions"-->
+<!--        android:icon="@drawable/baseline_bus_alert_24"-->
+<!--        android:title="Disruption_Fragment" />-->
     <item
-        android:id="@+id/menuact_stopselect"
-        android:icon="@drawable/outline_map_24"
-        android:title="Stop select on map" />
-
-    <item
-        android:id="@+id/menuact_journeyplanner"
-        android:icon="@drawable/baseline_multiple_stop_24"
-        android:title="JourneyPlanner" />
-    <item
-        android:id="@+id/menuact_disruptions"
+        android:id="@+id/menuact_disruption"
         android:icon="@drawable/baseline_bus_alert_24"
-        android:title="Disruptions" />
+        android:title="Disruption_Activity" />
 
     <item
         android:id="@+id/menuact_stops"
@@ -29,12 +32,14 @@
         android:icon="@drawable/baseline_multiple_stop_24"
         android:title="Routes Page" />
     <item
-        android:id="@+id/activity_routedetails"
+        android:id="@+id/menuact_routedetails"
         android:icon="@drawable/baseline_train_24"
         android:title="Routes Detail" />
 
     <item
-
+        android:id="@+id/menuact_routedirections"
+        android:icon="@drawable/baseline_commute_24"
+        android:title="Route Directions"
         />
 
 

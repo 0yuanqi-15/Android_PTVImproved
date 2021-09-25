@@ -38,8 +38,25 @@ public class Route {
         this.route_gtfs_id = route_gtfs_id;
     }
 
-    public Route(int route_type){
+    public Route(int route_id){
+        this.route_id = route_id;
+    }
+
+    public Route(int route_type, int route_id, String route_name, String route_number, RouteGeopath geopath) {
         this.route_type = route_type;
+        this.route_id = route_id;
+        this.route_name = route_name;
+        this.route_number = route_number;
+        this.geopath = geopath;
+    }
+
+    public Route(int route_type, int route_id, String route_name, String route_number, String route_gtfs_id, RouteGeopath geopath) { // Tram, Buses (incl. night bus)
+        this.route_type = route_type;
+        this.route_id = route_id;
+        this.route_name = route_name;
+        this.route_number = route_number;
+        this.route_gtfs_id = route_gtfs_id;
+        this.geopath = geopath;
     }
 
     public int getRoute_type() {
@@ -52,10 +69,6 @@ public class Route {
 
     public int getRoute_id() {
         return route_id;
-    }
-
-    public void setRoute_id(int route_id) {
-        this.route_id = route_id;
     }
 
     public String getRoute_name() {
