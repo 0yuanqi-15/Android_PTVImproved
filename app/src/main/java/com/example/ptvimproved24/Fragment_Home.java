@@ -1,5 +1,9 @@
 package com.example.ptvimproved24;
 
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +22,13 @@ public class Fragment_Home extends Fragment {
 
     private FragmentHomeBinding binding;
     private StopHttpRequestHandler stopHttpRequestHandler;
-    ListView mListView;
-    NearStopListAdapter adapter;
+    private LocationManager locationManager;
+    private ListView mListView;
+    private NearStopListAdapter adapter;
+    private final float defaultLatitude = -37.818078f;
+    private final float defaultLongitude = 144.96681f;
+    private Float latitude;
+    private Float longitude;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -28,12 +37,16 @@ public class Fragment_Home extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        latitude = defaultLatitude;
+        longitude = defaultLongitude;
         super.onViewCreated(view, savedInstanceState);
         mListView = (ListView) view.findViewById(R.id.nearStops_view);
         adapter = new NearStopListAdapter(view.getContext(),R.layout.nearstop_view, new ArrayList<>());
         mListView.setAdapter(adapter);
         stopHttpRequestHandler = new StopHttpRequestHandler(getActivity());
+        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
+        getGeoLocation();
         generateNearStopList();
         generateSavedStopList(view);
         generateSavedRouteList(view);
@@ -43,6 +56,22 @@ public class Fragment_Home extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void getGeoLocation() {
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+
+                }
+            });
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            latitude = (float) location.getLatitude();
+            longitude = (float) location.getLongitude();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
     }
 
     public void generateNearStopList(){
@@ -69,8 +98,7 @@ public class Fragment_Home extends Fragment {
 //        nearStopList.add(stop1);
 //        nearStopList.add(stop2);
 //        nearStopList.add(stop3);
-
-        stopHttpRequestHandler.getStopsFromLocation(adapter, -37.818078f, 144.96681f);
+        stopHttpRequestHandler.getStopsFromLocation(adapter, latitude, longitude);
     }
 
     public void generateSavedStopList(View v){

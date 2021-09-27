@@ -100,9 +100,10 @@ public class StopHttpRequestHandler {
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    adapter.addAll(dedupStopsArray.subList(0,3));
+                                    int toIndex = dedupStopsArray.size() >= 3 ? 3 : dedupStopsArray.size();
+                                    adapter.addAll(dedupStopsArray.subList(0,toIndex));
                                     adapter.notifyDataSetChanged();
-                                    for(int i = 0 ; i < 3; i ++) {
+                                    for(int i = 0 ; i < toIndex; i ++) {
                                         DepartureHttpRequestHandler departureHttpRequestHandler = new DepartureHttpRequestHandler(activity);
                                         departureHttpRequestHandler.getNextDepartureByStopid(dedupStopsArray.get(i), adapter);
                                     }
