@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,8 @@ public class Fragment_Home extends Fragment {
     private Float latitude;
     private Float longitude;
 
+    private Boolean isNearStopShowing;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -39,8 +42,22 @@ public class Fragment_Home extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         latitude = defaultLatitude;
         longitude = defaultLongitude;
+        isNearStopShowing = true;
+
         super.onViewCreated(view, savedInstanceState);
         mListView = (ListView) view.findViewById(R.id.nearStops_view);
+        view.findViewById(R.id.nearbystopLabel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isNearStopShowing) {
+                    mListView.setAdapter(new NearStopListAdapter(view.getContext(),R.layout.nearstop_view, new ArrayList<>()));
+                    isNearStopShowing = false;
+                } else {
+                    mListView.setAdapter(adapter);
+                    isNearStopShowing = true;
+                }
+            }
+        });
         adapter = new NearStopListAdapter(view.getContext(),R.layout.nearstop_view, new ArrayList<>());
         mListView.setAdapter(adapter);
         stopHttpRequestHandler = new StopHttpRequestHandler(getActivity());
@@ -70,6 +87,9 @@ public class Fragment_Home extends Fragment {
             latitude = (float) location.getLatitude();
             longitude = (float) location.getLongitude();
         } catch (SecurityException e) {
+            Toast.makeText(getContext(),
+                    "Default geolocation is used, please retry after enable location service.",
+                    Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }

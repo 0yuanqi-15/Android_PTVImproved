@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment_Home">
@@ -12,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:text="Nearby Stops:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        android:clickable="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <ListView
         android:id="@+id/nearStops_view"
@@ -35,17 +37,17 @@
         android:id="@+id/SavedStop_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxHeight="190sp"
-        android:layout_below="@+id/SavedStopLabel" />
+        android:layout_below="@+id/SavedStopLabel"
+        android:maxHeight="190sp" />
 
     <TextView
         android:id="@+id/savedRoute_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/SavedStop_view"
+        android:layout_marginTop="10dp"
         android:text="Saved Routes:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:layout_marginTop="10dp"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <ListView
         android:id="@+id/savedRoutes_view"
