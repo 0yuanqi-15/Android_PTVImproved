@@ -101,6 +101,7 @@ public class StopHttpRequestHandler {
                                 @Override
                                 public void run() {
                                     int toIndex = dedupStopsArray.size() >= 3 ? 3 : dedupStopsArray.size();
+                                    adapter.clear();
                                     adapter.addAll(dedupStopsArray.subList(0,toIndex));
                                     adapter.notifyDataSetChanged();
                                     for(int i = 0 ; i < toIndex; i ++) {

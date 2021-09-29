@@ -1,6 +1,9 @@
 package com.example.ptvimproved24;
 
+import static android.content.Context.SENSOR_SERVICE;
+
 import android.content.Context;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,10 +19,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.ptvimproved24.databinding.FragmentHomeBinding;
+import com.squareup.seismic.ShakeDetector;
 
 import java.util.ArrayList;
 
-public class Fragment_Home extends Fragment {
+public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 
     private FragmentHomeBinding binding;
     private StopHttpRequestHandler stopHttpRequestHandler;
@@ -43,6 +47,10 @@ public class Fragment_Home extends Fragment {
         latitude = defaultLatitude;
         longitude = defaultLongitude;
         isNearStopShowing = true;
+
+        SensorManager sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
+        ShakeDetector sd = new ShakeDetector(this);
+        sd.start(sensorManager);
 
         super.onViewCreated(view, savedInstanceState);
         mListView = (ListView) view.findViewById(R.id.nearStops_view);
@@ -163,5 +171,12 @@ public class Fragment_Home extends Fragment {
 
         SavedRouteListAdapter adapter = new SavedRouteListAdapter(v.getContext(),R.layout.savedroutes_view, SavedRouteList);
         mListView.setAdapter(adapter);
+    }
+
+    @Override
+    public void hearShake() {
+        getGeoLocation();
+        generateNearStopList();
+        Toast.makeText(getContext(), "reloading", Toast.LENGTH_SHORT).show();
     }
 }
