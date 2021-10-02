@@ -120,4 +120,107 @@ public class StopHttpRequestHandler {
             e.printStackTrace();
         }
     }
+
+    private StopLocation parseStopLocationFromJson(JSONObject jsonObject) {
+        StopLocation stopLocation = null;
+        try {
+            int postCode = jsonObject.getInt("postcode");
+            String municipality = jsonObject.getString("municipality");
+            int municipalityId = jsonObject.getInt("municipality_id");
+            String primaryName = jsonObject.getString("primary_stop_name");
+            String primaryType = jsonObject.getString("road_type_primary");
+            String secondName = jsonObject.getString("second_stop_name");
+            String secondType = jsonObject.getString("road_type_second");
+            String suburb = jsonObject.getString("suburb");
+            JSONObject GPS = jsonObject.getJSONObject("gps");
+            float latitude = (float) GPS.getDouble("latitude");
+            float longitude = (float) GPS.getDouble("longitude");
+            stopLocation = new StopLocation(postCode, municipality, municipalityId, primaryName, primaryType, secondName, secondType, suburb, latitude, longitude);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return stopLocation;
+    }
+
+    private ArrayList<Route> parseRoutesFromJson(JSONArray jsonArray) {
+        ArrayList<Route> routes = new ArrayList<>();
+        try {
+            for (int  i = 0; i < jsonArray.length(); i++) {
+                JSONObject r = jsonArray.getJSONObject(i);
+                int routeType = r.getInt("route_type");
+                int routeId = r.getInt("route_id");
+                String routeName = r.getString("route_name");
+                String routeNumber = r.getString("route_number");
+                String routeGtfsId = r.getString("route_gtfs_id");
+                Route route = new Route(routeType, routeId, routeName, routeNumber, routeGtfsId);
+                routes.add(route);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return routes;
+    }
+
+    private StopDetail parseStopDetailFromJson(JSONObject jsonObject) {
+        StopDetail stopDetail = null;
+        try {
+            int stopID = jsonObject.getInt("stop_id");
+            String stopName = jsonObject.getString("stop_name");
+            String opTime = jsonObject.getString("operating_hours");
+            String flexTime = jsonObject.getString("flexible_stop_opening_hours");
+            ArrayList<Integer> disruptionIds = new ArrayList<>();
+            JSONArray disruptionsJsonArray = jsonObject.getJSONArray("disruption_ids");
+            for (int i = 0; i < disruptionsJsonArray.length(); i++) {
+                int disId = disruptionsJsonArray.getInt(i);
+                disruptionIds.add(disId);
+            }
+            String stationDescription = jsonObject.getString("station_description");
+            StopLocation stopLocation = parseStopLocationFromJson(jsonObject.getJSONObject("stop_location"));
+            ArrayList<Route> routes = parseRoutesFromJson(jsonObject.getJSONArray("routes"));
+            int routeType = jsonObject.getInt("route_type");
+            stopDetail = new StopDetail(stopID, stopName, opTime, flexTime, disruptionIds, stationDescription, routeType, stopLocation, routes);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return stopDetail;
+    }
+
+    public void getStopFromId(int stopId, int routeType) {
+        try {
+            String url = commonDataRequest.showStopsInfo(stopId, routeType);
+            System.out.println(url);
+            Request request = new Request.Builder().url(url).build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()){
+                        String responseBody = response.body().string();
+                        try {
+                            JSONObject jsonObj = new JSONObject(responseBody);
+                            StopDetail stopDetail = parseStopDetailFromJson(jsonObj.getJSONObject("stop"));
+                            System.out.println(stopDetail.toString());
+
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
