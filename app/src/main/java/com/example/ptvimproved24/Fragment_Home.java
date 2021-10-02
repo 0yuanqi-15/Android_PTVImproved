@@ -95,7 +95,7 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
             latitude = (float) location.getLatitude();
             longitude = (float) location.getLongitude();
         } catch (SecurityException e) {
-            Toast.makeText(getContext(),
+            Toast.makeText(getActivity(),
                     "Default geolocation is used, please retry after enable location service.",
                     Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -177,6 +177,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
     public void hearShake() {
         getGeoLocation();
         generateNearStopList();
-        Toast.makeText(getContext(), "reloading", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "reloading", Toast.LENGTH_SHORT).show();
     }
 }
