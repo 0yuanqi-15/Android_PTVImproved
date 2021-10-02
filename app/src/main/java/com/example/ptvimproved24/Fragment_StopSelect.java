@@ -2,9 +2,18 @@ package com.example.ptvimproved24;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +26,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Fragment_StopSelect extends Fragment {
+    private double lat,lng;
+    LatLng userLatlng;
+    LocationListener locationListener;
+    LocationManager locationManager;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -31,9 +44,24 @@ public class Fragment_StopSelect extends Fragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            LatLng FlinderSt = new LatLng(-37.818078, 144.96681);
+            googleMap.addMarker(new MarkerOptions().position(FlinderSt).title("Flinder St Station"));
+            googleMap.moveCamera(CameraUpdateFactory.zoomTo(16));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(FlinderSt));
+            if (getLocation()){
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat,lng)));
+            }
+            GoogleMap mMap = googleMap;
+            locationManager= (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                    userLatlng = new LatLng(location.getLatitude(),location.getLongitude());
+                    mMap.clear();
+                    mMap.addMarker(new MarkerOptions().position(userLatlng).title("Your location"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(userLatlng));
+                }
+            };
         }
     };
 
@@ -54,4 +82,30 @@ public class Fragment_StopSelect extends Fragment {
             mapFragment.getMapAsync(callback);
         }
     }
+
+    public boolean getLocation() {
+        String serviceString = getActivity().LOCATION_SERVICE;
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(serviceString);
+        String provider = LocationManager.GPS_PROVIDER;
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return false;
+        }
+        Location location = locationManager.getLastKnownLocation(provider);
+        Log.i("location",location.toString());
+        if(location!=null){
+            userLatlng=new LatLng(location.getLatitude(),location.getLongitude());
+        }
+        locationManager.requestLocationUpdates(provider,5000,50,locationListener);
+        return true;
+    }
+
+
+
 }

@@ -1,5 +1,7 @@
 package com.example.ptvimproved24;
 
+import com.example.ptvimproved24.datastructures.RouteGeopath;
+
 public class Route {
     private int route_type;
     private int route_id;
@@ -7,6 +9,7 @@ public class Route {
     private String route_number;
     private String route_gtfs_id;
     private String direction;
+    private RouteGeopath geopath;
 
     public Route(int route_type, int route_id, String route_name, String route_number, String route_gtfs_id, String direction) {
         this.route_type = route_type;
@@ -37,8 +40,25 @@ public class Route {
         this.route_gtfs_id = route_gtfs_id;
     }
 
-    public Route(int route_type){
+    public Route(int route_id){
+        this.route_id = route_id;
+    }
+
+    public Route(int route_type, int route_id, String route_name, String route_number, RouteGeopath geopath) {
         this.route_type = route_type;
+        this.route_id = route_id;
+        this.route_name = route_name;
+        this.route_number = route_number;
+        this.geopath = geopath;
+    }
+
+    public Route(int route_type, int route_id, String route_name, String route_number, String route_gtfs_id, RouteGeopath geopath) { // Tram, Buses (incl. night bus)
+        this.route_type = route_type;
+        this.route_id = route_id;
+        this.route_name = route_name;
+        this.route_number = route_number;
+        this.route_gtfs_id = route_gtfs_id;
+        this.geopath = geopath;
     }
 
     public int getRoute_type() {
@@ -51,10 +71,6 @@ public class Route {
 
     public int getRoute_id() {
         return route_id;
-    }
-
-    public void setRoute_id(int route_id) {
-        this.route_id = route_id;
     }
 
     public String getRoute_name() {
@@ -87,5 +103,13 @@ public class Route {
 
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+
+    public RouteGeopath getGeopath() {
+        return geopath;
+    }
+
+    public void setGeopath(RouteGeopath geopath) {
+        this.geopath = geopath;
     }
 }

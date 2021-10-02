@@ -28,9 +28,9 @@ import com.microsoft.maps.MapRenderMode;
 import com.microsoft.maps.MapScene;
 import com.microsoft.maps.MapView;
 
-public class RouteDetails extends AppCompatActivity {
+public class RouteDirections extends AppCompatActivity {
     // Used for saved routes, showing both direction
-    private static final String TAG = "RouteDetails";
+    private static final String TAG = "RouteDirections";
     private MapView mMapView;
     private static final Geopoint FlinderSt = new Geopoint(-37.818078, 144.96681);
     private FusedLocationProviderClient fusedLocationClient;
@@ -42,7 +42,7 @@ public class RouteDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        setContentView(R.layout.activity_routedetails);
+        setContentView(R.layout.activity_routedirections);
         mMapView = new MapView(this, MapRenderMode.VECTOR);  // or use MapRenderMode.RASTER for 2D map
         mMapView.setCredentialsKey(BuildConfig.CREDENTIALS_KEY);
         ((FrameLayout) findViewById(R.id.map_view)).addView(mMapView);
@@ -57,7 +57,7 @@ public class RouteDetails extends AppCompatActivity {
         provider = LocationManager.GPS_PROVIDER;
         provider = locationManager.getBestProvider(new Criteria(), false);
         if(checkLocationPermission()){
-            ActivityCompat.requestPermissions(RouteDetails.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 999);
+            ActivityCompat.requestPermissions(RouteDirections.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 999);
             Location location = locationManager.getLastKnownLocation(provider);
 
             double lat = location.getLatitude();
@@ -70,7 +70,7 @@ public class RouteDetails extends AppCompatActivity {
             }
             mMapView.setScene(MapScene.createFromLocationAndZoomLevel(new Geopoint(lat, lng), 15), MapAnimationKind.NONE);
         } else {
-            Toast.makeText(RouteDetails.this, "Location permission not granted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RouteDirections.this, "Location permission not granted", Toast.LENGTH_SHORT).show();
             System.out.println("Location Info:"+"No location :(");
             mMapView.setScene(MapScene.createFromLocationAndZoomLevel(FlinderSt, 15), MapAnimationKind.NONE);
         }
@@ -95,7 +95,7 @@ public class RouteDetails extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(RouteDetails.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 999);
+                                ActivityCompat.requestPermissions(RouteDirections.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 999);
                             }
                         })
                         .create()

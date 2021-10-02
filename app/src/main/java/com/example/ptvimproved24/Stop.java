@@ -13,6 +13,8 @@ public class Stop {
     private ArrayList<Route> routesObj;
     private int distance;
     private int routeType;
+    private double stop_latitude;
+    private double stop_longitude;
 
     public Stop(String suburb, int stopid, String stopname, ArrayList<String> routes, ArrayList<String> times) {
         this.suburb = suburb;
@@ -39,6 +41,26 @@ public class Stop {
     public Stop (int stopId, String stopName) {
         this.stopid = stopId;
         this.stopname = stopName;
+    }
+
+    public Stop (int stopId) {
+        this.stopid = stopId;
+    }
+
+    public Stop(String suburb, String stopname, int stopid, int routeType, double stop_latitude, double stop_longitude) {
+        this.suburb = suburb;
+        this.stopname = stopname;
+        this.stopid = stopid;
+        this.routeType = routeType;
+        this.stop_latitude = stop_latitude;
+        this.stop_longitude = stop_longitude;
+    }
+
+    public Stop(String stopname, int stopid, double stop_latitude, double stop_longitude) {
+        this.stopname = stopname;
+        this.stopid = stopid;
+        this.stop_latitude = stop_latitude;
+        this.stop_longitude = stop_longitude;
     }
 
     public String getSuburb() {
@@ -111,5 +133,21 @@ public class Stop {
 
     public void setRoutesObj(ArrayList<Route> routesObj) {
         this.routesObj = routesObj;
+    }
+
+    public double getStop_latitude() {
+        return stop_latitude;
+    }
+
+    public void setStop_latitude(double stop_latitude) {
+        this.stop_latitude = stop_latitude;
+    }
+
+    public double getStop_longitude() {
+        return stop_longitude;
+    }
+
+    public void setStop_longitude(double stop_longitude) {
+        this.stop_longitude = stop_longitude;
     }
 }

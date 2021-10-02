@@ -62,7 +62,7 @@ public class commonDataRequest {
         return buildAPIrequest("/v3/disruptions/"+disruptionId);
     }
 
-//     Directions
+//     RouteDirections
     public static String showDirectionsOnRoute(int routeId) throws Exception {  // View directions that a route travels in
         return buildAPIrequest("/v3/directions/route/"+routeId);
     }
@@ -75,6 +75,9 @@ public class commonDataRequest {
 //     Routes
     public static String showRouteInfo(int routeId) throws Exception {                      // View route name and number for specific route ID
         return buildAPIrequest("/v3/routes/"+routeId);
+    }
+    public static String showRouteInfoWithPath(int routeId) throws Exception{
+        return buildAPIrequest("/v3/routes/"+routeId+"?include_geopath=true");
     }
 
     //Runs
