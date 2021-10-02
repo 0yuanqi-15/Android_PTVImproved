@@ -1,27 +1,45 @@
 package com.example.ptvimproved24;
 
+
 import android.content.Intent;
+
+import static android.content.Context.SENSOR_SERVICE;
+
+import android.content.Context;
+import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.ptvimproved24.databinding.FragmentHomeBinding;
+import com.squareup.seismic.ShakeDetector;
 
 import java.util.ArrayList;
 
-public class Fragment_Home extends Fragment {
+public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 
     private FragmentHomeBinding binding;
     private StopHttpRequestHandler stopHttpRequestHandler;
-    ListView mListView;
-    NearStopListAdapter adapter;
+    private LocationManager locationManager;
+    private ListView mListView;
+    private NearStopListAdapter adapter;
+    private final float defaultLatitude = -37.818078f;
+    private final float defaultLongitude = 144.96681f;
+    private Float latitude;
+    private Float longitude;
+
+    private Boolean isNearStopShowing;
 
     //add this to get nearest stops
     ArrayList<Stop> nearestStop = new ArrayList<>();
@@ -34,12 +52,34 @@ public class Fragment_Home extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        latitude = defaultLatitude;
+        longitude = defaultLongitude;
+        isNearStopShowing = true;
+
+        SensorManager sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
+        ShakeDetector sd = new ShakeDetector(this);
+        sd.start(sensorManager);
+
         super.onViewCreated(view, savedInstanceState);
         mListView = (ListView) view.findViewById(R.id.nearStops_view);
+        view.findViewById(R.id.nearbystopLabel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isNearStopShowing) {
+                    mListView.setAdapter(new NearStopListAdapter(view.getContext(),R.layout.nearstop_view, new ArrayList<>()));
+                    isNearStopShowing = false;
+                } else {
+                    mListView.setAdapter(adapter);
+                    isNearStopShowing = true;
+                }
+            }
+        });
         adapter = new NearStopListAdapter(view.getContext(),R.layout.nearstop_view, new ArrayList<>());
         mListView.setAdapter(adapter);
         stopHttpRequestHandler = new StopHttpRequestHandler(getActivity());
+        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
+        getGeoLocation();
         generateNearStopList();
         generateSavedStopList(view);
         generateSavedRouteList(view);
@@ -77,6 +117,25 @@ public class Fragment_Home extends Fragment {
         binding = null;
     }
 
+    private void getGeoLocation() {
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+
+                }
+            });
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            latitude = (float) location.getLatitude();
+            longitude = (float) location.getLongitude();
+        } catch (SecurityException e) {
+            Toast.makeText(getContext(),
+                    "Default geolocation is used, please retry after enable location service.",
+                    Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+
     public void generateNearStopList(){
 
         ArrayList<String> stop1route = new ArrayList<>();
@@ -102,11 +161,15 @@ public class Fragment_Home extends Fragment {
 //        nearStopList.add(stop2);
 //        nearStopList.add(stop3);
 
+
         stopHttpRequestHandler.getStopsFromLocation(adapter, -37.818078f, 144.96681f);
 
         //add this to get nearest stops
         nearestStop = stopHttpRequestHandler.getRecord();
         nearestStopDetail = stopHttpRequestHandler.getRecordDetail();
+
+        stopHttpRequestHandler.getStopsFromLocation(adapter, latitude, longitude);
+
     }
 
     public void generateSavedStopList(View v){
@@ -151,5 +214,12 @@ public class Fragment_Home extends Fragment {
 
         SavedRouteListAdapter adapter = new SavedRouteListAdapter(v.getContext(),R.layout.savedroutes_view, SavedRouteList);
         mListView.setAdapter(adapter);
+    }
+
+    @Override
+    public void hearShake() {
+        getGeoLocation();
+        generateNearStopList();
+        Toast.makeText(getContext(), "reloading", Toast.LENGTH_SHORT).show();
     }
 }

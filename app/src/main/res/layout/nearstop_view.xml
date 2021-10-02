@@ -13,7 +13,6 @@
             android:id="@+id/nearstop_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Caulfield Racecourse / Derby Rd - Stop 53"
             android:maxWidth="200sp"
             android:maxEms="12"
             android:ellipsize="end"
@@ -24,7 +23,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="50dp"
-            android:text="900"
             android:textAlignment="center" />
 
         <TextView
@@ -32,7 +30,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="75dp"
-            android:text="5 mins"
             android:textAlignment="center" />
     </TableRow>
 
@@ -42,15 +39,13 @@
         <TextView
             android:id="@+id/nearstop_suburb"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Malvern East" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/nearstop_route2"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:minWidth="50dp"
-            android:text="3"
             android:textAlignment="center" />
 
         <TextView
@@ -58,7 +53,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="75dp"
-            android:text="60 mins"
             android:textAlignment="center" />
     </TableRow>
 
@@ -71,15 +65,13 @@
         <TextView
             android:id="@+id/nearstop_distance"
             android:layout_width="200sp"
-            android:layout_height="wrap_content"
-            android:text="500 m" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/nearstop_route3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="50dp"
-            android:text="900"
             android:textAlignment="center" />
 
         <TextView
@@ -87,7 +79,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="75dp"
-            android:text="14:01"
             android:textAlignment="center" />
     </TableRow>
 

@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -26,6 +27,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Fragment_StopSelect extends Fragment {
     private double lat,lng;
+    LatLng userLatlng;
+    LocationListener locationListener;
+    LocationManager locationManager;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -47,7 +51,17 @@ public class Fragment_StopSelect extends Fragment {
             if (getLocation()){
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat,lng)));
             }
-
+            GoogleMap mMap = googleMap;
+            locationManager= (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                    userLatlng = new LatLng(location.getLatitude(),location.getLongitude());
+                    mMap.clear();
+                    mMap.addMarker(new MarkerOptions().position(userLatlng).title("Your location"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(userLatlng));
+                }
+            };
         }
     };
 
@@ -86,27 +100,12 @@ public class Fragment_StopSelect extends Fragment {
         Location location = locationManager.getLastKnownLocation(provider);
         Log.i("location",location.toString());
         if(location!=null){
-            lat = location.getLatitude();
-            lng = location.getLongitude();
+            userLatlng=new LatLng(location.getLatitude(),location.getLongitude());
         }
         locationManager.requestLocationUpdates(provider,5000,50,locationListener);
         return true;
     }
 
-    private final LocationListener locationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(@NonNull Location location) {
 
-        }
 
-        @Override
-        public void onProviderEnabled(@NonNull String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(@NonNull String provider) {
-
-        }
-    };
 }
