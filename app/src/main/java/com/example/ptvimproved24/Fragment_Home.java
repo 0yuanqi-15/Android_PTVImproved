@@ -41,10 +41,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 
     private Boolean isNearStopShowing;
 
-    //add this to get nearest stops
-    ArrayList<Stop> nearestStop = new ArrayList<>();
-    ArrayList<Stop> nearestStopDetail = new ArrayList<>();
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -84,31 +80,27 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         generateSavedStopList(view);
         generateSavedRouteList(view);
 
-
-
         //add listener here
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(view.getContext(), StopDetailActivity.class);
+                Stop clickedStop = adapter.getItem(i);
 
-                int amount = Math.min(nearestStopDetail.get(i).getRoutes().size(), nearestStopDetail.get(i).getTimes().size());
+                int amount = Math.min(clickedStop.getRoutes().size(), clickedStop.getTimes().size());
                 intent.putExtra("amount", amount);
 
                 for(int x=0; x<amount; x++) {
-                    intent.putExtra(String.valueOf(x), nearestStopDetail.get(i).getRoutes().get(x)+" "+nearestStopDetail.get(i).getTimes().get(x));
+                    intent.putExtra(String.valueOf(x), clickedStop.getRoutes().get(x)+" "+clickedStop.getTimes().get(x));
                 }
 
-                intent.putExtra("index", nearestStop.get(i).getStopid());
-                intent.putExtra("type", nearestStop.get(i).getRouteType());
-                intent.putExtra("name", nearestStop.get(i).getStopname());
+                intent.putExtra("index", clickedStop.getStopid());
+                intent.putExtra("type", clickedStop.getRouteType());
+                intent.putExtra("name", clickedStop.getStopname());
                 startActivity(intent);
 
             }
         });
-
-
-
     }
 
     @Override
@@ -129,7 +121,7 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
             latitude = (float) location.getLatitude();
             longitude = (float) location.getLongitude();
         } catch (SecurityException e) {
-            Toast.makeText(getContext(),
+            Toast.makeText(getActivity(),
                     "Default geolocation is used, please retry after enable location service.",
                     Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -160,13 +152,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 //        nearStopList.add(stop1);
 //        nearStopList.add(stop2);
 //        nearStopList.add(stop3);
-
-
-        stopHttpRequestHandler.getStopsFromLocation(adapter, -37.818078f, 144.96681f);
-
-        //add this to get nearest stops
-        nearestStop = stopHttpRequestHandler.getRecord();
-        nearestStopDetail = stopHttpRequestHandler.getRecordDetail();
 
         stopHttpRequestHandler.getStopsFromLocation(adapter, latitude, longitude);
 
@@ -220,6 +205,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
     public void hearShake() {
         getGeoLocation();
         generateNearStopList();
-        Toast.makeText(getContext(), "reloading", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "reloading", Toast.LENGTH_SHORT).show();
     }
 }
