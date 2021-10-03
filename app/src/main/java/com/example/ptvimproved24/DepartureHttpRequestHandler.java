@@ -89,6 +89,14 @@ public class DepartureHttpRequestHandler {
         return result;
     }
 
+    private String restructureGtfsId(String gtfsId) {
+        String result = gtfsId.substring(2);
+        while (result.charAt(0) == '0') {
+            result = result.substring(1);
+        }
+        return result;
+    }
+
     public void getNextDepartureByStopid(Stop stop, ArrayAdapter adapter){
         int stopid = stop.getStopid();
         int route_type = stop.getRouteType();
@@ -121,7 +129,7 @@ public class DepartureHttpRequestHandler {
                                     ArrayList<String> displayTime = new ArrayList<>();
                                     for(Map.Entry<Integer, String> e : routeMap.entrySet()) {
                                         String name = routeNameMap.get(e.getKey());
-                                        displayRoute.add(name);
+                                        displayRoute.add(restructureGtfsId(name));
                                         displayTime.add(e.getValue());
                                     }
                                     stop.setRoutes(displayRoute);
