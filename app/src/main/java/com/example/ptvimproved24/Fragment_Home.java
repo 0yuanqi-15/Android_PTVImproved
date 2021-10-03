@@ -75,7 +75,7 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         stopHttpRequestHandler = new StopHttpRequestHandler(getActivity());
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
-        //getGeoLocation();
+        getGeoLocation();
         generateNearStopList();
         generateSavedStopList(view);
         generateSavedRouteList(view);
