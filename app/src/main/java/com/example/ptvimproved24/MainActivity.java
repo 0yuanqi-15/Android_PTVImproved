@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     LocationManager locationManager;
     String provider;
-    int REQUEST_LOCATION=999;
+    int REQUEST_LOCATION=99;
 
     private ActivityMainBinding binding;
 
