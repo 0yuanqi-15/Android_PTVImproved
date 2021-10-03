@@ -40,6 +40,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -54,20 +55,22 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     LocationManager locationManager;
     String provider;
-    int REQUEST_LOCATION=99;
+
+    protected static final int REQUEST_LOCATION = 99;
+    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
 
     private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         getUserLocation();
-        if (ActivityCompat.checkSelfPermission(MainActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Location();
-        }else{
+        } else {
             ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         }
 //        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 //        checkLocationPermission();
@@ -91,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_journey_planner,R.id.navigation_mapselect, R.id.navigation_distuptions)
+                R.id.navigation_home, R.id.navigation_journey_planner, R.id.navigation_mapselect, R.id.navigation_distuptions)
                 .build();
 
 
@@ -101,17 +104,17 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        int fragmentToDisplay = getIntent().getIntExtra("fragmentToDisplay",0);
-        if(fragmentToDisplay == 1){
+        int fragmentToDisplay = getIntent().getIntExtra("fragmentToDisplay", 0);
+        if (fragmentToDisplay == 1) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_Home()).addToBackStack(null).commit();
         }
-        if(fragmentToDisplay == 2){
+        if (fragmentToDisplay == 2) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_StopSelect()).addToBackStack(null).commit();
         }
-        if(fragmentToDisplay == 3){
+        if (fragmentToDisplay == 3) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_JourneyPlanner()).addToBackStack(null).commit();
         }
-        if(fragmentToDisplay == 4){
+        if (fragmentToDisplay == 4) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_Disruptions()).addToBackStack(null).commit();
         }
     }
@@ -153,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = new Intent();
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 //            case R.id.menuact_home:
 //                intent = new Intent(MainActivity.this, MainActivity.class);
 //                intent.putExtra("fragmentToDisplay", 1);
@@ -180,26 +183,26 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.menuact_stops:
                 intent = new Intent(MainActivity.this, stops.class);
-                intent.putExtra("stopid",1000);
+                intent.putExtra("stopid", 1000);
                 startActivity(intent);
                 break;
             case R.id.menuact_routedirections:
                 intent = new Intent(MainActivity.this, RouteDirections.class);
-                intent.putExtra("routeid",1);
+                intent.putExtra("routeid", 1);
                 startActivity(intent);
                 break;
             case R.id.menuact_routedetails:
-                intent = new Intent(MainActivity.this,RouteDetails.class);
-                intent.putExtra("routeid",1);
+                intent = new Intent(MainActivity.this, RouteDetails.class);
+                intent.putExtra("routeid", 1);
                 startActivity(intent);
                 break;
         }
         return true;
     }
 
-    private void Location(){
+    private void Location() {
         LocationRequest request = LocationRequest.create();
-        request.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         request.setInterval(10000);
         request.setFastestInterval(3000);
 
@@ -212,18 +215,33 @@ public class MainActivity extends AppCompatActivity {
                 LocationSettingsResponse response = task.getResult(ApiException.class);
                 // Get near stop
             } catch (ApiException e) {
-                switch (e.getStatusCode()){
+                switch (e.getStatusCode()) {
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         try {
                             ResolvableApiException resolvableApiException = (ResolvableApiException) e;
                             resolvableApiException.startResolutionForResult(MainActivity.this, REQUEST_LOCATION);
-                        } catch (IntentSender.SendIntentException sendIntentException){
+                        } catch (IntentSender.SendIntentException sendIntentException) {
                             sendIntentException.printStackTrace();
                         }
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                         break;
                 }
                 e.printStackTrace();
+            }
+        });
+        result.addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),and check the result in onActivityResult().
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(MainActivity.this, REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        // Ignore the error.
+                    }
+                }
             }
         });
     }
