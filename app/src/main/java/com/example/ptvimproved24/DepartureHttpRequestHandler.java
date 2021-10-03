@@ -1,5 +1,7 @@
 package com.example.ptvimproved24;
 
+import android.widget.ArrayAdapter;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
@@ -87,7 +89,7 @@ public class DepartureHttpRequestHandler {
         return result;
     }
 
-    public void getNextDepartureByStopid(Stop stop, NearStopListAdapter adapter){
+    public void getNextDepartureByStopid(Stop stop, ArrayAdapter adapter){
         int stopid = stop.getStopid();
         int route_type = stop.getRouteType();
         try{
