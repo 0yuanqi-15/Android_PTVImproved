@@ -1,5 +1,7 @@
 package com.example.ptvimproved24;
 
+import android.widget.ArrayAdapter;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
@@ -28,7 +30,7 @@ public class RouteHttpRequestHandler {
         activity = act;
     }
 
-    public void getRoutePathById(int routeid, stopsListAdapter adapter, MapView map) throws Exception {
+    public void getRoutePathById(int routeid, ArrayAdapter adapter, MapView map) throws Exception {
         String url = commonDataRequest.showRouteInfoWithPath(routeid);
         System.out.println("Request:"+url);
         try {
