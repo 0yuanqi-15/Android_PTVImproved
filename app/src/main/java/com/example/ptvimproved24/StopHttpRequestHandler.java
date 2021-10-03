@@ -1,5 +1,7 @@
 package com.example.ptvimproved24;
 
+import android.widget.ArrayAdapter;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
@@ -63,7 +65,7 @@ public class StopHttpRequestHandler {
         return stops;
     }
 
-    public void getStopsFromLocation(NearStopListAdapter adapter, float latitude, float longitude) {
+    public void getStopsFromLocation(ArrayAdapter adapter, float latitude, float longitude) {
         try {
             String url = commonDataRequest.nearByStops(latitude, longitude);
             System.out.println(url);

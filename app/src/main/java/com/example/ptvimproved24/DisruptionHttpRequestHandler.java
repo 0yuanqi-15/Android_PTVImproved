@@ -1,5 +1,7 @@
 package com.example.ptvimproved24;
 
+import android.widget.ArrayAdapter;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
@@ -134,7 +136,7 @@ public class DisruptionHttpRequestHandler {
         return result;
     }
 
-    public void getAllDisruptions(DisruptionListAdapter adapter) {
+    public void getAllDisruptions(ArrayAdapter adapter) {
         try {
             System.out.println(commonDataRequest.disruptions());
             String url = commonDataRequest.disruptions();
