@@ -141,4 +141,67 @@ public class DepartureHttpRequestHandler {
             e.printStackTrace();
         }
     }
+
+
+    //add this method to show stop detail information
+    public void getNextDepartureByStopId(int stopId, int routeType, ArrayAdapter adapter){
+        //int stopid = stop.getStopid();
+        //int route_type = stop.getRouteType();
+        try{
+            String url = commonDataRequest.nextDeparture(routeType, stopId);
+            System.out.println(url);
+            Request request = new Request.Builder().url(url).build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                }
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()){
+                        String responseBody = response.body().string();
+                        try {
+                            JSONObject jsonObj = new JSONObject(responseBody);
+                            JSONArray departures = jsonObj.getJSONArray("departures");
+                            JSONObject routes = jsonObj.getJSONObject("routes");
+                            ArrayList<Departure> fetchedArray = getDepartureListFromJSONArray(departures);
+                            ArrayList<Route> routeArray = getRouteArrayFromJSONObject(routes);
+                            //stop.setDeparturesObj(fetchedArray);
+                            //stop.setRoutesObj(routeArray);
+
+
+
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ArrayList<String> displayRoute = new ArrayList<>();
+                                    ArrayList<String> displayTime = new ArrayList<>();
+                                    ArrayList<String> displayDetail = new ArrayList<>();
+                                    for(Map.Entry<Integer, String> e : routeMap.entrySet()) {
+                                        String name = routeNameMap.get(e.getKey());
+                                        displayRoute.add(name);
+                                        displayTime.add(e.getValue());
+                                        displayDetail.add(name+" "+e.getValue());
+                                    }
+                                    adapter.clear();
+                                    adapter.addAll(displayDetail.subList(0, displayDetail.size()));
+                                    //stop.setRoutes(displayRoute);
+                                    //stop.setTimes(displayTime);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

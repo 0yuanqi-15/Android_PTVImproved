@@ -75,7 +75,7 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         stopHttpRequestHandler = new StopHttpRequestHandler(getActivity());
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
-        getGeoLocation();
+        //getGeoLocation();
         generateNearStopList();
         generateSavedStopList(view);
         generateSavedRouteList(view);
@@ -84,15 +84,15 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(view.getContext(), StopDetailActivity.class);
+                Intent intent = new Intent(view.getContext(), stops.class);
                 Stop clickedStop = adapter.getItem(i);
 
-                int amount = Math.min(clickedStop.getRoutes().size(), clickedStop.getTimes().size());
-                intent.putExtra("amount", amount);
+                //int amount = Math.min(clickedStop.getRoutes().size(), clickedStop.getTimes().size());
+                //intent.putExtra("amount", amount);
 
-                for(int x=0; x<amount; x++) {
-                    intent.putExtra(String.valueOf(x), clickedStop.getRoutes().get(x)+" "+clickedStop.getTimes().get(x));
-                }
+                //for(int x=0; x<amount; x++) {
+                //    intent.putExtra(String.valueOf(x), clickedStop.getRoutes().get(x)+" "+clickedStop.getTimes().get(x));
+                //}
 
                 intent.putExtra("index", clickedStop.getStopid());
                 intent.putExtra("type", clickedStop.getRouteType());

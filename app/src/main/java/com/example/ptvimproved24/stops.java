@@ -1,5 +1,6 @@
 package com.example.ptvimproved24;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -12,12 +13,17 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.example.ptvimproved24.databinding.ActivityStopsBinding;
+
+import java.util.ArrayList;
 
 public class stops extends AppCompatActivity {
 
     private ActivityStopsBinding binding;
+    private ListView detail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +36,29 @@ public class stops extends AppCompatActivity {
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
         toolBarLayout.setTitle(getTitle());
+
+        //show information in the layout
+
+        detail = (ListView) findViewById(R.id.stops_nextservice);
+
+
+        //String stopRouteAndTime;
+
+        Intent intent = getIntent();
+        //int amount = intent.getIntExtra("amount", 0);
+        int stopId = intent.getIntExtra("index", 0);
+        int routeType = intent.getIntExtra("type", 0);
+        String stopName = intent.getStringExtra("name");
+
+        ArrayList<String> stopDetail = new ArrayList<>();
+
+        DepartureHttpRequestHandler departureHttpRequestHandler = new DepartureHttpRequestHandler(this);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stopDetail);
+
+        detail.setAdapter(adapter);
+
+        departureHttpRequestHandler.getNextDepartureByStopId(stopId, routeType, adapter);
 
         FloatingActionButton fab = binding.fab;
         fab.setOnClickListener(new View.OnClickListener() {
