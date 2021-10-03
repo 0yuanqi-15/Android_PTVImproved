@@ -87,16 +87,12 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
                 Intent intent = new Intent(view.getContext(), stops.class);
                 Stop clickedStop = adapter.getItem(i);
 
-                //int amount = Math.min(clickedStop.getRoutes().size(), clickedStop.getTimes().size());
-                //intent.putExtra("amount", amount);
 
-                //for(int x=0; x<amount; x++) {
-                //    intent.putExtra(String.valueOf(x), clickedStop.getRoutes().get(x)+" "+clickedStop.getTimes().get(x));
-                //}
 
                 intent.putExtra("index", clickedStop.getStopid());
                 intent.putExtra("type", clickedStop.getRouteType());
                 intent.putExtra("name", clickedStop.getStopname());
+                intent.putExtra("suburb", clickedStop.getSuburb());
                 startActivity(intent);
 
             }

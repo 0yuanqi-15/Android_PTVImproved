@@ -35,20 +35,17 @@ public class stops extends AppCompatActivity {
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
-        toolBarLayout.setTitle(getTitle());
+        //toolBarLayout.setTitle(getTitle());
 
         //show information in the layout
-
         detail = (ListView) findViewById(R.id.stops_nextservice);
-
-
-        //String stopRouteAndTime;
-
         Intent intent = getIntent();
-        //int amount = intent.getIntExtra("amount", 0);
         int stopId = intent.getIntExtra("index", 0);
         int routeType = intent.getIntExtra("type", 0);
         String stopName = intent.getStringExtra("name");
+        String stopSuburb = intent.getStringExtra("suburb");
+
+        toolBarLayout.setTitle(stopName+"\n"+stopSuburb);
 
         ArrayList<String> stopDetail = new ArrayList<>();
 
