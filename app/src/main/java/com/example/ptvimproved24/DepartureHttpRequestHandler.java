@@ -212,4 +212,56 @@ public class DepartureHttpRequestHandler {
         }
     }
 
+    public void getNextDepartureBySavedStop(SavedStop stop, ArrayAdapter adapter){
+        int stopid = Integer.parseInt(stop.getStopid());
+        int route_type = Integer.parseInt(stop.getRouteType());
+        try{
+            String url = commonDataRequest.nextDeparture(route_type, stopid);
+            System.out.println(url);
+            Request request = new Request.Builder().url(url).build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                }
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()){
+                        String responseBody = response.body().string();
+                        try {
+                            JSONObject jsonObj = new JSONObject(responseBody);
+                            JSONArray departures = jsonObj.getJSONArray("departures");
+                            JSONObject routes = jsonObj.getJSONObject("routes");
+                            ArrayList<Departure> fetchedArray = getDepartureListFromJSONArray(departures);
+                            ArrayList<Route> routeArray = getRouteArrayFromJSONObject(routes);
+
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ArrayList<String> displayRoute = new ArrayList<>();
+                                    ArrayList<String> displayTime = new ArrayList<>();
+                                    for(Map.Entry<Integer, String> e : routeMap.entrySet()) {
+                                        String name = routeNameMap.get(e.getKey());
+                                        displayRoute.add(restructureGtfsId(name));
+                                        displayTime.add(e.getValue());
+                                    }
+                                    stop.setRoutes(displayRoute);
+                                    stop.setTimes(displayTime);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

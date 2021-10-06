@@ -6,15 +6,18 @@ import android.content.Intent;
 import static android.content.Context.SENSOR_SERVICE;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,8 +27,16 @@ import androidx.fragment.app.Fragment;
 
 import com.example.ptvimproved24.databinding.FragmentHomeBinding;
 import com.squareup.seismic.ShakeDetector;
+import android.content.SharedPreferences;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 
 public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 
@@ -34,6 +45,7 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
     private LocationManager locationManager;
     private ListView mListView;
     private NearStopListAdapter adapter;
+    private SavedStopListAdapter savedStopListAdapter;
     private final float defaultLatitude = -37.818078f;
     private final float defaultLongitude = 144.96681f;
     private Float latitude;
@@ -86,7 +98,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(view.getContext(), stops.class);
                 Stop clickedStop = adapter.getItem(i);
-
 
 
                 intent.putExtra("index", clickedStop.getStopid());
@@ -156,31 +167,70 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
     public void generateSavedStopList(View v){
         ListView mListView = (ListView) v.findViewById(R.id.SavedStop_view);
 
-        ArrayList<String> stop1route = new ArrayList<>();
-        stop1route.add("703");stop1route.add("737");stop1route.add("862");
-        ArrayList<String> stop1time = new ArrayList<>();
-        stop1time.add("Now");stop1time.add("Now");stop1time.add("Now");
-        SavedStop stop1=new SavedStop("Clayton","Monash University",stop1route,stop1time);
-
-        ArrayList<String> stop2route = new ArrayList<>();
-        stop2route.add("862");stop2route.add("802");stop2route.add("900");
-        ArrayList<String> stop2time = new ArrayList<>();
-        stop2time.add("Now");stop2time.add("Now");stop2time.add("Now");
-        SavedStop stop2=new SavedStop("Chadstone","Chadstone Shopping Centre / Eastern Access Rd",stop2route,stop2time);
-
-        ArrayList<String> stop3route = new ArrayList<>();
-        stop3route.add("631");stop3route.add("631");stop3route.add("631");
-        ArrayList<String> stop3time = new ArrayList<>();
-        stop3time.add("Now");stop3time.add("6 mins");stop3time.add("7 mins");
-        SavedStop stop3=new SavedStop("Clayton","Princes Hwy / Blackburn Rd",stop3route,stop3time);
+//        ArrayList<String> stop1route = new ArrayList<>();
+//        stop1route.add("703");stop1route.add("737");stop1route.add("862");
+//        ArrayList<String> stop1time = new ArrayList<>();
+//        stop1time.add("Now");stop1time.add("Now");stop1time.add("Now");
+//        SavedStop stop1=new SavedStop("Clayton","Monash University",stop1route,stop1time);
+//
+//        ArrayList<String> stop2route = new ArrayList<>();
+//        stop2route.add("862");stop2route.add("802");stop2route.add("900");
+//        ArrayList<String> stop2time = new ArrayList<>();
+//        stop2time.add("Now");stop2time.add("Now");stop2time.add("Now");
+//        SavedStop stop2=new SavedStop("Chadstone","Chadstone Shopping Centre / Eastern Access Rd",stop2route,stop2time);
+//
+//        ArrayList<String> stop3route = new ArrayList<>();
+//        stop3route.add("631");stop3route.add("631");stop3route.add("631");
+//        ArrayList<String> stop3time = new ArrayList<>();
+//        stop3time.add("Now");stop3time.add("6 mins");stop3time.add("7 mins");
+//        SavedStop stop3=new SavedStop("Clayton","Princes Hwy / Blackburn Rd",stop3route,stop3time);
 
         ArrayList<SavedStop> savedStopList = new ArrayList<>();
-        savedStopList.add(stop1);
-        savedStopList.add(stop2);
-        savedStopList.add(stop3);
 
-        SavedStopListAdapter adapter = new SavedStopListAdapter(v.getContext(),R.layout.savedstops_view, savedStopList);
-        mListView.setAdapter(adapter);
+        String PREFERENCE_NAME = "SavedStops";
+        SharedPreferences pref = getContext().getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+
+        try {
+            if (pref != null) {
+                Map<String, ?> allEntries = pref.getAll();
+
+                for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+                    String stopid = entry.getKey();
+                    String stopinfo = pref.getString(stopid, (new JSONObject()).toString());
+
+                    Map<String,String> stopinfoMap = new HashMap<>();
+                    if (stopinfo != null) {
+                        JSONObject jsonObject = new JSONObject(stopinfo);
+                        Iterator<String> keysItr = jsonObject.keys();
+                        while (keysItr.hasNext()) {
+                            String key = keysItr.next();
+                            String value = jsonObject.getString(key);
+                            stopinfoMap.put(key, value);
+                        }
+                    }
+
+                    SavedStop savedStop = new SavedStop(stopid, stopinfoMap.get("suburb"), stopinfoMap.get("route_type"), stopinfoMap.get("stop_name"));
+
+                    savedStopList.add(savedStop);
+                    Log.d("values", "saved stop loaded success");
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        savedStopListAdapter  = new SavedStopListAdapter(v.getContext(),R.layout.savedstops_view, savedStopList);
+        mListView.setAdapter(savedStopListAdapter);
+
+        DepartureHttpRequestHandler departureHttpRequestHandler = new DepartureHttpRequestHandler(getActivity());
+
+        for (SavedStop eachSaveStop: savedStopList){
+            departureHttpRequestHandler.getNextDepartureBySavedStop(eachSaveStop, savedStopListAdapter);
+
+        }
+
+
     }
 
     public void generateSavedRouteList(View v){

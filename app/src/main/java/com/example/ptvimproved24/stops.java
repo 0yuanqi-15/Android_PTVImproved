@@ -1,6 +1,8 @@
 package com.example.ptvimproved24;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -10,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +21,10 @@ import android.widget.ListView;
 
 import com.example.ptvimproved24.databinding.ActivityStopsBinding;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class stops extends AppCompatActivity {
 
@@ -63,6 +69,25 @@ public class stops extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                String PREFERENCE_NAME = "SavedStops";
+
+                HashMap<String, Object> stop_info = new HashMap<String, Object>();
+                stop_info.put("stop_name", stopName);
+                stop_info.put("route_type", routeType);
+                stop_info.put("suburb", stopSuburb);
+
+                SharedPreferences.Editor editor = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
+                JSONObject jsonObject = new JSONObject(stop_info);
+                String jsonString = jsonObject.toString();
+                editor.putString(Integer.toString(stopId), jsonString);
+
+                editor.apply();
+
+                String TAG = "MyActivity";
+                Log.i(TAG, "write success");
+                Snackbar.make(view, "Stop saved successfully", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
             }
         });
     }

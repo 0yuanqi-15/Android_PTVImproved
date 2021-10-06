@@ -6,6 +6,7 @@ public class SavedStop {
     private String suburb;
     private String stopname;
     private String stopid;
+    private String routeType;
     private ArrayList<String> routes;
     private ArrayList<String> times;
 
@@ -23,6 +24,14 @@ public class SavedStop {
         this.routes = routes;
         this.times = times;
     }
+
+    public SavedStop(String stopid, String suburb, String routeType, String stopname) {
+        this.suburb = suburb;
+        this.stopname = stopname;
+        this.stopid = stopid;
+        this.routeType = routeType;
+    }
+
 
     public String getSuburb() {
         return suburb;
@@ -62,5 +71,13 @@ public class SavedStop {
 
     public void setTimes(ArrayList<String> times) {
         this.times = times;
+    }
+
+    public String getRouteType() {
+        return routeType;
+    }
+
+    public void setRouteType(String routeType) {
+        this.routeType = routeType;
     }
 }
