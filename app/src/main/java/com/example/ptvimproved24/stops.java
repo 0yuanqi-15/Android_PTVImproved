@@ -3,6 +3,7 @@ package com.example.ptvimproved24;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -13,11 +14,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 
 import com.example.ptvimproved24.databinding.ActivityStopsBinding;
 
@@ -70,8 +76,43 @@ public class stops extends AppCompatActivity {
             public void onClick(View view) {
                 SharedPreferences pref = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
                 if (pref.contains(Integer.toString(stopId))){
-                    Snackbar.make(view, "You have already saved this stop!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+
+                    View pop_view = getLayoutInflater().inflate(R.layout.popup_window_stop_detail, null, false);
+                    final PopupWindow popWindow = new PopupWindow(pop_view,
+                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+
+                    popWindow.setTouchable(true);
+                    popWindow.setBackgroundDrawable(new ColorDrawable(0xffffffff));
+
+                    popWindow.showAtLocation(pop_view, Gravity.CENTER, 0, 0);
+
+                    Button btn_yes = (Button) pop_view.findViewById(R.id.btn_ok);
+                    Button btn_cancel = (Button) pop_view.findViewById(R.id.btn_cancel);
+
+                    btn_yes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            SharedPreferences.Editor editor = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
+                            editor.remove(Integer.toString(stopId));
+                            editor.apply();
+
+                            Snackbar.make(view, "This stop has been removed from you save-list", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                            popWindow.dismiss();
+                        }
+                    });
+
+                    btn_cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popWindow.dismiss();
+                        }
+                    });
+
+
+
+//                    Snackbar.make(view, "You have already saved this stop!", Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show();
                     return;
                 }
 

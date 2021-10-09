@@ -210,7 +210,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
                     }
 
                     SavedStop savedStop = new SavedStop(stopid, stopinfoMap.get("suburb"), stopinfoMap.get("route_type"), stopinfoMap.get("stop_name"));
-
                     savedStopList.add(savedStop);
                     Log.d("values", "saved stop loaded success");
 
@@ -226,6 +225,7 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         DepartureHttpRequestHandler departureHttpRequestHandler = new DepartureHttpRequestHandler(getActivity());
 
         for (SavedStop eachSaveStop: savedStopList){
+            Log.d("values", ("id of " + eachSaveStop.getStopname() + "is" + eachSaveStop.getStopid()));
             departureHttpRequestHandler.getNextDepartureBySavedStop(eachSaveStop, savedStopListAdapter);
 
         }
