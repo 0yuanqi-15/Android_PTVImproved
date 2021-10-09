@@ -48,19 +48,29 @@ public class SavedStopListAdapter extends ArrayAdapter<SavedStop> {
         tvSuburb.setText(stopsuburb);
 
         if(routes == null || times == null){
-            tvroute1.setText("Nothing found");
+            tvroute1.setText("");
             tvtime1.setText("Nothing found");
+            tvroute2.setText("");
+            tvtime2.setText("");
+            tvroute3.setText("");
+            tvtime3.setText("");
             return convertView;
         }
 
         if (routes.size()>=1 && times.size()>=1){
             tvroute1.setText(routes.get(0));
             tvtime1.setText(times.get(0));
+            tvroute2.setText("");
+            tvtime2.setText("");
+            tvroute3.setText("");
+            tvtime3.setText("");
         }
 
         if (routes.size()>=2 && times.size()>=2){
             tvroute2.setText(routes.get(1));
             tvtime2.setText(times.get(1));
+            tvroute3.setText("");
+            tvtime3.setText("");
         }
 
         if (routes.size()>=3 && times.size()>=3){

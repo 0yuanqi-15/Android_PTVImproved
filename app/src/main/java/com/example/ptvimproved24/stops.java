@@ -63,13 +63,17 @@ public class stops extends AppCompatActivity {
 
         departureHttpRequestHandler.getNextDepartureByStopId(stopId, routeType, adapter);
 
+        String PREFERENCE_NAME = "SavedStops";
         FloatingActionButton fab = binding.fab;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                String PREFERENCE_NAME = "SavedStops";
+                SharedPreferences pref = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+                if (pref.contains(Integer.toString(stopId))){
+                    Snackbar.make(view, "You have already saved this stop!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    return;
+                }
 
                 HashMap<String, Object> stop_info = new HashMap<String, Object>();
                 stop_info.put("stop_name", stopName);
