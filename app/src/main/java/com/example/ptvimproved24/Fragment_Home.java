@@ -72,7 +72,7 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
         getGeoLocation();
-        generateNearStopList();
+        //generateNearStopList();
         generateSavedStopList(view);
         generateSavedRouteList(view);
     }
@@ -88,16 +88,21 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
-
+                    if(latitude != (float) location.getLatitude() || longitude != (float) location.getLongitude()) {
+                        latitude = (float) location.getLatitude();
+                        longitude = (float) location.getLongitude();
+                        generateNearStopList();
+                    }
                 }
             });
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            latitude = (float) location.getLatitude();
-            longitude = (float) location.getLongitude();
+//            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//            latitude = (float) location.getLatitude();
+//            longitude = (float) location.getLongitude();
         } catch (SecurityException e) {
             Toast.makeText(getActivity(),
                     "Default geolocation is used, please retry after enable location service.",
                     Toast.LENGTH_LONG).show();
+            generateNearStopList();
             e.printStackTrace();
         }
     }
@@ -161,6 +166,7 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 
     public void generateSavedRouteList(View v){
         ListView mListView = (ListView) v.findViewById(R.id.savedRoutes_view);
+        //stopHttpRequestHandler.getStopFromId(1159, 0);
 
         SavedRoute route1=new SavedRoute("703","Oakleigh - Box Hill via Clayton");
         SavedRoute route2=new SavedRoute("3-3a","Melbourne University - East Malvern");
