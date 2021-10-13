@@ -62,7 +62,7 @@ public class commonDataRequest {
         return buildAPIrequest("/v3/disruptions/"+disruptionId);
     }
 
-//     RouteDirections
+//     RouteDirections）
     public static String showDirectionsOnRoute(int routeId) throws Exception {  // View directions that a route travels in
         return buildAPIrequest("/v3/directions/route/"+routeId);
     }

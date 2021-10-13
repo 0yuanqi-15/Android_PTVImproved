@@ -63,6 +63,7 @@ public class RouteDirections extends AppCompatActivity {
         mMapView = new MapView(this, MapRenderMode.VECTOR);  // or use MapRenderMode.RASTER for 2D map
         mMapView.setCredentialsKey(BuildConfig.CREDENTIALS_KEY);
         ((FrameLayout) findViewById(R.id.map_view)).addView(mMapView);
+
         mMapView.onCreate(savedInstanceState);
 
         int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
