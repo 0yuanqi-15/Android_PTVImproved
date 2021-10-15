@@ -69,6 +69,7 @@ public class RouteDirections extends AppCompatActivity {
 
         mMapView.onCreate(savedInstanceState);
 
+
         int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
 //        getRoutePathById(routeid);
         // looking up route route, nearest's stop to user, then lookup the stop's next departure
