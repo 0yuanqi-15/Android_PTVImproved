@@ -11,7 +11,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +42,7 @@ import com.microsoft.maps.MapRenderMode;
 import com.microsoft.maps.MapScene;
 import com.microsoft.maps.MapView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RouteDirections extends AppCompatActivity {
@@ -298,4 +301,28 @@ public class RouteDirections extends AppCompatActivity {
         }
 
     };
+
+    //ZhentaoHe Test
+    public void generateRouteDirectionList(View v){
+        ListView mListView = (ListView) v.findViewById(R.id.route_directionList);
+
+        Route route1 = new Route(1038);
+        Direction direction1 = new Direction(1038);
+
+
+        ArrayList<Route> SearchRouteList = new ArrayList<>();
+        ArrayList<Direction> SearchDirectionList = new ArrayList<>();
+
+        SearchRouteList.add(route1);
+        SearchDirectionList.add(direction1);
+
+
+        RouteDirectionAdapter adapter = new RouteDirectionAdapter(v.getContext(),R.layout.routedetails_view, SearchDirectionList);
+        mListView.setAdapter(adapter);
+    }
+
+    //ZhentaoHe Test
+
+
+
 }

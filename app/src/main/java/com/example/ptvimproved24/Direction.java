@@ -7,7 +7,6 @@ public class Direction {
     private int route_id;
     private int direction_id;
 
-
     private String route_direction_description;
     private String direction_name;
 
@@ -18,6 +17,11 @@ public class Direction {
         this.direction_id = direction_id;
         this.route_direction_description = route_direction_description;
         this.direction_name = direction_name;
+    }
+
+
+    public Direction(int route_id) {
+        this.route_id = route_id;
     }
 
     public int getRoute_type() {
