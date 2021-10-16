@@ -3,7 +3,6 @@ package com.example.ptvimproved24;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.ptvimproved24.ui.StopDetailAdapter;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -14,7 +13,6 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.ptvimproved24.databinding.ActivityStopsBinding;
