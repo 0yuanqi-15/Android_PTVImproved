@@ -31,12 +31,14 @@ public class DepartureHttpRequestHandler {
     private final FragmentActivity activity;
     private HashMap<Integer, String> routeMap;
     private HashMap<Integer, String> routeNameMap;
+    private HashMap<Integer, String> routeDirectionMap;
 
     public DepartureHttpRequestHandler(FragmentActivity act) {
         client = new OkHttpClient();
         activity = act;
         routeMap = new HashMap<>();
         routeNameMap = new HashMap<>();
+        routeDirectionMap = new HashMap<>();
     }
 
     private String UTCToAEST(String utc) {
@@ -82,7 +84,12 @@ public class DepartureHttpRequestHandler {
             String routeName = route.getString("route_name");
             String routeNumber = route.getString("route_number");
             String routeGtfsId = route.getString("route_gtfs_id");
+
+            String[] direction = routeName.split("-");
+            String[] routeDirection = direction[1].split("via");
+
             routeNameMap.put(routeId, routeGtfsId);
+            routeDirectionMap.put(routeId, routeDirection[0]);
             Route r = new Route(routeType, routeId, routeName, routeNumber, routeGtfsId, "");
             result.add(r);
         }
@@ -153,8 +160,6 @@ public class DepartureHttpRequestHandler {
 
     //add this method to show stop detail information
     public void getNextDepartureByStopId(int stopId, int routeType, ArrayAdapter adapter){
-        //int stopid = stop.getStopid();
-        //int route_type = stop.getRouteType();
         try{
             String url = commonDataRequest.nextDeparture(routeType, stopId);
             System.out.println(url);
@@ -175,8 +180,6 @@ public class DepartureHttpRequestHandler {
                             JSONObject routes = jsonObj.getJSONObject("routes");
                             ArrayList<Departure> fetchedArray = getDepartureListFromJSONArray(departures);
                             ArrayList<Route> routeArray = getRouteArrayFromJSONObject(routes);
-                            //stop.setDeparturesObj(fetchedArray);
-                            //stop.setRoutesObj(routeArray);
 
 
 
@@ -186,16 +189,23 @@ public class DepartureHttpRequestHandler {
                                     ArrayList<String> displayRoute = new ArrayList<>();
                                     ArrayList<String> displayTime = new ArrayList<>();
                                     ArrayList<String> displayDetail = new ArrayList<>();
+
                                     for(Map.Entry<Integer, String> e : routeMap.entrySet()) {
                                         String name = routeNameMap.get(e.getKey());
+
+                                        String direction = routeDirectionMap.get(e.getKey());
+                                        //try {
+                                        //    direction = commonDataRequest.showDirectionsOnRoute(e.getKey());
+                                        //   System.out.println(direction);
+                                        //} catch (Exception exception) {
+                                        //    exception.printStackTrace();
+                                        //}
                                         displayRoute.add(name);
                                         displayTime.add(e.getValue());
-                                        displayDetail.add(name+" "+e.getValue());
+                                        displayDetail.add(name+"@"+e.getValue()+"@"+direction);
                                     }
                                     adapter.clear();
                                     adapter.addAll(displayDetail.subList(0, displayDetail.size()));
-                                    //stop.setRoutes(displayRoute);
-                                    //stop.setTimes(displayTime);
                                     adapter.notifyDataSetChanged();
                                 }
                             });

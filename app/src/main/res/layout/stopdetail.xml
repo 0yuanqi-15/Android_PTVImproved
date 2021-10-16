@@ -9,25 +9,33 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/stop_image"
-            android:layout_width="30dp"
-            android:layout_height="50dp"
-            android:background="@color/quantum_orange"
-            android:src="@drawable/baseline_directions_railway_filled_20"/>
-
         <TextView
-            android:id="@+id/stop_route"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:id="@+id/stop_direction"
+            android:layout_width="50dp"
+            android:layout_height="70dp"
             android:minWidth="50dp"
             android:textAlignment="center"
             android:textSize="50px"/>
 
         <TextView
+            android:id="@+id/stop_route"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:minWidth="50dp"
+            android:textAlignment="center"
+            android:textSize="50px"/>
+
+        <ImageView
+            android:id="@+id/stop_time_image"
+            android:layout_width="30dp"
+            android:layout_height="70dp"
+            android:background="@color/quantum_orange"
+            android:src="@drawable/outline_watch_later_24"/>
+
+        <TextView
             android:id="@+id/stop_time"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="70dp"
             android:minWidth="75dp"
             android:textAlignment="center"
             android:textSize="50px"/>
