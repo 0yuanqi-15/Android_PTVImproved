@@ -71,13 +71,6 @@ public class RouteDirections extends AppCompatActivity {
 
         mMapView.onCreate(savedInstanceState);
 
-        mListView = (ListView) findViewById(R.id.route_directionList);
-        routeDirectionAdapter = new RouteDirectionAdapter(this, R.layout.routedetails_view, new ArrayList<>());
-        mListView.setAdapter(routeDirectionAdapter);
-
-
-
-
         //int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
 //        getRoutePathById(routeid);
         mListView = (ListView) findViewById(R.id.route_directionList);
