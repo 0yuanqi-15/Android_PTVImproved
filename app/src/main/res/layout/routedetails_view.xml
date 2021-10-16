@@ -59,8 +59,7 @@
             <TextView
                 android:id="@+id/rdetails_time1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="time1" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/rdetails_countdown1"
@@ -82,8 +81,7 @@
             <TextView
                 android:id="@+id/rdetails_time2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="time2" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/rdetails_countdown2"
@@ -104,8 +102,7 @@
             <TextView
                 android:id="@+id/rdetails_time3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="time3" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/rdetails_countdown3"

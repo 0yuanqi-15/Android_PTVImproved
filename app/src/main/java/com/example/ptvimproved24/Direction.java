@@ -15,6 +15,7 @@ public class Direction {
 
     private ArrayList<Stop> stops;
     private Stop nearestStop;
+    private ArrayList<Departure> departuresForNearestStop;
 
 
     public Direction(int route_type, int route_id, int direction_id, String route_direction_description, String direction_name) {
@@ -24,6 +25,7 @@ public class Direction {
         this.route_direction_description = route_direction_description;
         this.direction_name = direction_name;
         this.stops = new ArrayList<>();
+        departuresForNearestStop = new ArrayList<>();
     }
 
 
@@ -85,5 +87,13 @@ public class Direction {
 
     public void setNearestStop(Stop nearestStop) {
         this.nearestStop = nearestStop;
+    }
+
+    public ArrayList<Departure> getDeparturesForNearestStop() {
+        return departuresForNearestStop;
+    }
+
+    public void setDeparturesForNearestStop(ArrayList<Departure> departuresForNearestStop) {
+        this.departuresForNearestStop = departuresForNearestStop;
     }
 }

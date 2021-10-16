@@ -280,6 +280,8 @@ public class StopHttpRequestHandler {
                                 }
                             }
                             direction.setNearestStop(nearestStop);
+                            DepartureHttpRequestHandler departureHttpRequestHandler = new DepartureHttpRequestHandler(activity);
+                            departureHttpRequestHandler.getDepartureForRouteOnStop(direction, adapter);
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {

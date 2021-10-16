@@ -132,15 +132,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
     public void generateSavedStopList(View v){
         ListView mListView = (ListView) v.findViewById(R.id.SavedStop_view);
 
-        try{System.out.println(commonDataRequest.showDirectionsOnRoute(1881)); }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-
-
-
         ArrayList<String> stop1route = new ArrayList<>();
         stop1route.add("703");stop1route.add("737");stop1route.add("862");
         ArrayList<String> stop1time = new ArrayList<>();
