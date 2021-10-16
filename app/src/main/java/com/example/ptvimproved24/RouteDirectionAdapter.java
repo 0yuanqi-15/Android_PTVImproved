@@ -28,12 +28,19 @@ public class RouteDirectionAdapter extends ArrayAdapter<Direction> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         String direction_name = getItem(position).getDirection_name();
+        String nearestStopName = "--";
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
 
         TextView serviceTo = (TextView) convertView.findViewById(R.id.rdetails_terminus);
         serviceTo.setText(direction_name);
+
+        if (getItem(position).getNearestStop() != null) {
+            nearestStopName = getItem(position).getNearestStop().getStopname();
+        }
+        TextView nearStopName = (TextView) convertView.findViewById(R.id.rdetails_stopname);
+        nearStopName.setText(nearestStopName);
 
 
         return convertView;

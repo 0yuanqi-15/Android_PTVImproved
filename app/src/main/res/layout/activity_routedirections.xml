@@ -11,9 +11,8 @@
     <FrameLayout
         android:id="@+id/map_view"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        app:layout_constraintDimensionRatio="1:1"
-        />
+        android:layout_height="400dp"
+        app:layout_constraintDimensionRatio="1:1" />
 
     <ListView
         android:id="@+id/route_directionList"

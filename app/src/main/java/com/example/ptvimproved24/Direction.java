@@ -2,6 +2,9 @@ package com.example.ptvimproved24;
 
 import com.example.ptvimproved24.datastructures.RouteGeopath;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Direction {
     private int route_type;
     private int route_id;
@@ -10,6 +13,9 @@ public class Direction {
     private String route_direction_description;
     private String direction_name;
 
+    private ArrayList<Stop> stops;
+    private Stop nearestStop;
+
 
     public Direction(int route_type, int route_id, int direction_id, String route_direction_description, String direction_name) {
         this.route_type = route_type;
@@ -17,6 +23,7 @@ public class Direction {
         this.direction_id = direction_id;
         this.route_direction_description = route_direction_description;
         this.direction_name = direction_name;
+        this.stops = new ArrayList<>();
     }
 
 
@@ -64,7 +71,19 @@ public class Direction {
         this.direction_name = direction_name;
     }
 
+    public ArrayList<Stop> getStops() {
+        return stops;
+    }
 
+    public void setStops(ArrayList<Stop> stops) {
+        this.stops = stops;
+    }
 
+    public Stop getNearestStop() {
+        return nearestStop;
+    }
 
+    public void setNearestStop(Stop nearestStop) {
+        this.nearestStop = nearestStop;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.ptvimproved24;
 
+import android.location.Location;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
@@ -213,6 +214,76 @@ public class StopHttpRequestHandler {
                                 @Override
                                 public void run() {
 
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Stop> getStopsFromJSONArray(JSONArray array) throws JSONException{
+        ArrayList<Stop> stops = new ArrayList<>();
+        for(int i = 0; i < array.length(); i++) {
+            JSONObject stopObject = array.getJSONObject(i);
+            String stopName = stopObject.getString("stop_name");
+            String stopSuburb = stopObject.getString("stop_suburb");
+            int stopId = stopObject.getInt("stop_id");
+            int stopSequence = stopObject.getInt("stop_sequence");
+            double stopLatitude = stopObject.getDouble("stop_latitude");
+            double stopLongitude = stopObject.getDouble("stop_longitude");
+            Stop stop = new Stop(stopId, stopName);
+            stop.setSuburb(stopSuburb);
+            stop.setStop_latitude(stopLatitude);
+            stop.setStop_longitude(stopLongitude);
+            stops.add(stop);
+        }
+        return stops;
+    }
+
+    public void getStopsForDirection(Direction direction, ArrayAdapter adapter, double latitude, double longitude) {
+        try {
+            int routeId = direction.getRoute_id();
+            int routeType = direction.getRoute_type();
+            int directionId = direction.getDirection_id();
+            String url = commonDataRequest.showRoutesStopByDirectionId(routeId, routeType, directionId);
+            System.out.println(url);
+            Request request = new Request.Builder().url(url).build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()){
+                        String responseBody = response.body().string();
+                        try {
+                            JSONObject jsonObj = new JSONObject(responseBody);
+                            JSONArray stopArray = jsonObj.getJSONArray("stops");
+                            ArrayList<Stop> stops = getStopsFromJSONArray(stopArray);
+                            direction.setStops(stops);
+                            float smallestDistance = Float.MAX_VALUE;
+                            Stop nearestStop = null;
+                            for(Stop s : stops) {
+                                float[] distance = new float[1];
+                                Location.distanceBetween(latitude, longitude, s.getStop_latitude(), s.getStop_longitude(), distance);
+                                if (smallestDistance > distance[0]) {
+                                    smallestDistance = distance[0];
+                                    nearestStop = s;
+                                }
+                            }
+                            direction.setNearestStop(nearestStop);
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.notifyDataSetChanged();
                                 }
                             });
                         } catch (JSONException e) {

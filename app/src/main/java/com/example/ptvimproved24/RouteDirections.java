@@ -2,22 +2,18 @@ package com.example.ptvimproved24;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -26,20 +22,16 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.microsoft.maps.Geopoint;
-import com.microsoft.maps.MapAnimationKind;
 import com.microsoft.maps.MapRenderMode;
-import com.microsoft.maps.MapScene;
 import com.microsoft.maps.MapView;
 
 import java.util.ArrayList;
@@ -53,15 +45,39 @@ public class RouteDirections extends AppCompatActivity {
     private RouteDirectionAdapter routeDirectionAdapter;
     private static final Geopoint FlinderSt = new Geopoint(-37.818078, 144.96681);
     private FusedLocationProviderClient fusedLocationClient;
-    LocationManager locationManager;
+    private double userLatitude;
+    private double userLongitude;
+    private LocationManager locationManager;
+    private RouteDirectionsRequestsHandler routeDirectionHandler;
     String provider;
 
     private static final int REQUEST_LOCATION = 99;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
 
+    private void getGeoLocation() {
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                    if (userLatitude != location.getLatitude() || userLongitude != location.getLongitude()) {
+                        userLatitude = location.getLatitude();
+                        userLongitude = location.getLongitude();
+                        routeDirectionHandler.getRouteDirectionById(855,routeDirectionAdapter, userLatitude, userLongitude);
+                    }
+                }
+            });
+        } catch (SecurityException e) {
+            Toast.makeText(this,
+                    "Default geolocation is used, please retry after enable location service.",
+                    Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         setContentView(R.layout.activity_routedirections);
@@ -76,8 +92,9 @@ public class RouteDirections extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.route_directionList);
         routeDirectionAdapter = new RouteDirectionAdapter(this, R.layout.routedetails_view, new ArrayList<>());
         mListView.setAdapter(routeDirectionAdapter);
-        RouteDirectionsHandler handler= new RouteDirectionsHandler(this);
-        handler.getRouteDirectionById(855,routeDirectionAdapter);
+        routeDirectionHandler = new RouteDirectionsRequestsHandler(this);
+        getGeoLocation();
+
         // looking up route route, nearest's stop to user, then lookup the stop's next departure
 
 
@@ -322,7 +339,7 @@ public class RouteDirections extends AppCompatActivity {
 
         SearchRouteList.add(route1);
 
-        RouteDirectionsHandler handler= new RouteDirectionsHandler(this);
+        RouteDirectionsRequestsHandler handler= new RouteDirectionsRequestsHandler(this);
         //handler.getRouteDirectionById(route1,SearchDirectionList);
 
         RouteDirectionAdapter adapter = new RouteDirectionAdapter(v.getContext(),R.layout.routedetails_view, SearchDirectionList);

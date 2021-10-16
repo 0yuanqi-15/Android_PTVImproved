@@ -110,6 +110,10 @@ public class commonDataRequest {
         return buildAPIrequest("/v3/stops/route/"+routeId+"/route_type/"+routeType);
     }
 
+    public static String showRoutesStopByDirectionId(int routeId, int routeType, int directionId) throws Exception {     // View all stops on a specific route
+        return buildAPIrequest("/v3/stops/route/"+routeId+"/route_type/"+routeType+"?direction_id="+directionId);
+    }
+
     public static String nearByStops(float latitude, float longtitude) throws Exception {    // View all stops near a specific location
         return buildAPIrequest("/v3/stops/location/"+latitude+","+longtitude+"?max_results=5&max_distance=2000");
     }

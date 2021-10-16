@@ -5,8 +5,6 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
-import com.microsoft.maps.MapView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,18 +19,18 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class RouteDirectionsHandler {
+public class RouteDirectionsRequestsHandler {
     private OkHttpClient client;
     private FragmentActivity activity;
 
-    public RouteDirectionsHandler(FragmentActivity act) {
+    public RouteDirectionsRequestsHandler(FragmentActivity act) {
         client = new OkHttpClient();
         activity = act;
     }
 
 
 //    public void getRouteDirectionById(Route route, ArrayAdapter adapter, MapView map, ArrayList<Direction> resultArrayListDirection) throws Exception {
-    public void getRouteDirectionById(int route_id,  ArrayAdapter adapter) {
+    public void getRouteDirectionById(int route_id,  ArrayAdapter adapter, double latitude, double longitude) {
         try {
             String url = commonDataRequest.showDirectionsOnRoute(route_id);
             System.out.println("Request:"+url);
@@ -52,6 +50,11 @@ public class RouteDirectionsHandler {
                             JSONArray routeDirectionArray =  jsonObj.getJSONArray("directions");
 
                             ArrayList<Direction> directionList = getDirectionList(routeDirectionArray);
+
+                            for (Direction direction : directionList) {
+                                StopHttpRequestHandler stopHttpRequestHandler = new StopHttpRequestHandler(activity);
+                                stopHttpRequestHandler.getStopsForDirection(direction, adapter, latitude, longitude);
+                            }
 
                             activity.runOnUiThread(new Runnable() {
                                 @Override
