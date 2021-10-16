@@ -7,7 +7,6 @@
     android:padding="16dp"
     android:id="@+id/activity_directions">
 
-    <!--    android:id="@+id/routed_routemap"-->
     <FrameLayout
         android:id="@+id/map_view"
         android:layout_width="match_parent"

@@ -36,6 +36,8 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.microsoft.maps.Geopoint;
 import com.microsoft.maps.MapAnimationKind;
+import com.microsoft.maps.MapElement;
+import com.microsoft.maps.MapElementLayer;
 import com.microsoft.maps.MapRenderMode;
 import com.microsoft.maps.MapScene;
 import com.microsoft.maps.MapView;
@@ -43,35 +45,54 @@ import com.microsoft.maps.MapView;
 import java.util.List;
 
 public class RouteDirections extends AppCompatActivity {
+//public class RouteDirections extends AppCompatActivity implements OnMapReadyCallback {
+    private Float latitude = -37.818078f;
+    private Float longitude = 144.96681f;
+
     // Used for saved routes, showing both direction
     private static final String TAG = "RouteDirections";
-    private MapView mMapView;
-    private static final Geopoint FlinderSt = new Geopoint(-37.818078, 144.96681);
     private FusedLocationProviderClient fusedLocationClient;
     LocationManager locationManager;
     String provider;
+    RouteHttpRequestHandler routeHttpRequestHandler = new RouteHttpRequestHandler(this);
+    StopHttpRequestHandler stopHttpRequestHandler = new StopHttpRequestHandler(this);
 
     private static final int REQUEST_LOCATION = 99;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
 
+    private MapView mMapView;
+    private MapElementLayer mStopPinLayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int route_id = getIntent().getIntExtra("route_id", 1); // Get Route details to display
+        int route_type = getIntent().getIntExtra("route_type", 1);
+        getUserLocation();
+        getGeoLocation();
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        setContentView(R.layout.activity_routedirections);
-        mMapView = new MapView(this, MapRenderMode.VECTOR);  // or use MapRenderMode.RASTER for 2D map
+        //===========      Following is Belong to Bingmap
+        mMapView = new MapView(this, MapRenderMode.RASTER);  // or use MapRenderMode.RASTER for 2D map
         mMapView.setCredentialsKey(BuildConfig.CREDENTIALS_KEY);
-        ((FrameLayout) findViewById(R.id.map_view)).addView(mMapView);
+        setContentView(R.layout.activity_routedirections);
+        mStopPinLayer = new MapElementLayer();
+        try {
+            stopHttpRequestHandler.getStopsOnRouteToBingmap(route_id,route_type,mMapView);
+            mMapView.getLayers().add(mStopPinLayer);
+            // Pop stops in
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mMapView.onCreate(savedInstanceState);
+        //        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
-//        getRoutePathById(routeid);
+        ((FrameLayout) findViewById(R.id.map_view)).addView(mMapView);
+        //==============      Above is Belong to Bingmap
         // looking up route route, nearest's stop to user, then lookup the stop's next departure
 
-        getUserLocation();
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Location();
+            getGeoLocation();
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
@@ -98,107 +119,6 @@ public class RouteDirections extends AppCompatActivity {
                 .check();
     }
 
-    private void Location() {
-        LocationRequest request = LocationRequest.create();
-        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        request.setInterval(10000);
-        request.setFastestInterval(3000);
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(request);
-        builder.setAlwaysShow(true);
-
-        Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
-        result.addOnCompleteListener(task -> {
-            try {
-                LocationSettingsResponse response = task.getResult(ApiException.class);
-                // Get near stop
-            } catch (ApiException e) {
-                switch (e.getStatusCode()) {
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        try {
-                            ResolvableApiException resolvableApiException = (ResolvableApiException) e;
-                            resolvableApiException.startResolutionForResult(RouteDirections.this, REQUEST_LOCATION);
-                        } catch (IntentSender.SendIntentException sendIntentException) {
-                            sendIntentException.printStackTrace();
-                        }
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        break;
-                }
-                e.printStackTrace();
-            }
-        });
-        result.addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                if (e instanceof ResolvableApiException) {
-                    // Location settings are not satisfied, but this can be fixed by showing the user a dialog.
-                    try {
-                        // Show the dialog by calling startResolutionForResult(),and check the result in onActivityResult().
-                        ResolvableApiException resolvable = (ResolvableApiException) e;
-                        resolvable.startResolutionForResult(RouteDirections.this, REQUEST_CHECK_SETTINGS);
-                    } catch (IntentSender.SendIntentException sendEx) {
-                        // Ignore the error.
-                    }
-                }
-            }
-        });
-    }
-
-//    public boolean checkLocationPermission() {
-//        if (ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.ACCESS_FINE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED) {
-//
-//            // Should we show an explanation?
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-//                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-//
-//                // Show an explanation to the user *asynchronously* -- don't block
-//                // this thread waiting for the user's response! After the user
-//                // sees the explanation, try again to request the permission.
-//                new AlertDialog.Builder(this)
-//                        .setTitle("Location access required")
-//                        .setMessage("To find your nearest stops, your location is important attribute to calculate that.")
-//                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                //Prompt the user once explanation has been shown
-//                                ActivityCompat.requestPermissions(RouteDirections.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 999);
-//                            }
-//                        })
-//                        .create()
-//                        .show();
-//            } else {
-//                // No explanation needed, we can request the permission.
-//                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 999);
-//            }
-//            return false;
-//        } else {
-//            return true;
-//        }
-//    }
-
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        switch (requestCode) {
-//            case 999: {
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//                        locationManager.requestLocationUpdates(provider, 10000, 1, (LocationListener) this);
-////                        Update and show user's location on bingmap
-//                    }
-//
-//                } else {
-//                    // Define user's location is 0,0 and remove user's location
-//                }
-//                return;
-//            }
-//        }
-//    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -209,19 +129,12 @@ public class RouteDirections extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            locationManager.requestLocationUpdates(provider, 400, 1, (LocationListener) this);
-        }
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mMapView.onPause();
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            locationManager.removeUpdates((LocationListener)this);
-        }
     }
 
     @Override
@@ -241,37 +154,30 @@ public class RouteDirections extends AppCompatActivity {
         super.onDestroy();
         mMapView.onDestroy();
     }
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
     }
 
-    private final LocationListener locationListener = new LocationListener() {
-
-        @Override
-        public void onLocationChanged(Location location) {
-            // TODO Auto-generated method stub
-
+    private void getGeoLocation() {
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                }
+            });
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            System.out.println("locationfragStopselect:" + location);
+            latitude = (float) location.getLatitude();
+            longitude = (float) location.getLongitude();
+        } catch (SecurityException e) {
+            Toast.makeText(this,
+                    "GPS Has been disabled to determine the nearest stops",
+                    Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
-
-        @Override
-        public void onProviderDisabled(String arg0) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void onProviderEnabled(String arg0) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-            // TODO Auto-generated method stub
-
-        }
-
-    };
+    }
 }

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.microsoft.maps.MapView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,9 +61,27 @@ public class StopHttpRequestHandler {
                 timeArray.add("--:--"); // 再次异步请求Departure,根据Stop id,route type; 获得后续的班车信息
             }
             Stop stop = new Stop(stopSuburb, stopName, distance, routesArray, timeArray);
-            stop.setStopid(stopId);
+            stop.setStop_id(stopId);
             stop.setRouteType(routeType);
             stops.add(stop);
+        }
+        return stops;
+    }
+
+    private ArrayList<Stop> getStoppingList(JSONArray jsonArray) throws JSONException {
+//        异步请求某线路停靠的全程站点
+        ArrayList<Stop> stops = new ArrayList<>();
+        for (int i=0; i<jsonArray.length();i++){
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            String stop_suburb = jsonObject.getString("stop_suburb");
+            int route_type = jsonObject.getInt("route_type");
+            float stop_latitude = (float) jsonObject.getDouble("stop_latitude");
+            float stop_longitude = (float) jsonObject.getDouble("stop_longitude");
+            int stop_id = jsonObject.getInt("stop_id");
+            String stop_name = jsonObject.getString("stop_name");
+
+            Stop s = new Stop(stop_suburb,route_type,stop_latitude,stop_longitude,stop_id,stop_name);
+            stops.add(s);
         }
         return stops;
     }
@@ -82,16 +101,16 @@ public class StopHttpRequestHandler {
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()){
                         String responseBody = response.body().string();
-                        try {
-                            JSONObject jsonObj = new JSONObject(responseBody);
-                            JSONArray stops = jsonObj.getJSONArray("stops");
-                            ArrayList<Stop> stopsArray = getNearStopsFromJson(stops);
-                            ArrayList<Stop> dedupStopsArray = new ArrayList<>();
+                                try {
+                                    JSONObject jsonObj = new JSONObject(responseBody);
+                                    JSONArray stops = jsonObj.getJSONArray("stops");
+                                    ArrayList<Stop> stopsArray = getNearStopsFromJson(stops);
+                                    ArrayList<Stop> dedupStopsArray = new ArrayList<>();
 
-                            for (int i=0;i<stopsArray.size();i++){
-                                boolean duplicate = false;
-                                for (int j=0;j<dedupStopsArray.size();j++){
-                                    if (stopsArray.get(i).getStopid()==dedupStopsArray.get(j).getStopid()){
+                                    for (int i=0;i<stopsArray.size();i++){
+                                        boolean duplicate = false;
+                                        for (int j=0;j<dedupStopsArray.size();j++){
+                                    if (stopsArray.get(i).getStop_id()==dedupStopsArray.get(j).getStop_id()){
                                         duplicate= true;
                                         break;
                                     }
@@ -142,7 +161,7 @@ public class StopHttpRequestHandler {
                         try {
                             JSONObject jsonObj = new JSONObject(responseBody);
                             JSONArray stops = jsonObj.getJSONArray("stops");
-                            ArrayList<Stop> stopsArray = getNearStopsFromJson(stops);
+                            ArrayList<Stop> stopsArray = getStoppingList(stops);
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -161,6 +180,42 @@ public class StopHttpRequestHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void getStopsOnRouteToBingmap(int route_id, int route_type, MapView mapview) throws Exception {
+        String url = commonDataRequest.showRoutesStop(route_id, route_type);
+        Request request = new Request.Builder().url(url).build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()){
+                    String responseBody = response.body().string();
+                    try {
+                        JSONObject jsonObj = new JSONObject(responseBody);
+                        JSONArray stops = jsonObj.getJSONArray("stops");
+                        ArrayList<Stop> stopsArray = getStoppingList(stops);
+                        for(int i = 0 ; i < stopsArray.size(); i ++) {
+                            System.out.println("Bingmap attempt append:"+ stopsArray.get(i).getStop_latitude()+" "+stopsArray.get(i).getStop_longitude());
+                        }
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                for(int i = 0 ; i < stopsArray.size(); i ++) {
+                                    System.out.println("Bingmap attempt append:"+ stopsArray.get(i).getStop_latitude()+" "+stopsArray.get(i).getStop_longitude());
+                                }
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     private StopLocation parseStopLocationFromJson(JSONObject jsonObject) {

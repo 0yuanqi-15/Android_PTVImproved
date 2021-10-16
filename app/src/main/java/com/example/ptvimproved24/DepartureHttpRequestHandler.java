@@ -98,7 +98,7 @@ public class DepartureHttpRequestHandler {
     }
 
     public void getNextDepartureByStopid(Stop stop, ArrayAdapter adapter){
-        int stopid = stop.getStopid();
+        int stopid = stop.getStop_id();
         int route_type = stop.getRouteType();
         try{
             String url = commonDataRequest.nextDeparture(route_type, stopid);

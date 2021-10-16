@@ -73,10 +73,9 @@ public class Fragment_StopSelect extends Fragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng FlinderSt = new LatLng(-37.818078, 144.96681);
-            googleMap.addMarker(new MarkerOptions().position(FlinderSt).title("Flinder St Station"));
+//            LatLng FlinderSt = new LatLng(-37.818078, 144.96681);
+//            googleMap.addMarker(new MarkerOptions().position(FlinderSt).title("Flinder St Station"));
             googleMap.moveCamera(CameraUpdateFactory.zoomTo(16.5f));
-
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
             getGeoLocation();
             googleMap.getUiSettings().setMapToolbarEnabled(true);
@@ -135,12 +134,11 @@ public class Fragment_StopSelect extends Fragment {
         }
     }
 
-    @SuppressLint("WrongConstant")
-    private void getStopLists(GoogleMap googleMap) throws Exception {
+    private void getStopLists(GoogleMap googleMap) {
         float zoomlevel = googleMap.getCameraPosition().zoom;
         if (zoomlevel <=15.5f){
             //Require more Zoomi n
-            Toast.makeText(getContext(),"Please Zoomin the map to see stops",2);
+            Toast.makeText(getContext(),"Please Zoomin the map to see stops",Toast.LENGTH_SHORT);
         } else {
             // Require via RestAPI
             float targetLng = (float) googleMap.getCameraPosition().target.longitude;

@@ -183,17 +183,19 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.menuact_stops:
                 intent = new Intent(MainActivity.this, stops.class);
-                intent.putExtra("stopid", 1000);
+                intent.putExtra("stop_id", 1000);
                 startActivity(intent);
                 break;
             case R.id.menuact_routedirections:
                 intent = new Intent(MainActivity.this, RouteDirections.class);
-                intent.putExtra("routeid", 1);
+                intent.putExtra("route_id", 1);
+                intent.putExtra("route_type",0);
                 startActivity(intent);
                 break;
             case R.id.menuact_routedetails:
                 intent = new Intent(MainActivity.this, RouteDetails.class);
-                intent.putExtra("routeid", 1);
+                intent.putExtra("route_id", 1);
+                intent.putExtra("route_type",0);
                 startActivity(intent);
                 break;
         }

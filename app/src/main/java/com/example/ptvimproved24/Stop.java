@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class Stop {
 
-    private String suburb;
-    private String stopname;
-    private int stopid;
+    private String stop_suburb;
+    private String stop_name;
+    private int stop_id;
     private ArrayList<String> routes;
     private ArrayList<String> times;
     private ArrayList<Departure> departuresObj;
@@ -16,75 +16,78 @@ public class Stop {
     private double stop_latitude;
     private double stop_longitude;
 
-    public Stop(String suburb, int stopid, String stopname, ArrayList<String> routes, ArrayList<String> times) {
-        this.suburb = suburb;
-        this.stopname = stopname;
-        this.stopid = stopid;
+    public Stop (int stopId, int routeType) {
+        this.stop_id = stopId;
+        this.routeType = routeType;
+    }
+
+    public Stop (int stopId, String stop_name) {
+        this.stop_id = stopId;
+        this.stop_name = stop_name;
+    }
+
+
+    public Stop(String stop_suburb, int stop_id, String stop_name, ArrayList<String> routes, ArrayList<String> times) {
+        this.stop_suburb = stop_suburb;
+        this.stop_name = stop_name;
+        this.stop_id = stop_id;
         this.routes = routes;
         this.times = times;
     }
 
-    public Stop(String suburb, String stopname, int distance, ArrayList<String> routes, ArrayList<String> times) {
-        this.suburb = suburb;
-        this.stopname = stopname;
+    public Stop(String stop_suburb, String stop_name, int distance, ArrayList<String> routes, ArrayList<String> times) {
+        this.stop_suburb = stop_suburb;
+        this.stop_name = stop_name;
         this.routes = routes;
         this.times = times;
         this.distance = distance;
     }
 
-    public Stop(String suburb, String stopname, int stopid) {
-        this.suburb = suburb;
-        this.stopname = stopname;
-        this.stopid = stopid;
+    public Stop(String stop_suburb, String stop_name, int stop_id) {
+        this.stop_suburb = stop_suburb;
+        this.stop_name = stop_name;
+        this.stop_id = stop_id;
     }
 
-    public Stop (int stopId, String stopName) {
-        this.stopid = stopId;
-        this.stopname = stopName;
-    }
-
-    public Stop (int stopId) {
-        this.stopid = stopId;
-    }
-
-    public Stop(String suburb, String stopname, int stopid, int routeType, double stop_latitude, double stop_longitude) {
-        this.suburb = suburb;
-        this.stopname = stopname;
-        this.stopid = stopid;
+    public Stop (int stopId, int routeType, float stop_latitude, float stop_longitude, String stop_name) {
+        this.stop_id = stopId;
         this.routeType = routeType;
         this.stop_latitude = stop_latitude;
         this.stop_longitude = stop_longitude;
+        this.stop_name = stop_name;
     }
 
-    public Stop(String stopname, int stopid, double stop_latitude, double stop_longitude) {
-        this.stopname = stopname;
-        this.stopid = stopid;
+    public Stop(String stop_suburb, int routeType, float stop_latitude, float stop_longitude,int stop_id, String stop_name) {
+        this.stop_suburb = stop_suburb;
+        this.stop_name = stop_name;
+        this.routeType = routeType;
+        this.stop_id = stop_id;
         this.stop_latitude = stop_latitude;
         this.stop_longitude = stop_longitude;
     }
 
-    public String getSuburb() {
-        return suburb;
+    public String getStop_suburb() {
+        return stop_suburb;
     }
 
-    public void setSuburb(String suburb) {
-        this.suburb = suburb;
+    public void setStop_suburb(String stop_suburb) {
+        this.stop_suburb = stop_suburb;
     }
 
-    public String getStopname() {
-        return stopname;
+    public String getStop_name() {
+        return stop_name;
     }
 
-    public void setStopname(String stopname) {
-        this.stopname = stopname;
+    public void setStop_name(String stop_name) {
+        this.stop_name = stop_name;
     }
 
-    public int getStopid() {
-        return stopid;
+    public int getStop_id() {
+        return stop_id;
     }
 
-    public void setStopid(int stopid) {
-        this.stopid = stopid;
+    public void setStop_id(int stop_id) {
+        this.stop_id = stop_id;
     }
 
     public ArrayList<String> getRoutes() {

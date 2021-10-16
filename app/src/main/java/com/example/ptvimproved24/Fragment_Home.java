@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,7 +26,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.ptvimproved24.databinding.FragmentHomeBinding;
 import com.squareup.seismic.ShakeDetector;
-import android.content.SharedPreferences;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 
 public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 
@@ -100,10 +97,10 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
                 Stop clickedStop = adapter.getItem(i);
 
 
-                intent.putExtra("index", clickedStop.getStopid());
+                intent.putExtra("index", clickedStop.getStop_id());
                 intent.putExtra("type", clickedStop.getRouteType());
-                intent.putExtra("name", clickedStop.getStopname());
-                intent.putExtra("suburb", clickedStop.getSuburb());
+                intent.putExtra("name", clickedStop.getStop_name());
+                intent.putExtra("suburb", clickedStop.getStop_suburb());
                 startActivity(intent);
 
             }

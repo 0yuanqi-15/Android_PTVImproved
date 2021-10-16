@@ -14,6 +14,7 @@ import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -44,31 +45,28 @@ public class RouteDetails extends AppCompatActivity {
     // Used for saved routes, showing both direction
     private static final String TAG = "RouteDetails";
     private MapView mMapView;
-    private float userloc=-37.818078f;
-    private float userlat=144.96681f;
+    private float latitude=-37.818078f;
+    private float longitude=144.96681f;
     private static final Geopoint FlinderSt = new Geopoint(-37.818078, 144.96681);
     private FusedLocationProviderClient fusedLocationClient;
-    LocationManager locationManager;
-    String provider;
+    private LocationManager locationManager;
     int REQUEST_LOCATION =99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getUserLocation();
+        int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         setContentView(R.layout.activity_routedetails);
-        mMapView = new MapView(this, MapRenderMode.VECTOR);  // or use MapRenderMode.RASTER for 2D map
+        mMapView = new MapView(this, MapRenderMode.RASTER);  // or use MapRenderMode.RASTER for 2D map
         mMapView.setCredentialsKey(BuildConfig.CREDENTIALS_KEY);
         ((FrameLayout) findViewById(R.id.map_view)).addView(mMapView);
         mMapView.onCreate(savedInstanceState);
 
-        int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
-//        getRoutePathById(routeid);
-        // looking up route route, nearest's stop to user, then lookup the stop's next departure
 
-
-        getUserLocation();
         if (ActivityCompat.checkSelfPermission(RouteDetails.this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             Location();
         }else{
@@ -180,4 +178,21 @@ public class RouteDetails extends AppCompatActivity {
         mMapView.onLowMemory();
     }
 
+    private void getGeoLocation() {
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                }
+            });
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            System.out.println("locationfragStopselect:"+location);
+            latitude = (float) location.getLatitude();
+            longitude = (float) location.getLongitude();
+        } catch (SecurityException e) {
+            Toast.makeText(this, "GPS Permission has been disabled", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
 }

@@ -26,10 +26,10 @@
         android:id="@+id/menuact_stops"
         android:icon="@drawable/ic_baseline_place_24"
         android:title="Stops Page" />
-    <item
-        android:id="@+id/menuact_routes"
-        android:icon="@drawable/baseline_multiple_stop_24"
-        android:title="Routes Page"/>
+<!--    <item-->
+<!--        android:id="@+id/menuact_routes"-->
+<!--        android:icon="@drawable/baseline_multiple_stop_24"-->
+<!--        android:title="Routes Page"/>-->
     <item
         android:id="@+id/menuact_routedetails"
         android:icon="@drawable/baseline_train_24"
