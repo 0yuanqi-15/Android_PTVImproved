@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.IntentSender;
@@ -33,20 +34,32 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class Fragment_StopSelect extends Fragment {
-    private Float latitude =-37.818078f;
-    private Float longitude = 144.96681f;
-    private LatLng userLatlng = new LatLng(latitude, longitude);
-    private LocationListener locationListener;
+    private final float defaultLatitude = -37.818078f;
+    private final float defaultLongitude = 144.96681f;
+    private Float latitude = defaultLatitude;
+    private Float longitude = defaultLongitude;
     private LocationManager locationManager;
-    int REQUEST_LOCATION=99;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -54,7 +67,6 @@ public class Fragment_StopSelect extends Fragment {
          * Manipulates the map once available.
          * This callback is triggered when the map is ready to be used.
          * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
          * If Google Play services is not installed on the device, the user will be prompted to
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
@@ -63,36 +75,24 @@ public class Fragment_StopSelect extends Fragment {
         public void onMapReady(GoogleMap googleMap) {
             LatLng FlinderSt = new LatLng(-37.818078, 144.96681);
             googleMap.addMarker(new MarkerOptions().position(FlinderSt).title("Flinder St Station"));
-            googleMap.moveCamera(CameraUpdateFactory.zoomTo(16));
+            googleMap.moveCamera(CameraUpdateFactory.zoomTo(16.5f));
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
-
-            GoogleMap mMap = googleMap;
-            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-            locationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(@NonNull Location location) {
-                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
-                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    latitude = (float) location.getLatitude();
-                    longitude = (float) location.getLongitude();
-
-                    userLatlng = new LatLng(location.getLatitude(),location.getLongitude());
-                    mMap.clear();
-//                    mMap.addMarker(new MarkerOptions().position(userLatlng).title("Your location"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(userLatlng));
-                }
-            };
+            getGeoLocation();
+            googleMap.getUiSettings().setMapToolbarEnabled(true);
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            googleMap.setMyLocationEnabled(true);
         }
+
     };
 
     @Nullable
@@ -100,6 +100,8 @@ public class Fragment_StopSelect extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        getGeoLocation();
         return inflater.inflate(R.layout.fragment_navigation_mapselect, container, false);
     }
 
@@ -111,63 +113,41 @@ public class Fragment_StopSelect extends Fragment {
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
-        getUserLocation();
-        if (ActivityCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            Location();
-        }else{
-            ActivityCompat.requestPermissions((Activity) getContext(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION);
+    }
+
+    private void getGeoLocation() {
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                }
+            });
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            System.out.println("locationfragStopselect:"+location);
+            latitude = (float) location.getLatitude();
+            longitude = (float) location.getLongitude();
+        } catch (SecurityException e) {
+            Toast.makeText(getActivity(),
+                    "Default geolocation is used, please retry after enable location service.",
+                    Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
     }
 
-    private void getUserLocation() {
-        PermissionListener permissionlistener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                Toast.makeText(getContext(), "Location Permission Granted", Toast.LENGTH_SHORT).show();
-            }
+    @SuppressLint("WrongConstant")
+    private void getStopLists(GoogleMap googleMap) throws Exception {
+        float zoomlevel = googleMap.getCameraPosition().zoom;
+        if (zoomlevel <=15.5f){
+            //Require more Zoomi n
+            Toast.makeText(getContext(),"Please Zoomin the map to see stops",2);
+        } else {
+            // Require via RestAPI
+            float targetLng = (float) googleMap.getCameraPosition().target.longitude;
+            float targetLat = (float) googleMap.getCameraPosition().target.latitude;
 
-            @Override
-            public void onPermissionDenied(List<String> deniedPermissions) {
-                Toast.makeText(getContext(), "Location Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        TedPermission.create()
-                .setPermissionListener(permissionlistener)
-                .setDeniedMessage("If you reject Location permission,some service may not available\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-                .check();
-    }
-
-    private void Location(){
-        LocationRequest request = LocationRequest.create();
-        request.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        request.setInterval(10000);
-        request.setFastestInterval(3000);
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(request);
-        builder.setAlwaysShow(true);
-
-        Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(getContext()).checkLocationSettings(builder.build());
-        result.addOnCompleteListener(task -> {
-            try {
-                LocationSettingsResponse response = task.getResult(ApiException.class);
-                // Get near stop
-            } catch (ApiException e) {
-                switch (e.getStatusCode()){
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        try {
-                            ResolvableApiException resolvableApiException = (ResolvableApiException) e;
-                            resolvableApiException.startResolutionForResult((Activity) getContext(), REQUEST_LOCATION);
-                        } catch (IntentSender.SendIntentException sendIntentException){
-                            sendIntentException.printStackTrace();
-                        }
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        break;
-                }
-                e.printStackTrace();
-            }
-        });
+            StopHttpRequestHandler stopHttpRequestHandler = new StopHttpRequestHandler(getActivity());
+            stopHttpRequestHandler.getStopsFromLocation(googleMap,targetLat,targetLng);
+        }
     }
 }

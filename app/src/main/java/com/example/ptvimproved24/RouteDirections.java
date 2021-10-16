@@ -69,29 +69,6 @@ public class RouteDirections extends AppCompatActivity {
 //        getRoutePathById(routeid);
         // looking up route route, nearest's stop to user, then lookup the stop's next departure
 
-
-//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        provider = LocationManager.GPS_PROVIDER;
-//        provider = locationManager.getBestProvider(new Criteria(), false);
-//        if(checkLocationPermission()){
-//            ActivityCompat.requestPermissions(RouteDirections.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 999);
-//            Location location = locationManager.getLastKnownLocation(provider);
-//
-//            double lat = location.getLatitude();
-//            double lng = location.getLongitude();
-//
-//            locationManager.requestLocationUpdates(provider, 10000, 25,locationListener);
-//            System.out.println("Location Info:"+lat+"/"+lng);
-//            if (location != null) {
-//
-//            }
-//            mMapView.setScene(MapScene.createFromLocationAndZoomLevel(new Geopoint(lat, lng), 15), MapAnimationKind.NONE);
-//        } else {
-//            Toast.makeText(RouteDirections.this, "Location permission not granted", Toast.LENGTH_SHORT).show();
-//            System.out.println("Location Info:"+"No location :(");
-//            mMapView.setScene(MapScene.createFromLocationAndZoomLevel(FlinderSt, 15), MapAnimationKind.NONE);
-//        }
-
         getUserLocation();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Location();

@@ -5,6 +5,8 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.maps.GoogleMap;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -109,6 +111,44 @@ public class StopHttpRequestHandler {
                                     for(int i = 0 ; i < toIndex; i ++) {
                                         DepartureHttpRequestHandler departureHttpRequestHandler = new DepartureHttpRequestHandler(activity);
                                         departureHttpRequestHandler.getNextDepartureByStopid(dedupStopsArray.get(i), adapter);
+                                    }
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getStopsFromLocation(GoogleMap googleMap, float latitude, float longitude) {
+        try {
+            String url = commonDataRequest.nearByStopsOnSelect(latitude, longitude);
+            Request request = new Request.Builder().url(url).build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()){
+                        String responseBody = response.body().string();
+                        try {
+                            JSONObject jsonObj = new JSONObject(responseBody);
+                            JSONArray stops = jsonObj.getJSONArray("stops");
+                            ArrayList<Stop> stopsArray = getNearStopsFromJson(stops);
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    googleMap.clear();
+                                    for(int i = 0 ; i < stopsArray.size(); i ++) {
+
                                     }
                                 }
                             });
