@@ -70,6 +70,8 @@ public class RouteDirections extends AppCompatActivity {
         mMapView.onCreate(savedInstanceState);
 
 
+
+
         int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
 //        getRoutePathById(routeid);
         // looking up route route, nearest's stop to user, then lookup the stop's next departure
@@ -304,7 +306,7 @@ public class RouteDirections extends AppCompatActivity {
     };
 
     //ZhentaoHe Test
-    public void generateRouteDirectionList(View v){
+    public void generateRouteDirectionList(View v) throws Exception {
         ListView mListView = (ListView) v.findViewById(R.id.route_directionList);
 
         Route route1 = new Route(1038);
@@ -315,8 +317,9 @@ public class RouteDirections extends AppCompatActivity {
         ArrayList<Direction> SearchDirectionList = new ArrayList<>();
 
         SearchRouteList.add(route1);
-        SearchDirectionList.add(direction1);
 
+        RouteDirectionsHandler hundler= new RouteDirectionsHandler();
+        hundler.getRouteDirectionById(route1,SearchDirectionList);
 
         RouteDirectionAdapter adapter = new RouteDirectionAdapter(v.getContext(),R.layout.routedetails_view, SearchDirectionList);
         mListView.setAdapter(adapter);

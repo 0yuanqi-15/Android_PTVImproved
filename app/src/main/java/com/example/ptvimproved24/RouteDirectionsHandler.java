@@ -20,6 +20,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+
 public class RouteDirectionsHandler {
     private OkHttpClient client;
     private FragmentActivity activity;
@@ -30,7 +31,8 @@ public class RouteDirectionsHandler {
     }
 
 
-    public void getRouteDirectionById(Route route, ArrayAdapter adapter, MapView map) throws Exception {
+//    public void getRouteDirectionById(Route route, ArrayAdapter adapter, MapView map, ArrayList<Direction> resultArrayListDirection) throws Exception {
+    public void getRouteDirectionById(Route route,  ArrayList<Direction> resultArrayListDirection) throws Exception {
         int route_id = route.getRoute_id();
         String url = commonDataRequest.showDirectionsOnRoute(route_id);
         System.out.println("Request:"+url);
@@ -51,6 +53,8 @@ public class RouteDirectionsHandler {
                             JSONArray routeDirectionArray =  jsonObj.getJSONArray("directions");
 
                             ArrayList<Direction> directionList = getDirectionList(routeDirectionArray);
+                            resultArrayListDirection.clear();
+                            resultArrayListDirection.addAll(directionList);
 
                             activity.runOnUiThread(new Runnable() {
                                 @Override
