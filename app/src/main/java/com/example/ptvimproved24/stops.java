@@ -3,6 +3,7 @@ package com.example.ptvimproved24;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.ptvimproved24.ui.StopDetailAdapter;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -51,7 +52,7 @@ public class stops extends AppCompatActivity {
 
         DepartureHttpRequestHandler departureHttpRequestHandler = new DepartureHttpRequestHandler(this);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stopDetail);
+        StopDetailAdapter adapter = new StopDetailAdapter(this, R.layout.stopdetail, stopDetail);
 
         detail.setAdapter(adapter);
 
