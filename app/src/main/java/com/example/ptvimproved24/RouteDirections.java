@@ -83,8 +83,8 @@ public class RouteDirections extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.route_directionList);
         routeDirectionAdapter = new RouteDirectionAdapter(this, R.layout.routedetails_view, new ArrayList<>());
         mListView.setAdapter(routeDirectionAdapter);
-        RouteDirectionsHandler hundler= new RouteDirectionsHandler(this);
-        hundler.getRouteDirectionById(855,routeDirectionAdapter);
+        RouteDirectionsHandler handler= new RouteDirectionsHandler(this);
+        handler.getRouteDirectionById(855,routeDirectionAdapter);
         // looking up route route, nearest's stop to user, then lookup the stop's next departure
 
 
@@ -329,8 +329,8 @@ public class RouteDirections extends AppCompatActivity {
 
         SearchRouteList.add(route1);
 
-        RouteDirectionsHandler hundler= new RouteDirectionsHandler(this);
-        //hundler.getRouteDirectionById(route1,SearchDirectionList);
+        RouteDirectionsHandler handler= new RouteDirectionsHandler(this);
+        //handler.getRouteDirectionById(route1,SearchDirectionList);
 
         RouteDirectionAdapter adapter = new RouteDirectionAdapter(v.getContext(),R.layout.routedetails_view, SearchDirectionList);
         mListView.setAdapter(adapter);
