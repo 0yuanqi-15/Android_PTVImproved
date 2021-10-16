@@ -32,11 +32,10 @@ public class RouteDirectionsHandler {
 
 
 //    public void getRouteDirectionById(Route route, ArrayAdapter adapter, MapView map, ArrayList<Direction> resultArrayListDirection) throws Exception {
-    public void getRouteDirectionById(Route route,  ArrayList<Direction> resultArrayListDirection) throws Exception {
-        int route_id = route.getRoute_id();
-        String url = commonDataRequest.showDirectionsOnRoute(route_id);
-        System.out.println("Request:"+url);
+    public void getRouteDirectionById(int route_id,  ArrayAdapter adapter) {
         try {
+            String url = commonDataRequest.showDirectionsOnRoute(route_id);
+            System.out.println("Request:"+url);
             Request request = new Request.Builder().url(url).build();
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -53,13 +52,13 @@ public class RouteDirectionsHandler {
                             JSONArray routeDirectionArray =  jsonObj.getJSONArray("directions");
 
                             ArrayList<Direction> directionList = getDirectionList(routeDirectionArray);
-                            resultArrayListDirection.clear();
-                            resultArrayListDirection.addAll(directionList);
 
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-
+                                    adapter.clear();
+                                    adapter.addAll(directionList);
+                                    adapter.notifyDataSetChanged();
                                 }
                             });
 

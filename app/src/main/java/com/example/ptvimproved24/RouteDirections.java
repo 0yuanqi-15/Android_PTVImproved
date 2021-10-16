@@ -49,6 +49,8 @@ public class RouteDirections extends AppCompatActivity {
     // Used for saved routes, showing both direction
     private static final String TAG = "RouteDirections";
     private MapView mMapView;
+    private ListView mListView;
+    private RouteDirectionAdapter routeDirectionAdapter;
     private static final Geopoint FlinderSt = new Geopoint(-37.818078, 144.96681);
     private FusedLocationProviderClient fusedLocationClient;
     LocationManager locationManager;
@@ -69,11 +71,20 @@ public class RouteDirections extends AppCompatActivity {
 
         mMapView.onCreate(savedInstanceState);
 
+        mListView = (ListView) findViewById(R.id.route_directionList);
+        routeDirectionAdapter = new RouteDirectionAdapter(this, R.layout.routedetails_view, new ArrayList<>());
+        mListView.setAdapter(routeDirectionAdapter);
 
 
 
-        int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
+
+        //int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
 //        getRoutePathById(routeid);
+        mListView = (ListView) findViewById(R.id.route_directionList);
+        routeDirectionAdapter = new RouteDirectionAdapter(this, R.layout.routedetails_view, new ArrayList<>());
+        mListView.setAdapter(routeDirectionAdapter);
+        RouteDirectionsHandler hundler= new RouteDirectionsHandler(this);
+        hundler.getRouteDirectionById(855,routeDirectionAdapter);
         // looking up route route, nearest's stop to user, then lookup the stop's next departure
 
 
@@ -318,8 +329,8 @@ public class RouteDirections extends AppCompatActivity {
 
         SearchRouteList.add(route1);
 
-        RouteDirectionsHandler hundler= new RouteDirectionsHandler();
-        hundler.getRouteDirectionById(route1,SearchDirectionList);
+        RouteDirectionsHandler hundler= new RouteDirectionsHandler(this);
+        //hundler.getRouteDirectionById(route1,SearchDirectionList);
 
         RouteDirectionAdapter adapter = new RouteDirectionAdapter(v.getContext(),R.layout.routedetails_view, SearchDirectionList);
         mListView.setAdapter(adapter);
