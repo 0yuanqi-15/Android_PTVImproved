@@ -150,6 +150,48 @@ public class DepartureHttpRequestHandler {
         }
     }
 
+    public void getDepartureForRouteOnStop(Direction direction, ArrayAdapter adapter) {
+        try{
+            String url = commonDataRequest.showRouteDepartureOnStop(direction.getRoute_type(),
+                    direction.getNearestStop().getStopid(), direction.getRoute_id(), direction.getDirection_id());
+            System.out.println(url);
+            Request request = new Request.Builder().url(url).build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                }
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()){
+                        String responseBody = response.body().string();
+                        try {
+                            JSONObject jsonObj = new JSONObject(responseBody);
+                            JSONArray departures = jsonObj.getJSONArray("departures");
+                            ArrayList<Departure> departuresArray = getDepartureListFromJSONArray(departures);
+                            for (Departure d : departuresArray) {
+                                d.setScheduled_departure_utc(UTCToAEST(d.getScheduled_departure_utc()));
+                            }
+                            direction.setDeparturesForNearestStop(departuresArray);
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     //add this method to show stop detail information
     public void getNextDepartureByStopId(int stopId, int routeType, ArrayAdapter adapter){
@@ -157,6 +199,7 @@ public class DepartureHttpRequestHandler {
         //int route_type = stop.getRouteType();
         try{
             String url = commonDataRequest.nextDeparture(routeType, stopId);
+
             System.out.println(url);
             Request request = new Request.Builder().url(url).build();
 
@@ -263,5 +306,4 @@ public class DepartureHttpRequestHandler {
             e.printStackTrace();
         }
     }
-
 }

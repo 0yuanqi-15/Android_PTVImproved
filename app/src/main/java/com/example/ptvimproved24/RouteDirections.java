@@ -2,20 +2,18 @@ package com.example.ptvimproved24;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -24,13 +22,11 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
@@ -39,9 +35,9 @@ import com.microsoft.maps.MapAnimationKind;
 import com.microsoft.maps.MapElement;
 import com.microsoft.maps.MapElementLayer;
 import com.microsoft.maps.MapRenderMode;
-import com.microsoft.maps.MapScene;
 import com.microsoft.maps.MapView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RouteDirections extends AppCompatActivity {
@@ -51,16 +47,20 @@ public class RouteDirections extends AppCompatActivity {
 
     // Used for saved routes, showing both direction
     private static final String TAG = "RouteDirections";
+    private MapView mMapView;
+    private ListView mListView;
+    private RouteDirectionAdapter routeDirectionAdapter;
     private FusedLocationProviderClient fusedLocationClient;
-    LocationManager locationManager;
+    private double userLatitude;
+    private double userLongitude;
+    private LocationManager locationManager;
+    private RouteDirectionsRequestsHandler routeDirectionHandler;
     String provider;
     RouteHttpRequestHandler routeHttpRequestHandler = new RouteHttpRequestHandler(this);
     StopHttpRequestHandler stopHttpRequestHandler = new StopHttpRequestHandler(this);
 
     private static final int REQUEST_LOCATION = 99;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
-
-    private MapView mMapView;
     private MapElementLayer mStopPinLayer;
 
     @Override
@@ -85,9 +85,16 @@ public class RouteDirections extends AppCompatActivity {
         }
         mMapView.onCreate(savedInstanceState);
         //        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
         ((FrameLayout) findViewById(R.id.map_view)).addView(mMapView);
         //==============      Above is Belong to Bingmap
+
+        //int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
+//        getRoutePathById(routeid);
+        mListView = (ListView) findViewById(R.id.route_directionList);
+        routeDirectionAdapter = new RouteDirectionAdapter(this, R.layout.routedetails_view, new ArrayList<>());
+        mListView.setAdapter(routeDirectionAdapter);
+        routeDirectionHandler = new RouteDirectionsRequestsHandler(this);
+
         // looking up route route, nearest's stop to user, then lookup the stop's next departure
 
 
@@ -180,4 +187,27 @@ public class RouteDirections extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+//
+//    //ZhentaoHe Test
+//    public void generateRouteDirectionList(View v) throws Exception {
+//        ListView mListView = (ListView) v.findViewById(R.id.route_directionList);
+//
+//        Route route1 = new Route(1038);
+//        Direction direction1 = new Direction(1038);
+//
+//
+//        ArrayList<Route> SearchRouteList = new ArrayList<>();
+//        ArrayList<Direction> SearchDirectionList = new ArrayList<>();
+//
+//        SearchRouteList.add(route1);
+//
+//        RouteDirectionsRequestsHandler handler= new RouteDirectionsRequestsHandler(this);
+//        //handler.getRouteDirectionById(route1,SearchDirectionList);
+//
+//        RouteDirectionAdapter adapter = new RouteDirectionAdapter(v.getContext(),R.layout.routedetails_view, SearchDirectionList);
+//        mListView.setAdapter(adapter);
+//    }
+//
+//    //ZhentaoHe Test
+
 }

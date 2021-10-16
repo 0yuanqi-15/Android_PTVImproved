@@ -7,11 +7,18 @@ import java.util.ArrayList;
 public class Route {
     private int route_type;
     private int route_id;
+    private int direction_id;
+
     private String route_name;
     private String route_number;
     private String route_gtfs_id;
     private String direction;
+
     private ArrayList<RouteGeopath> geopath;
+
+    private String route_direction_description;
+    private String direction_name;
+
 
     public Route(int route_type, int route_id, String route_name, String route_number, String route_gtfs_id, String direction) {
         this.route_type = route_type;
@@ -20,6 +27,14 @@ public class Route {
         this.route_number = route_number;
         this.route_gtfs_id = route_gtfs_id;
         this.direction = direction;
+    }
+
+    public Route(int route_type, int route_id, int direction_id, String route_direction_description, String direction_name) {
+        this.route_type = route_type;
+        this.route_id = route_id;
+        this.direction_id = direction_id;
+        this.route_direction_description = route_direction_description;
+        this.direction_name = direction_name;
     }
 
     public Route(int route_type, int route_id, String route_name, String route_gtfs_id) { // Train, vline train&coach, skybus
