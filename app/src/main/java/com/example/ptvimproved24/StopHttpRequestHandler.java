@@ -333,7 +333,7 @@ public class StopHttpRequestHandler {
             double stopLatitude = stopObject.getDouble("stop_latitude");
             double stopLongitude = stopObject.getDouble("stop_longitude");
             Stop stop = new Stop(stopId, stopName);
-            stop.setSuburb(stopSuburb);
+            stop.setStop_suburb(stopSuburb);
             stop.setStop_latitude(stopLatitude);
             stop.setStop_longitude(stopLongitude);
             stops.add(stop);

@@ -153,7 +153,7 @@ public class DepartureHttpRequestHandler {
     public void getDepartureForRouteOnStop(Direction direction, ArrayAdapter adapter) {
         try{
             String url = commonDataRequest.showRouteDepartureOnStop(direction.getRoute_type(),
-                    direction.getNearestStop().getStopid(), direction.getRoute_id(), direction.getDirection_id());
+                    direction.getNearestStop().getStop_id(), direction.getRoute_id(), direction.getDirection_id());
             System.out.println(url);
             Request request = new Request.Builder().url(url).build();
 

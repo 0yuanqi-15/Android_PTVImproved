@@ -80,7 +80,7 @@ public class RouteDirectionAdapter extends ArrayAdapter<Direction> {
         serviceTo.setText(direction_name);
 
         if (getItem(position).getNearestStop() != null) {
-            nearestStopName = getItem(position).getNearestStop().getStopname();
+            nearestStopName = getItem(position).getNearestStop().getStop_name();
         }
 
         ArrayList<Departure> meaningfulDepartures = new ArrayList<>();
