@@ -27,7 +27,7 @@ public class StopDetailAdapter extends ArrayAdapter<String> {
         String[] stopDetail = getItem(position).split("@");
         String stopRoute = stopDetail[0];
         String stopTime = stopDetail[1];
-        String stopDirection = stopDetail[2];
+//        String stopDirection = stopDetail[2];
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
@@ -37,7 +37,7 @@ public class StopDetailAdapter extends ArrayAdapter<String> {
         TextView time = (TextView) convertView.findViewById(R.id.stop_time);
 
 
-        direction.setText(stopDirection);
+        //direction.setText(stopDirection);
         route.setText(stopRoute);
         time.setText(stopTime);
 

@@ -31,14 +31,14 @@ public class DepartureHttpRequestHandler {
     private final FragmentActivity activity;
     private HashMap<Integer, String> routeMap;
     private HashMap<Integer, String> routeNameMap;
-    private HashMap<Integer, String> routeDirectionMap;
+    //private HashMap<Integer, String> routeDirectionMap;
 
     public DepartureHttpRequestHandler(FragmentActivity act) {
         client = new OkHttpClient();
         activity = act;
         routeMap = new HashMap<>();
         routeNameMap = new HashMap<>();
-        routeDirectionMap = new HashMap<>();
+       // routeDirectionMap = new HashMap<>();
     }
 
     private String UTCToAEST(String utc) {
@@ -85,11 +85,11 @@ public class DepartureHttpRequestHandler {
             String routeNumber = route.getString("route_number");
             String routeGtfsId = route.getString("route_gtfs_id");
 
-            String[] direction = routeName.split("-");
-            String[] routeDirection = direction[1].split("via");
+            //String[] direction = routeName.split("-");
+            //String[] routeDirection = direction[1].split("via");
 
             routeNameMap.put(routeId, routeGtfsId);
-            routeDirectionMap.put(routeId, routeDirection[0]);
+            //routeDirectionMap.put(routeId, routeDirection[0]);
             Route r = new Route(routeType, routeId, routeName, routeNumber, routeGtfsId, "");
             result.add(r);
         }
@@ -193,7 +193,7 @@ public class DepartureHttpRequestHandler {
                                     for(Map.Entry<Integer, String> e : routeMap.entrySet()) {
                                         String name = routeNameMap.get(e.getKey());
 
-                                        String direction = routeDirectionMap.get(e.getKey());
+                                        String direction = "";
                                         //try {
                                         //    direction = commonDataRequest.showDirectionsOnRoute(e.getKey());
                                         //   System.out.println(direction);
