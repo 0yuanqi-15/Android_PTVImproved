@@ -63,7 +63,7 @@ public class stops extends AppCompatActivity {
 
         DepartureHttpRequestHandler departureHttpRequestHandler = new DepartureHttpRequestHandler(this);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, stopDetail);
+        StopDetailAdapter adapter = new StopDetailAdapter(this, R.layout.stopdetail, stopDetail);
 
         detail.setAdapter(adapter);
 
