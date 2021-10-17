@@ -94,6 +94,7 @@ public class RouteDirections extends AppCompatActivity {
         routeDirectionAdapter = new RouteDirectionAdapter(this, R.layout.routedetails_view, new ArrayList<>());
         mListView.setAdapter(routeDirectionAdapter);
         routeDirectionHandler = new RouteDirectionsRequestsHandler(this);
+        routeDirectionHandler.getRouteDirectionById(897, routeDirectionAdapter, latitude, longitude);
 
         // looking up route route, nearest's stop to user, then lookup the stop's next departure
 
