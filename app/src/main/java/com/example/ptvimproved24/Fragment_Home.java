@@ -220,11 +220,9 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         savedStopListAdapter  = new SavedStopListAdapter(v.getContext(),R.layout.savedstops_view, savedStopList);
         mListView.setAdapter(savedStopListAdapter);
 
-        DepartureHttpRequestHandler departureHttpRequestHandler = new DepartureHttpRequestHandler(getActivity());
-
         for (SavedStop eachSaveStop: savedStopList){
             Log.d("values", ("id of " + eachSaveStop.getStopname() + "is" + eachSaveStop.getStopid()));
-            departureHttpRequestHandler.getNextDepartureBySavedStop(eachSaveStop, savedStopListAdapter);
+            new DepartureHttpRequestHandler(getActivity()).getNextDepartureBySavedStop(eachSaveStop, savedStopListAdapter);
 
         }
 
