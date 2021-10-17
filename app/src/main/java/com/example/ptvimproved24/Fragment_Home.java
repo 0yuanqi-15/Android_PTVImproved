@@ -85,7 +85,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
         getGeoLocation();
-        generateNearStopList();
         generateSavedStopList(view);
         generateSavedRouteList(view);
 
@@ -118,17 +117,22 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
-
+                    if(latitude != (float) location.getLatitude() || longitude != (float) location.getLongitude()) {
+                        latitude = (float) location.getLatitude();
+                        longitude = (float) location.getLongitude();
+                        generateNearStopList();
+                    }
                 }
             });
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            System.out.println("locationfraghome:"+location);
-            latitude = (float) location.getLatitude();
-            longitude = (float) location.getLongitude();
+//            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//            System.out.println("locationfraghome:"+location);
+//            latitude = (float) location.getLatitude();
+//            longitude = (float) location.getLongitude();
         } catch (SecurityException e) {
             Toast.makeText(getActivity(),
                     "Default geolocation is used, please retry after enable location service.",
                     Toast.LENGTH_LONG).show();
+            generateNearStopList();
             e.printStackTrace();
         }
     }
@@ -246,7 +250,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
     @Override
     public void hearShake() {
         getGeoLocation();
-        generateNearStopList();
-        Toast.makeText(getActivity(), "reloading", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Reloading", Toast.LENGTH_SHORT).show();
     }
 }
