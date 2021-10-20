@@ -69,8 +69,8 @@ public class StopHttpRequestHandler {
         return stops;
     }
 
-    private ArrayList<Stop> getStoppingList(JSONArray jsonArray) throws JSONException {
-//        异步请求某线路停靠的全程站点
+    public ArrayList<Stop> getStoppingList(JSONArray jsonArray) throws JSONException {
+//        异步请求某线路停靠的全程站点, 来自地图的数据
         ArrayList<Stop> stops = new ArrayList<>();
         for (int i=0; i<jsonArray.length();i++){
             JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -166,9 +166,8 @@ public class StopHttpRequestHandler {
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    googleMap.clear();
                                     for(int i = 0 ; i < stopsArray.size(); i ++) {
-
+                                        System.out.println(stopsArray.get(i));
                                     }
                                 }
                             });

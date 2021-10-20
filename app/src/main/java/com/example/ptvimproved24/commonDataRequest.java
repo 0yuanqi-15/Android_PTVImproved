@@ -119,7 +119,7 @@ public class commonDataRequest {
     }
 
     public static String nearByStopsOnSelect(float latitude, float longtitude) throws Exception {    // View all stops near a specific location
-        return buildAPIrequest("/v3/stops/location/"+latitude+","+longtitude+"?max_results=750&max_distance=10000");
+        return buildAPIrequest("/v3/stops/location/"+latitude+","+longtitude+"?max_results=500&max_distance=5000");
     }
 
     public static String nearByTrainStopsOnSelect(float latitude, float longtitude) throws Exception {    // View metro and vline stops only at large scale

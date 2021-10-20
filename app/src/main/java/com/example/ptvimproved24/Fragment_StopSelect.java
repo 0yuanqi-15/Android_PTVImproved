@@ -5,11 +5,13 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -17,14 +19,19 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.example.ptvimproved24.datastructures.MapItems;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -35,13 +42,18 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.clustering.ClusterManager;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 
@@ -63,7 +75,10 @@ public class Fragment_StopSelect extends Fragment implements
         OnMapReadyCallback, GoogleMap.OnCameraMoveListener,
         GoogleMap.OnCameraMoveStartedListener,
         GoogleMap.OnCameraIdleListener,
-        GoogleMap.OnCameraMoveCanceledListener {
+        GoogleMap.OnCameraMoveCanceledListener,
+        GoogleMap.OnMarkerClickListener,
+        GoogleMap.OnInfoWindowClickListener,
+        GoogleMap.OnInfoWindowCloseListener {
     private static final String TAG = "Stop Select Fragment:";
 
     private final float defaultLatitude = -37.818078f;
@@ -78,6 +93,11 @@ public class Fragment_StopSelect extends Fragment implements
     private CompoundButton customDurationToggle;
     private SeekBar customDurationBar;
     private PolylineOptions currPolylineOptions;
+    MarkerOptions markerOptions = new MarkerOptions();
+    ArrayList<Stop> stopsArray = new ArrayList<>();
+    private Marker mLastSelectedMarker;
+
+    int lastStopClicked;
 
 
 //    private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -153,21 +173,6 @@ public class Fragment_StopSelect extends Fragment implements
         }
     }
 
-    private void getStopLists(GoogleMap googleMap) {
-        float zoomlevel = googleMap.getCameraPosition().zoom;
-        if (zoomlevel <= 15.5f) {
-            //Require more Zoomi n
-            Toast.makeText(getContext(), "Please Zoomin the map to see stops", Toast.LENGTH_SHORT);
-        } else {
-            // Require via RestAPI
-            float targetLng = (float) googleMap.getCameraPosition().target.longitude;
-            float targetLat = (float) googleMap.getCameraPosition().target.latitude;
-
-            StopHttpRequestHandler stopHttpRequestHandler = new StopHttpRequestHandler(getActivity());
-            stopHttpRequestHandler.getStopsFromLocation(googleMap, targetLat, targetLng);
-        }
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
@@ -175,9 +180,11 @@ public class Fragment_StopSelect extends Fragment implements
         map.setOnCameraIdleListener(this::onCameraIdle);
         map.setOnCameraMoveStartedListener(this::onCameraMoveStarted);
         map.setOnCameraMoveCanceledListener(this::onCameraMoveCanceled);
+        map.setOnInfoWindowClickListener(this);
+        map.setOnInfoWindowCloseListener(this);
+        map.setOnMarkerClickListener(this);
         map.moveCamera(CameraUpdateFactory.zoomTo(16.5f));
         map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
-        getGeoLocation();
         map.getUiSettings().setMapToolbarEnabled(true);
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -199,7 +206,7 @@ public class Fragment_StopSelect extends Fragment implements
         }
 
         String reasonText = "UNKNOWN_REASON";
-        currPolylineOptions = new PolylineOptions().width(5);
+        currPolylineOptions = new PolylineOptions().width(0);   //Showing Polyline Gestures
         switch (reason) {
             case GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE:
                 currPolylineOptions.color(Color.BLUE);
@@ -249,7 +256,9 @@ public class Fragment_StopSelect extends Fragment implements
         currPolylineOptions = null;
         isCanceled = false;  // Set to *not* clear the map when dragging starts again.
         Log.d(TAG, "onCameraIdle");
-        getGeoLocation();
+//        System.out.println("Camera Centre:"+getCameraCentre().latitude+"\t"+getCameraCentre().longitude);
+        getStopsFromLocation((float) map.getCameraPosition().target.latitude, (float) map.getCameraPosition().target.longitude);
+//        getStopsFromLocation(-37.8060656f, 145.1571894f);
     }
 
     private void addCameraTargetToPath() {
@@ -257,4 +266,138 @@ public class Fragment_StopSelect extends Fragment implements
         currPolylineOptions.add(target);
     }
 
+    public void getStopsFromLocation(float latitude, float longitude) {
+        OkHttpClient client = new OkHttpClient();
+        try {
+            String url = commonDataRequest.nearByStopsOnSelect(latitude, longitude);
+            Request request = new Request.Builder().url(url).build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String responseBody = response.body().string();
+                        stopsArray.clear();
+                        try {
+                            JSONObject jsonObj = new JSONObject(responseBody);
+                            JSONArray stops = jsonObj.getJSONArray("stops");
+                            for (int i = 0; i < stops.length(); i++) {
+                                JSONObject jsonObject = stops.getJSONObject(i);
+                                String stop_suburb = jsonObject.getString("stop_suburb");
+                                int route_type = jsonObject.getInt("route_type");
+                                float stop_latitude = (float) jsonObject.getDouble("stop_latitude");
+                                float stop_longitude = (float) jsonObject.getDouble("stop_longitude");
+                                int stop_id = jsonObject.getInt("stop_id");
+                                String stop_name = jsonObject.getString("stop_name");
+                                Stop s = new Stop(stop_suburb, route_type, stop_latitude, stop_longitude, stop_id, stop_name);
+                                stopsArray.add(s);
+                            }
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    for (int i = 0; i < stopsArray.size(); i++) {
+                                        map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
+                                                title(stopsArray.get(i).getStop_name()).snippet(stopsArray.get(i).getRouteType()+","+stopsArray.get(i).getStop_id()));
+//                                        switch (stopsArray.get(i).getRouteType()){
+//                                            case 0:
+//                                                map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
+//                                                        title(stopsArray.get(i).getStop_name()).snippet("stop id:" + stopsArray.get(i).getStop_id()));
+//                                                break;
+//                                            case 1:
+//                                                map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
+//                                                        title(stopsArray.get(i).getStop_name()).snippet("stop id:" + stopsArray.get(i).getStop_id()));
+//                                                break;
+//                                            case 2:
+//                                                map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
+//                                                        title(stopsArray.get(i).getStop_name()).snippet("stop id:" + stopsArray.get(i).getStop_id()));
+//                                                break;
+//                                            case 3:
+//                                                map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
+//                                                        title(stopsArray.get(i).getStop_name()).snippet("stop id:" + stopsArray.get(i).getStop_id()));
+//                                                break;
+//                                            case 4:
+//                                                map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
+//                                                        title(stopsArray.get(i).getStop_name()).snippet("stop id:" + stopsArray.get(i).getStop_id()));
+//                                                break;
+//                                            default:
+//                                                map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
+//                                                        title(stopsArray.get(i).getStop_name()).snippet("stop id:" + stopsArray.get(i).getStop_id()));
+//
+//                                        }
+                                    }
+                                }
+                            });
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        // This causes the marker at Perth to bounce into position when it is clicked.
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        final long duration = 1500;
+        final Interpolator interpolator = new BounceInterpolator();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = Math.max(
+                        1 - interpolator.getInterpolation((float) elapsed / duration), 0);
+                marker.setAnchor(0.5f, 1.0f + 2 * t);
+
+                if (t > 0.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
+                }
+            }
+        });
+
+        // Markers have a z-index that is settable and gettable.
+        float zIndex = marker.getZIndex() + 1.0f;
+        marker.setZIndex(zIndex);
+        Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_SHORT).show();
+        int stop_id = Integer.parseInt(marker.getSnippet().substring(2));
+        int route_type = Integer.parseInt(marker.getSnippet().substring(0,1));
+        if(lastStopClicked == stop_id){
+            Intent i = new Intent(getActivity(), stops.class);
+            i.putExtra("index",stop_id);
+            for (int ii = 0; ii < stopsArray.size(); ii++) {
+                if(stopsArray.get(ii).getStop_id() == stop_id){
+                    i.putExtra("type",stopsArray.get(ii).getRouteType());
+                    i.putExtra("name",stopsArray.get(ii).getStop_name());
+                    i.putExtra("suburb",stopsArray.get(ii).getStop_suburb());
+                }
+            }
+            startActivity(i);
+        }
+        lastStopClicked = stop_id;
+        mLastSelectedMarker = marker;
+        // We return false to indicate that we have not consumed the event and that we wish
+        // for the default behavior to occur (which is for the camera to move such that the
+        // marker is centered and for the marker's info window to open, if it has one).
+        return false;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(getContext(), "Click Info Window", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onInfoWindowClose(Marker marker) {
+        //Toast.makeText(this, "Close Info Window", Toast.LENGTH_SHORT).show();
+    }
 }

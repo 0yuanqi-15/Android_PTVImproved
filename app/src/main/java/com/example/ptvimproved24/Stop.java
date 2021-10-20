@@ -82,9 +82,7 @@ public class Stop {
         this.stop_name = stop_name;
     }
 
-    public int getStop_id() {
-        return stop_id;
-    }
+    public int getStop_id() { return stop_id; }
 
     public void setStop_id(int stop_id) {
         this.stop_id = stop_id;
