@@ -43,11 +43,12 @@ public class stopSelection extends FragmentActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         LatLng melb = new LatLng(-37.840935, 144.946457);
         mMap.addMarker(new MarkerOptions().position(melb).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(melb));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(16.9f));
     }
+
+
 
 }

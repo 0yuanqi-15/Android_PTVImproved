@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">MyTimetable</string>
     <string name="route_details">Route Details</string>
-    <string name="title_activity_stopselection">stopselection</string>
-    <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_activity_stopselection">Stop Select</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_disruptions">Disruptions</string>
@@ -12,6 +11,5 @@
     <string name="large_text">To be replaced in strings xml</string>
     <string name="title_activity_stops">Stop Name</string>
     <string name="action_settings">Settings</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="map_not_ready">Map is not ready</string>
 </resources>
