@@ -99,40 +99,6 @@ public class Fragment_StopSelect extends Fragment implements
 
     int lastStopClicked;
 
-
-//    private OnMapReadyCallback callback = new OnMapReadyCallback() {
-//
-//        /**
-//         * Manipulates the map once available.
-//         * This callback is triggered when the map is ready to be used.
-//         * This is where we can add markers or lines, add listeners or move the camera.
-//         * If Google Play services is not installed on the device, the user will be prompted to
-//         * install it inside the SupportMapFragment. This method will only be triggered once the
-//         * user has installed Google Play services and returned to the app.
-//         */
-//        @Override
-//        public void onMapReady(GoogleMap googleMap) {
-//            GoogleMap mMap = googleMap;
-////            LatLng FlinderSt = new LatLng(-37.818078, 144.96681);
-////            googleMap.addMarker(new MarkerOptions().position(FlinderSt).title("Flinder St Station"));
-//            googleMap.moveCamera(CameraUpdateFactory.zoomTo(16.5f));
-//            googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
-//            getGeoLocation();
-//            googleMap.getUiSettings().setMapToolbarEnabled(true);
-//            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                // TODO: Consider calling
-//                //    ActivityCompat#requestPermissions
-//                // here to request the missing permissions, and then overriding
-//                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                //                                          int[] grantResults)
-//                // to handle the case where the user grants the permission. See the documentation
-//                // for ActivityCompat#requestPermissions for more details.
-//                return;
-//            }
-//            googleMap.setMyLocationEnabled(true);
-//        }
-//    };
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -300,6 +266,7 @@ public class Fragment_StopSelect extends Fragment implements
                                 @Override
                                 public void run() {
                                     for (int i = 0; i < stopsArray.size(); i++) {
+                                        System.out.println(stopsArray.get(i));
                                         map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
                                                 title(stopsArray.get(i).getStop_name()).snippet(stopsArray.get(i).getRouteType()+","+stopsArray.get(i).getStop_id()));
 //                                        switch (stopsArray.get(i).getRouteType()){

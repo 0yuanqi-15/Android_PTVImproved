@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.example.ptvimproved24.databinding.ActivityStopsBinding;
 
@@ -57,7 +58,9 @@ public class stops extends AppCompatActivity {
         String stopName = intent.getStringExtra("name");
         String stopSuburb = intent.getStringExtra("suburb");
 
-        toolBarLayout.setTitle(stopName+"\n"+stopSuburb);
+        toolBarLayout.setTitle(stopName);
+        TextView stopsuburb = findViewById(R.id.text_stopsuburb);
+        stopsuburb.setText(stopSuburb);
 
         ArrayList<String> stopDetail = new ArrayList<>();
 

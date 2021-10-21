@@ -112,9 +112,7 @@ public class Stop {
         this.distance = distance;
     }
 
-    public int getRouteType() {
-        return routeType;
-    }
+    public int getRouteType() { return routeType; }
 
     public void setRouteType(int routeType) {
         this.routeType = routeType;

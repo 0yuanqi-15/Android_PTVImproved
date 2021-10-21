@@ -22,6 +22,7 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:expandedTitleMarginBottom="50dp"
             app:toolbarId="@+id/toolbar">
 
             <androidx.appcompat.widget.Toolbar
@@ -29,7 +30,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
+                app:title="Stop name"
                 app:popupTheme="@style/Theme.PTVImproved24.PopupOverlay" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:paddingStart="32dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="8dp"
+                android:text="Stop suburb"
+                android:id="@+id/text_stopsuburb"
+                android:textSize="20sp"
+                app:layout_collapseMode="parallax"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
