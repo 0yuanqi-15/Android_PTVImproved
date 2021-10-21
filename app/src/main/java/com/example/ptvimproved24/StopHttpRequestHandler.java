@@ -7,6 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.microsoft.maps.Geopoint;
+import com.microsoft.maps.MapElementLayer;
+import com.microsoft.maps.MapIcon;
 import com.microsoft.maps.MapView;
 
 import org.json.JSONArray;
@@ -182,7 +185,7 @@ public class StopHttpRequestHandler {
         }
     }
 
-    public void getStopsOnRouteToBingmap(int route_id, int route_type, MapView mapview) throws Exception {
+    public void getStopsOnRouteToBingmap(int route_id, int route_type, MapElementLayer mPinLayer) throws Exception {
         String url = commonDataRequest.showRoutesStop(route_id, route_type);
         Request request = new Request.Builder().url(url).build();
         client.newCall(request).enqueue(new Callback() {
@@ -199,14 +202,21 @@ public class StopHttpRequestHandler {
                         JSONObject jsonObj = new JSONObject(responseBody);
                         JSONArray stops = jsonObj.getJSONArray("stops");
                         ArrayList<Stop> stopsArray = getStoppingList(stops);
-                        for(int i = 0 ; i < stopsArray.size(); i ++) {
-                            System.out.println("Bingmap attempt append:"+ stopsArray.get(i).getStop_latitude()+" "+stopsArray.get(i).getStop_longitude());
-                        }
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                for(int i = 0 ; i < stopsArray.size(); i ++) {
-                                    System.out.println("Bingmap attempt append:"+ stopsArray.get(i).getStop_latitude()+" "+stopsArray.get(i).getStop_longitude());
+                                mPinLayer.getElements().clear();
+                                for (int i = 0; i < stopsArray.size(); i++) {
+                                    Geopoint location = new Geopoint(stopsArray.get(i).getStop_latitude(),stopsArray.get(i).getStop_longitude());  // your pin lat-long coordinates
+                                    String title = stopsArray.get(i).getStop_name();       // title to be shown next to the pin
+//            Bitmap pinBitmap = ...   // your pin graphic (optional)
+
+                                    MapIcon pushpin = new MapIcon();
+                                    pushpin.setLocation(location);
+                                    pushpin.setTitle(title);
+//            pushpin.setImage(new MapImage(pinBitmap));
+
+                                    mPinLayer.getElements().add(pushpin);
                                 }
                             }
                         });

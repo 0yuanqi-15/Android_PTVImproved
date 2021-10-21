@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -34,11 +35,25 @@ import com.microsoft.maps.Geopoint;
 import com.microsoft.maps.MapAnimationKind;
 import com.microsoft.maps.MapElement;
 import com.microsoft.maps.MapElementLayer;
+import com.microsoft.maps.MapIcon;
+import com.microsoft.maps.MapImage;
 import com.microsoft.maps.MapRenderMode;
+import com.microsoft.maps.MapScene;
 import com.microsoft.maps.MapView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class RouteDirections extends AppCompatActivity {
 //public class RouteDirections extends AppCompatActivity implements OnMapReadyCallback {
@@ -48,6 +63,7 @@ public class RouteDirections extends AppCompatActivity {
     // Used for saved routes, showing both direction
     private static final String TAG = "RouteDirections";
     private MapView mMapView;
+    private MapElementLayer mPinLayer;
     private ListView mListView;
     private RouteDirectionAdapter routeDirectionAdapter;
     private FusedLocationProviderClient fusedLocationClient;
@@ -75,10 +91,10 @@ public class RouteDirections extends AppCompatActivity {
         mMapView = new MapView(this, MapRenderMode.RASTER);  // or use MapRenderMode.RASTER for 2D map
         mMapView.setCredentialsKey(BuildConfig.CREDENTIALS_KEY);
         setContentView(R.layout.activity_routedirections);
-        mStopPinLayer = new MapElementLayer();
+        mPinLayer = new MapElementLayer();
+        mMapView.getLayers().add(mPinLayer);
         try {
-            stopHttpRequestHandler.getStopsOnRouteToBingmap(route_id,route_type,mMapView);
-            mMapView.getLayers().add(mStopPinLayer);
+            stopHttpRequestHandler.getStopsOnRouteToBingmap(route_id,route_type,mPinLayer);
             // Pop stops in
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,7 +110,8 @@ public class RouteDirections extends AppCompatActivity {
         routeDirectionAdapter = new RouteDirectionAdapter(this, R.layout.routedetails_view, new ArrayList<>());
         mListView.setAdapter(routeDirectionAdapter);
         routeDirectionHandler = new RouteDirectionsRequestsHandler(this);
-        routeDirectionHandler.getRouteDirectionById(897, routeDirectionAdapter, latitude, longitude);
+        routeDirectionHandler.getRouteDirectionById(route_id, routeDirectionAdapter, latitude, longitude);
+        mMapView.setScene(MapScene.createFromLocationAndZoomLevel(new Geopoint(-37.818078,144.96681), 12), MapAnimationKind.DEFAULT);
 
         // looking up route route, nearest's stop to user, then lookup the stop's next departure
 
@@ -188,6 +205,22 @@ public class RouteDirections extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    public void appendPinsToMap(ArrayList<Stop> stopArrayList){
+        mPinLayer.getElements().clear();
+        for (int i = 0; i < stopArrayList.size(); i++) {
+            Geopoint location = new Geopoint(stopArrayList.get(i).getStop_latitude(),stopArrayList.get(i).getStop_longitude());  // your pin lat-long coordinates
+            String title = stopArrayList.get(i).getStop_name();       // title to be shown next to the pin
+//            Bitmap pinBitmap = ...   // your pin graphic (optional)
+
+            MapIcon pushpin = new MapIcon();
+            pushpin.setLocation(location);
+            pushpin.setTitle(title);
+//            pushpin.setImage(new MapImage(pinBitmap));
+
+            mPinLayer.getElements().add(pushpin);
+        }
+    }
 //
 //    //ZhentaoHe Test
 //    public void generateRouteDirectionList(View v) throws Exception {
@@ -210,5 +243,4 @@ public class RouteDirections extends AppCompatActivity {
 //    }
 //
 //    //ZhentaoHe Test
-
 }
