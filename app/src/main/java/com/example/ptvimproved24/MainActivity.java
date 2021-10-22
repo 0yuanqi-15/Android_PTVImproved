@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.menuact_routedetails:
                 intent = new Intent(MainActivity.this, RouteDetails.class);
-                intent.putExtra("route_id", 1);
+                intent.putExtra("route_id", 2);
                 intent.putExtra("route_type",0);
                 startActivity(intent);
                 break;

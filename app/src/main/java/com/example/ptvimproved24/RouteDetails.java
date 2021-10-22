@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.ptvimproved24.databinding.ActivityRoutedetailsBinding;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -29,53 +31,72 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.microsoft.maps.Geopoint;
 import com.microsoft.maps.MapAnimationKind;
+import com.microsoft.maps.MapElementLayer;
 import com.microsoft.maps.MapRenderMode;
 import com.microsoft.maps.MapScene;
 import com.microsoft.maps.MapView;
 
+import java.util.ArrayList;
 import java.util.List;
-
 public class RouteDetails extends AppCompatActivity {
+//public class RouteDetails extends AppCompatActivity implements OnMapReadyCallback {
     // Used for saved routes, showing both direction
     private static final String TAG = "RouteDetails";
-    private MapView mMapView;
     private float latitude=-37.818078f;
     private float longitude=144.96681f;
     private static final Geopoint FlinderSt = new Geopoint(-37.818078, 144.96681);
-    private FusedLocationProviderClient fusedLocationClient;
     private LocationManager locationManager;
     int REQUEST_LOCATION =99;
+
+    private MapView mMapView;
+    private MapElementLayer mPinLayer;
+
+    StopHttpRequestHandler stopHttpRequestHandler = new StopHttpRequestHandler(this);
+
+//    private GoogleMap mMap;
+    private ActivityRoutedetailsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getUserLocation();
-        int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
         setContentView(R.layout.activity_routedetails);
-        mMapView = new MapView(this, MapRenderMode.RASTER);  // or use MapRenderMode.RASTER for 2D map
+        int route_id = getIntent().getIntExtra("route_id",2); // Get Route details to display
+        int route_type = getIntent().getIntExtra("route_type",1); // Get Route details to display
+        getUserLocation();
+        getGeoLocation();
+
+        mMapView = new MapView(this, MapRenderMode.RASTER);
         mMapView.setCredentialsKey(BuildConfig.CREDENTIALS_KEY);
-        ((FrameLayout) findViewById(R.id.map_view)).addView(mMapView);
+        ((FrameLayout)findViewById(R.id.map_view)).addView(mMapView);
         mMapView.onCreate(savedInstanceState);
-
-
-        if (ActivityCompat.checkSelfPermission(RouteDetails.this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            Location();
-        }else{
-            ActivityCompat.requestPermissions(RouteDetails.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION);
+        mPinLayer = new MapElementLayer();
+        mMapView.getLayers().add(mPinLayer);
+        try {
+            stopHttpRequestHandler.getStopsOnRouteToBingmap(route_id,route_type,mPinLayer,mMapView);
+            // Pop stops in
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        //        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        //==============      Above is Belong to Bingmap
+
+        //int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
+//        getRoutePathById(routeid);
+
     }
-
-
 
     private void getUserLocation() {
         PermissionListener permissionlistener = new PermissionListener() {
@@ -97,35 +118,22 @@ public class RouteDetails extends AppCompatActivity {
                 .check();
     }
 
-    private void Location(){
-        LocationRequest request = LocationRequest.create();
-        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        request.setInterval(10000);
-        request.setFastestInterval(3000);
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(request);
-        builder.setAlwaysShow(true);
-
-        Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
-        result.addOnCompleteListener(task -> {
-            try {
-                LocationSettingsResponse response = task.getResult(ApiException.class);
-                // Get near stop
-            } catch (ApiException e) {
-                switch (e.getStatusCode()){
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        try {
-                            ResolvableApiException resolvableApiException = (ResolvableApiException) e;
-                            resolvableApiException.startResolutionForResult(RouteDetails.this, REQUEST_LOCATION);
-                        } catch (IntentSender.SendIntentException sendIntentException){
-                            sendIntentException.printStackTrace();
-                        }
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        break;
+    private void getGeoLocation() {
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
                 }
-                e.printStackTrace();
-            }
-        });
+            });
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            System.out.println("locationfragStopselect:"+location);
+            latitude = (float) location.getLatitude();
+            longitude = (float) location.getLongitude();
+        } catch (SecurityException e) {
+            Toast.makeText(this, "GPS Permission has been disabled", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -138,21 +146,12 @@ public class RouteDetails extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
-        if (ActivityCompat.checkSelfPermission(RouteDetails.this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            Location();
-        }else{
-            ActivityCompat.requestPermissions(RouteDetails.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION);
-        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mMapView.onPause();
-        if (ActivityCompat.checkSelfPermission(RouteDetails.this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-//            locationManager.removeUpdates((LocationListener)this);
-        }
     }
 
     @Override
@@ -172,27 +171,10 @@ public class RouteDetails extends AppCompatActivity {
         super.onDestroy();
         mMapView.onDestroy();
     }
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
-    }
-
-    private void getGeoLocation() {
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        try {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, new LocationListener() {
-                @Override
-                public void onLocationChanged(@NonNull Location location) {
-                }
-            });
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            System.out.println("locationfragStopselect:"+location);
-            latitude = (float) location.getLatitude();
-            longitude = (float) location.getLongitude();
-        } catch (SecurityException e) {
-            Toast.makeText(this, "GPS Permission has been disabled", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
     }
 }

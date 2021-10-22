@@ -8,8 +8,11 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.microsoft.maps.Geopoint;
+import com.microsoft.maps.MapAnimationKind;
 import com.microsoft.maps.MapElementLayer;
+import com.microsoft.maps.MapFlyout;
 import com.microsoft.maps.MapIcon;
+import com.microsoft.maps.MapScene;
 import com.microsoft.maps.MapView;
 
 import org.json.JSONArray;
@@ -185,7 +188,7 @@ public class StopHttpRequestHandler {
         }
     }
 
-    public void getStopsOnRouteToBingmap(int route_id, int route_type, MapElementLayer mPinLayer) throws Exception {
+    public void getStopsOnRouteToBingmap(int route_id, int route_type, MapElementLayer mPinLayer,MapView mapView) throws Exception {
         String url = commonDataRequest.showRoutesStop(route_id, route_type);
         Request request = new Request.Builder().url(url).build();
         client.newCall(request).enqueue(new Callback() {
@@ -206,18 +209,26 @@ public class StopHttpRequestHandler {
                             @Override
                             public void run() {
                                 mPinLayer.getElements().clear();
+                                double avglat=0,avglng=0;
                                 for (int i = 0; i < stopsArray.size(); i++) {
                                     Geopoint location = new Geopoint(stopsArray.get(i).getStop_latitude(),stopsArray.get(i).getStop_longitude());  // your pin lat-long coordinates
                                     String title = stopsArray.get(i).getStop_name();       // title to be shown next to the pin
 //            Bitmap pinBitmap = ...   // your pin graphic (optional)
-
                                     MapIcon pushpin = new MapIcon();
                                     pushpin.setLocation(location);
                                     pushpin.setTitle(title);
+                                    avglng+=stopsArray.get(i).getStop_longitude();
+                                    avglat+=stopsArray.get(i).getStop_latitude();
 //            pushpin.setImage(new MapImage(pinBitmap));
-
                                     mPinLayer.getElements().add(pushpin);
+                                    MapFlyout mapFlyout = new MapFlyout();
+                                    mapFlyout.setTitle(stopsArray.get(i).getStop_name());
+                                    mapFlyout.setDescription("Suburb:"+stopsArray.get(i).getStop_suburb()+"\nStop Id:"+stopsArray.get(i).getStop_id());
+                                    pushpin.setFlyout(mapFlyout);
                                 }
+                                avglat = avglat/stopsArray.size();
+                                avglng = avglng/stopsArray.size();
+                                mapView.setScene(MapScene.createFromLocationAndZoomLevel(new Geopoint(avglat,avglng), 12), MapAnimationKind.DEFAULT);
                             }
                         });
                     } catch (JSONException e) {

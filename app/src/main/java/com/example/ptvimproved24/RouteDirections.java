@@ -77,25 +77,24 @@ public class RouteDirections extends AppCompatActivity {
 
     private static final int REQUEST_LOCATION = 99;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
-    private MapElementLayer mStopPinLayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_routedirections);
         int route_id = getIntent().getIntExtra("route_id", 1); // Get Route details to display
-        int route_type = getIntent().getIntExtra("route_type", 1);
+        int route_type = getIntent().getIntExtra("route_type", 0);
         getUserLocation();
         getGeoLocation();
 
         //===========      Following is Belong to Bingmap
         mMapView = new MapView(this, MapRenderMode.RASTER);  // or use MapRenderMode.RASTER for 2D map
         mMapView.setCredentialsKey(BuildConfig.CREDENTIALS_KEY);
-        setContentView(R.layout.activity_routedirections);
+        ((FrameLayout)findViewById(R.id.map_view)).addView(mMapView);
         mPinLayer = new MapElementLayer();
         mMapView.getLayers().add(mPinLayer);
         try {
-            stopHttpRequestHandler.getStopsOnRouteToBingmap(route_id,route_type,mPinLayer);
-            // Pop stops in
+            stopHttpRequestHandler.getStopsOnRouteToBingmap(route_id,route_type,mPinLayer,mMapView); // Pop stops in
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,7 +110,7 @@ public class RouteDirections extends AppCompatActivity {
         mListView.setAdapter(routeDirectionAdapter);
         routeDirectionHandler = new RouteDirectionsRequestsHandler(this);
         routeDirectionHandler.getRouteDirectionById(route_id, routeDirectionAdapter, latitude, longitude);
-        mMapView.setScene(MapScene.createFromLocationAndZoomLevel(new Geopoint(-37.818078,144.96681), 12), MapAnimationKind.DEFAULT);
+
 
         // looking up route route, nearest's stop to user, then lookup the stop's next departure
 
