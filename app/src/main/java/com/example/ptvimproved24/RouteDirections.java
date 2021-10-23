@@ -99,8 +99,6 @@ public class RouteDirections extends AppCompatActivity {
             e.printStackTrace();
         }
         mMapView.onCreate(savedInstanceState);
-        //        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        ((FrameLayout) findViewById(R.id.map_view)).addView(mMapView);
         //==============      Above is Belong to Bingmap
 
         //int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
