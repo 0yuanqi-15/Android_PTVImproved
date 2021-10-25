@@ -238,8 +238,8 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
     public void generateSavedRouteList(View v){
         ListView mListView = (ListView) v.findViewById(R.id.savedRoutes_view);
 
-        SavedRoute route1=new SavedRoute("703","Oakleigh - Box Hill via Clayton");
-        SavedRoute route2=new SavedRoute("3-3a","Melbourne University - East Malvern");
+        SavedRoute route1=new SavedRoute("703",13270,"Oakleigh - Box Hill via Clayton",2);
+        SavedRoute route2=new SavedRoute("3-3a",761,"Melbourne University - East Malvern",1);
 
         ArrayList<SavedRoute> SavedRouteList = new ArrayList<>();
         SavedRouteList.add(route1);
@@ -255,7 +255,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
                     String routeid = entry.getKey();
                     int routetype = pref.getInt(routeid, 0);
 
-
                     SavedRoute route=new SavedRoute(routeid,Integer.toString(routetype));
                     SavedRouteList.add(route);
                     Log.d("values", "saved route loaded success");
@@ -268,6 +267,15 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 
 
         SavedRouteListAdapter adapter = new SavedRouteListAdapter(v.getContext(),R.layout.savedroutes_view, SavedRouteList);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent intent = new Intent(getActivity(), RouteDetails.class);
+                intent.putExtra("route_id",adapter.getItem(position).getSavedRouteid());
+                intent.putExtra("route_type",adapter.getItem(position).getSavedRouteType());
+                startActivity(intent);
+            }
+        });
         mListView.setAdapter(adapter);
     }
 
