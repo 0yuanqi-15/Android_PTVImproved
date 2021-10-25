@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -95,8 +97,18 @@ public class RouteDirections extends AppCompatActivity {
         routeDirectionHandler = new RouteDirectionsRequestsHandler(this);
         routeDirectionHandler.getRouteDirectionById(route_id, routeDirectionAdapter, latitude, longitude);
 
-
-        // looking up route route, nearest's stop to user, then lookup the stop's next departure
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(RouteDirections.this, stops.class);
+                Direction clickedDirection = routeDirectionAdapter.getItem(i);
+                intent.putExtra("index", clickedDirection.getStops().get(0).getStop_id());
+                intent.putExtra("type", clickedDirection.getStops().get(0).getRouteType());
+                intent.putExtra("name", clickedDirection.getStops().get(0).getStop_name());
+                intent.putExtra("suburb", clickedDirection.getStops().get(0).getStop_suburb());
+                startActivity(intent);
+            }
+        });
 
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -127,6 +139,7 @@ public class RouteDirections extends AppCompatActivity {
                     }
                     System.out.println("Last click stopid:"+lastSelectedStopId);
                     lastSelectedStopId = stopid;
+                    Toast.makeText(getApplicationContext(),"Click again to see next departures of "+pushpin.getFlyout().getTitle(),Toast.LENGTH_SHORT);
 //                    for(String ret: pushpin.getFlyout().getDescription().split("\\:")){
 //                        System.out.println(ret);
 //                    }
@@ -135,7 +148,6 @@ public class RouteDirections extends AppCompatActivity {
                 return false;
             }
         });
-
     }
 
     @Override
@@ -240,41 +252,4 @@ public class RouteDirections extends AppCompatActivity {
         }
     }
 
-    public void appendPinsToMap(ArrayList<Stop> stopArrayList){
-        mPinLayer.getElements().clear();
-        for (int i = 0; i < stopArrayList.size(); i++) {
-            Geopoint location = new Geopoint(stopArrayList.get(i).getStop_latitude(),stopArrayList.get(i).getStop_longitude());  // your pin lat-long coordinates
-            String title = stopArrayList.get(i).getStop_name();       // title to be shown next to the pin
-//            Bitmap pinBitmap = ...   // your pin graphic (optional)
-
-            MapIcon pushpin = new MapIcon();
-            pushpin.setLocation(location);
-            pushpin.setTitle(title);
-//            pushpin.setImage(new MapImage(pinBitmap));
-
-            mPinLayer.getElements().add(pushpin);
-        }
-    }
-//
-//    //ZhentaoHe Test
-//    public void generateRouteDirectionList(View v) throws Exception {
-//        ListView mListView = (ListView) v.findViewById(R.id.route_directionList);
-//
-//        Route route1 = new Route(1038);
-//        Direction direction1 = new Direction(1038);
-//
-//
-//        ArrayList<Route> SearchRouteList = new ArrayList<>();
-//        ArrayList<Direction> SearchDirectionList = new ArrayList<>();
-//
-//        SearchRouteList.add(route1);
-//
-//        RouteDirectionsRequestsHandler handler= new RouteDirectionsRequestsHandler(this);
-//        //handler.getRouteDirectionById(route1,SearchDirectionList);
-//
-//        RouteDirectionAdapter adapter = new RouteDirectionAdapter(v.getContext(),R.layout.routedetails_view, SearchDirectionList);
-//        mListView.setAdapter(adapter);
-//    }
-//
-//    //ZhentaoHe Test
 }
