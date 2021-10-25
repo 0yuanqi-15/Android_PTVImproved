@@ -6,16 +6,21 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,6 +38,7 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.microsoft.maps.Geopoint;
@@ -137,6 +143,51 @@ public class RouteDirections extends AppCompatActivity {
         if (item.getItemId() == R.id.save_route) {
             int route_id = getIntent().getIntExtra("route_id", 1); // Get Route details to display
             int route_type = getIntent().getIntExtra("route_type", 0);
+
+            String PREFERENCE_NAME = "saved_routes";
+            SharedPreferences pref = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+            if (pref.contains(Integer.toString(route_id))){
+
+                View pop_view = getLayoutInflater().inflate(R.layout.popup_window_route_direction, null, false);
+                final PopupWindow popWindow = new PopupWindow(pop_view,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+
+                popWindow.setTouchable(true);
+                popWindow.setBackgroundDrawable(new ColorDrawable(0xffffffff));
+
+                popWindow.showAtLocation(pop_view, Gravity.CENTER, 0, 0);
+
+                Button btn_yes = (Button) pop_view.findViewById(R.id.btn_ok);
+                Button btn_cancel = (Button) pop_view.findViewById(R.id.btn_cancel);
+
+                btn_yes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SharedPreferences.Editor editor = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
+                        editor.remove(Integer.toString(route_id));
+                        editor.apply();
+
+                        Snackbar.make(mMapView, "This stop has been removed from you save-list", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                        popWindow.dismiss();
+                    }
+                });
+
+                btn_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popWindow.dismiss();
+                    }
+                });
+
+
+
+//                    Snackbar.make(view, "You have already saved this stop!", Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show();
+                return true;
+            }
+
+
             SharedPreferences.Editor editor = getSharedPreferences("saved_routes", Context.MODE_PRIVATE).edit();
             editor.putInt(Integer.toString(route_id), route_type);
             editor.apply();
