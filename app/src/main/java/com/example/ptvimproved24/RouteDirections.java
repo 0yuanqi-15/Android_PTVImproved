@@ -3,6 +3,7 @@ package com.example.ptvimproved24;
 import android.Manifest;
 import android.content.Context;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -134,7 +135,11 @@ public class RouteDirections extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         if (item.getItemId() == R.id.save_route) {
-            //
+            int route_id = getIntent().getIntExtra("route_id", 1); // Get Route details to display
+            int route_type = getIntent().getIntExtra("route_type", 0);
+            SharedPreferences.Editor editor = getSharedPreferences("saved_routes", Context.MODE_PRIVATE).edit();
+            editor.putInt(Integer.toString(route_id), route_type);
+            editor.apply();
             return true;
         }
         return super.onOptionsItemSelected(item);

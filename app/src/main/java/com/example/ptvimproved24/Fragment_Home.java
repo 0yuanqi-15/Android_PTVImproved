@@ -245,6 +245,28 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         SavedRouteList.add(route1);
         SavedRouteList.add(route2);
 
+        SharedPreferences pref = getContext().getSharedPreferences("saved_routes", Context.MODE_PRIVATE);
+
+        try {
+            if (pref != null) {
+                Map<String, ?> allEntries = pref.getAll();
+
+                for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+                    String routeid = entry.getKey();
+                    int routetype = pref.getInt(routeid, 0);
+
+
+                    SavedRoute route=new SavedRoute(routeid,Integer.toString(routetype));
+                    SavedRouteList.add(route);
+                    Log.d("values", "saved route loaded success");
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         SavedRouteListAdapter adapter = new SavedRouteListAdapter(v.getContext(),R.layout.savedroutes_view, SavedRouteList);
         mListView.setAdapter(adapter);
     }

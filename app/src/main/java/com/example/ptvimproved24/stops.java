@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -71,6 +72,20 @@ public class stops extends AppCompatActivity {
         detail.setAdapter(adapter);
 
         departureHttpRequestHandler.getNextDepartureByStopId(stopId, routeType, adapter);
+
+        detail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(view.getContext(), RouteDirections.class);
+                String route_info = adapter.getItem(i);
+                System.out.println(route_info);
+
+//                intent.putExtra("index", clickedStop.getStop_id());
+//
+//                startActivity(intent);
+
+            }
+        });
 
         String PREFERENCE_NAME = "SavedStops";
         FloatingActionButton fab = binding.fab;
