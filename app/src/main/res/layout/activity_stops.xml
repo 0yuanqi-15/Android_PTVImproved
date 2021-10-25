@@ -24,8 +24,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:expandedTitleMarginBottom="50dp"
             app:toolbarId="@+id/toolbar"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Design.CollapsingToolbar.Expanded"
-            app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Title">
+            >
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
