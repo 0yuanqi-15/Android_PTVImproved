@@ -2,10 +2,9 @@ package com.example.ptvimproved24;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.IntentSender;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -21,43 +19,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.microsoft.maps.Geopoint;
-import com.microsoft.maps.MapAnimationKind;
 import com.microsoft.maps.MapElement;
+import com.microsoft.maps.MapElementCollection;
 import com.microsoft.maps.MapElementLayer;
+import com.microsoft.maps.MapElementTappedEventArgs;
+import com.microsoft.maps.MapFlyout;
 import com.microsoft.maps.MapIcon;
-import com.microsoft.maps.MapImage;
 import com.microsoft.maps.MapRenderMode;
-import com.microsoft.maps.MapScene;
+import com.microsoft.maps.MapTappedEventArgs;
 import com.microsoft.maps.MapView;
+import com.microsoft.maps.OnMapElementTappedListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class RouteDirections extends AppCompatActivity {
 //public class RouteDirections extends AppCompatActivity implements OnMapReadyCallback {
@@ -68,6 +48,8 @@ public class RouteDirections extends AppCompatActivity {
     private static final String TAG = "RouteDirections";
     private MapView mMapView;
     private MapElementLayer mPinLayer;
+    private MapFlyout mapFlyout;
+    private MapIcon pushpin;
     private ListView mListView;
     private RouteDirectionAdapter routeDirectionAdapter;
     private FusedLocationProviderClient fusedLocationClient;
@@ -75,7 +57,7 @@ public class RouteDirections extends AppCompatActivity {
     private double userLongitude;
     private LocationManager locationManager;
     private RouteDirectionsRequestsHandler routeDirectionHandler;
-    String provider;
+    private int lastSelectedStopId=-1;
     RouteHttpRequestHandler routeHttpRequestHandler = new RouteHttpRequestHandler(this);
     StopHttpRequestHandler stopHttpRequestHandler = new StopHttpRequestHandler(this);
 
@@ -123,7 +105,39 @@ public class RouteDirections extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         }
+
+        mPinLayer.addOnMapElementTappedListener(new OnMapElementTappedListener() {
+            @Override
+            public boolean onMapElementTapped(MapElementTappedEventArgs e) {
+                System.out.println("PinElement:"+e.mapElements);
+                if(e.mapElements.size()>0){
+                    pushpin = (MapIcon) e.mapElements.get(0);
+//                    System.out.println("FlyoutT:"+pushpin.getFlyout().getTitle());
+//                    System.out.println("FlyoutD:"+pushpin.getFlyout().getDescription().split("\\:"));
+                    String[] stopdetails = pushpin.getFlyout().getDescription().split("\\:");
+                    int stopid = Integer.parseInt(stopdetails[stopdetails.length-1]);
+                    System.out.println("stopid:"+stopid);
+                    if(stopid == lastSelectedStopId){
+                        Intent i = new Intent(RouteDirections.this,stops.class);
+                        i.putExtra("index",stopid);
+                        i.putExtra("type",route_type);
+//                        i.putExtra("name",pushpin.getFlyout().getTitle());
+//                        i.putExtra("suburb",stopdetails[1]);
+                        startActivity(i);
+                    }
+                    System.out.println("Last click stopid:"+lastSelectedStopId);
+                    lastSelectedStopId = stopid;
+//                    for(String ret: pushpin.getFlyout().getDescription().split("\\:")){
+//                        System.out.println(ret);
+//                    }
+//                    lastSelectedStopId = pushpin.getFlyout().getDescription().split("\\:")
+                }
+                return false;
+            }
+        });
+
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
