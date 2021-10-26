@@ -21,6 +21,13 @@ public class Route {
 
     private String scheduleDepart;
 
+    public Route(Route r) {
+        this.route_type = r.getRoute_type();
+        this.route_id = r.getRoute_id();
+        this.route_name = r.getRoute_name();
+        this.route_gtfs_id = r.getRoute_gtfs_id();
+        this.route_number = r.getRoute_number();
+    }
 
     public Route(int route_type, int route_id, String route_name, String route_number, String route_gtfs_id, String direction) {
         this.route_type = route_type;

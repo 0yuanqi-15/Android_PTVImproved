@@ -111,7 +111,6 @@ public class RouteDirections extends AppCompatActivity {
         mListView.setAdapter(routeDirectionAdapter);
         routeDirectionHandler = new RouteDirectionsRequestsHandler(this);
         routeDirectionHandler.getRouteDirectionById(route_id, routeDirectionAdapter, latitude, longitude);
-        mMapView.setTransitFeaturesVisible(true);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -130,6 +129,7 @@ public class RouteDirections extends AppCompatActivity {
         ((FrameLayout)findViewById(R.id.map_view)).addView(mMapView);
         mPinLayer = new MapElementLayer();
         mMapView.getLayers().add(mPinLayer);
+        mMapView.setTransitFeaturesVisible(true);
         try {
             stopHttpRequestHandler.getStopsOnRouteToBingmap(route_id,route_type,mPinLayer,mMapView); // Pop stops in
         } catch (Exception e) {
