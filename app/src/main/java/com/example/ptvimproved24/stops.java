@@ -63,7 +63,7 @@ public class stops extends AppCompatActivity {
         TextView stopsuburb = findViewById(R.id.text_stopsuburb);
         stopsuburb.setText(stopSuburb);
 
-        ArrayList<String> stopDetail = new ArrayList<>();
+        ArrayList<Route> stopDetail = new ArrayList<>();
 
         DepartureHttpRequestHandler departureHttpRequestHandler = new DepartureHttpRequestHandler(this);
 
@@ -77,12 +77,14 @@ public class stops extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(view.getContext(), RouteDirections.class);
-                String route_info = adapter.getItem(i);
-                System.out.println(route_info);
+                Route route = adapter.getItem(i);
 
-//                intent.putExtra("index", clickedStop.getStop_id());
-//
-//                startActivity(intent);
+                intent.putExtra("route_id", route.getRoute_id());
+                intent.putExtra("route_type", route.getRoute_type());
+                intent.putExtra("route_name", route.getRoute_name());
+                intent.putExtra("route_gtfs_id", route.getRoute_gtfs_id());
+
+                startActivity(intent);
 
             }
         });

@@ -12,11 +12,11 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class StopDetailAdapter extends ArrayAdapter<String> {
+public class StopDetailAdapter extends ArrayAdapter<Route> {
 
     private Context mContext;
     int mResource;
-    public StopDetailAdapter(@NonNull Context context, int resource, @NonNull ArrayList<String> objects) {
+    public StopDetailAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Route> objects) {
         super(context, resource, objects);
         mContext =context;
         mResource = resource;
@@ -24,9 +24,8 @@ public class StopDetailAdapter extends ArrayAdapter<String> {
 
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        String[] stopDetail = getItem(position).split("@");
-        String stopRoute = stopDetail[0];
-        String stopTime = stopDetail[1];
+        String stopRoute = getItem(position).getRoute_gtfs_id();
+        String stopTime = getItem(position).getScheduleDepart();
 //        String stopDirection = stopDetail[2];
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
