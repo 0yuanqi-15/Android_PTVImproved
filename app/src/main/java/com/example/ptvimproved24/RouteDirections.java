@@ -50,6 +50,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.StringBufferInputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,12 +83,19 @@ public class RouteDirections extends AppCompatActivity {
     private static final int REQUEST_LOCATION = 99;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
 
+    private int route_id;
+    private int route_type;
+    private String route_name;
+    private String route_gtfs_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routedirections);
-        int route_id = getIntent().getIntExtra("route_id", 1); // Get Route details to display
-        int route_type = getIntent().getIntExtra("route_type", 0);
+        route_id = getIntent().getIntExtra("route_id", 1); // Get Route details to display
+        route_type = getIntent().getIntExtra("route_type", 0);
+        route_name = getIntent().getStringExtra("route_name");
+        route_gtfs_id = getIntent().getStringExtra("route_gtfs_id");
         getUserLocation();
         getGeoLocation();
 
