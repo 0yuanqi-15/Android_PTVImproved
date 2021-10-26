@@ -70,6 +70,7 @@ import java.io.IOException;
 import java.io.StringBufferInputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -116,6 +117,7 @@ public class RouteDirections extends AppCompatActivity {
         route_type = getIntent().getIntExtra("route_type", 0);
         route_name = getIntent().getStringExtra("route_name");
         route_gtfs_id = getIntent().getStringExtra("route_gtfs_id");
+
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getGeoLocation();
@@ -200,9 +202,6 @@ public class RouteDirections extends AppCompatActivity {
         // Handle item selection
         if (item.getItemId() == R.id.save_route) {
 
-            int route_id = getIntent().getIntExtra("route_id", 1); // Get Route details to display
-            int route_type = getIntent().getIntExtra("route_type", 0);
-
             String PREFERENCE_NAME = "saved_routes";
             SharedPreferences pref = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
             if (pref.contains(Integer.toString(route_id))){
@@ -239,21 +238,23 @@ public class RouteDirections extends AppCompatActivity {
                     }
                 });
 
-
-
-//                    Snackbar.make(view, "You have already saved this stop!", Snackbar.LENGTH_LONG)
-//                            .setAction("Action", null).show();
                 return true;
             }
 
-
-
-            route_id = getIntent().getIntExtra("route_id", 1); // Get Route details to display
-            route_type = getIntent().getIntExtra("route_type", 0);
+            HashMap<String, Object> route_info = new HashMap<String, Object>();
+            route_info.put("route_name", route_name);
+            route_info.put("route_type", route_type);
+            route_info.put("gtfs_id", route_gtfs_id);
 
             SharedPreferences.Editor editor = getSharedPreferences("saved_routes", Context.MODE_PRIVATE).edit();
-            editor.putInt(Integer.toString(route_id), route_type);
+            JSONObject jsonObject = new JSONObject(route_info);
+            String jsonString = jsonObject.toString();
+            editor.putString(Integer.toString(route_id), jsonString);
             editor.apply();
+
+            Snackbar.make(mMapView, "Route saved successfully!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+
             return true;
         }
         return super.onOptionsItemSelected(item);

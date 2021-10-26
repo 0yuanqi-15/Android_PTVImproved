@@ -269,15 +269,28 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 
                 for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
                     String routeid = entry.getKey();
-                    int routetype = pref.getInt(routeid, 0);
+                    String stopinfo = pref.getString(routeid, (new JSONObject()).toString());
 
-                    SavedRoute route=new SavedRoute(routeid,Integer.toString(routetype));
+                    Map<String,String> routeinfoMap = new HashMap<>();
+                    if (stopinfo != null) {
+                        JSONObject jsonObject = new JSONObject(stopinfo);
+                        Iterator<String> keysItr = jsonObject.keys();
+                        while (keysItr.hasNext()) {
+                            String key = keysItr.next();
+                            String value = jsonObject.getString(key);
+                            routeinfoMap.put(key, value);
+                        }
+                    }
+                    System.out.println("gtfs is " + routeinfoMap.get("gtfs_id"));
+                    System.out.println("route name is " + routeinfoMap.get("route_name"));
+                    System.out.println("id is " + routeid);
+                    SavedRoute route=new SavedRoute(routeinfoMap.get("gtfs_id"), Integer.parseInt(routeid), routeinfoMap.get("route_name"), Integer.parseInt(routeinfoMap.get("route_type")));
                     savedRouteArrayList.add(route);
                     Log.d("values", "saved route loaded success");
 
                 }
             }
-        } catch (Exception e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -289,6 +302,8 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
                 Intent intent = new Intent(getActivity(), RouteDetails.class);
                 intent.putExtra("route_id", savedRouteListAdapter.getItem(position).getSavedRouteid());
                 intent.putExtra("route_type", savedRouteListAdapter.getItem(position).getSavedRouteType());
+                //intent.putExtra("route_name", savedRouteListAdapter.getItem(position).getSavedRoutename());
+
                 startActivity(intent);
             }
         });
