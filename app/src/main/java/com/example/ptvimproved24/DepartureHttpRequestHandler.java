@@ -221,34 +221,20 @@ public class DepartureHttpRequestHandler {
                             JSONObject jsonObj = new JSONObject(responseBody);
                             JSONArray departures = jsonObj.getJSONArray("departures");
                             JSONObject routes = jsonObj.getJSONObject("routes");
-                            ArrayList<Departure> fetchedArray = getDepartureListFromJSONArray(departures);
+                            getDepartureListFromJSONArray(departures);
                             ArrayList<Route> routeArray = getRouteArrayFromJSONObject(routes);
-
-
 
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ArrayList<String> displayRoute = new ArrayList<>();
-                                    ArrayList<String> displayTime = new ArrayList<>();
-                                    ArrayList<String> displayDetail = new ArrayList<>();
-
-                                    for(Map.Entry<Integer, String> e : routeMap.entrySet()) {
-                                        String name = routeNameMap.get(e.getKey());
-
-                                        String direction = "";
-                                        //try {
-                                        //    direction = commonDataRequest.showDirectionsOnRoute(e.getKey());
-                                        //   System.out.println(direction);
-                                        //} catch (Exception exception) {
-                                        //    exception.printStackTrace();
-                                        //}
-                                        displayRoute.add(name);
-                                        displayTime.add(e.getValue());
-                                        displayDetail.add(name+"@"+e.getValue()+"@"+direction);
+                                    for(Route r : routeArray) {
+                                        String time = routeMap.get(r.getRoute_id());
+                                        r.setScheduleDepart(time);
+                                        String gtfsId = restructureGtfsId(r.getRoute_gtfs_id());
+                                        r.setRoute_gtfs_id(gtfsId);
                                     }
                                     adapter.clear();
-                                    adapter.addAll(displayDetail.subList(0, displayDetail.size()));
+                                    adapter.addAll(routeArray);
                                     adapter.notifyDataSetChanged();
                                 }
                             });

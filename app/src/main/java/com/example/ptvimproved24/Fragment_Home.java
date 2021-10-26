@@ -238,9 +238,14 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         savedStopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), StopDetailActivity.class);
-                intent.putExtra("index", nearStopListAdapter.getItem(i).getStop_id());   // Stopid
-                intent.putExtra("route_type", nearStopListAdapter.getItem(i).getRouteType());
+                Intent intent = new Intent(getActivity(), stops.class);
+                Stop clickedStop = nearStopListAdapter.getItem(i);
+
+                intent.putExtra("index", clickedStop.getStop_id());
+                intent.putExtra("type", clickedStop.getRouteType());
+                intent.putExtra("name", clickedStop.getStop_name());
+                intent.putExtra("suburb", clickedStop.getStop_suburb());
+
                 startActivity(intent);
             }
         });

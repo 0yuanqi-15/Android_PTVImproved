@@ -21,25 +21,50 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.microsoft.maps.Geopoint;
+import com.microsoft.maps.MapAnimationKind;
 import com.microsoft.maps.MapElement;
 import com.microsoft.maps.MapElementCollection;
 import com.microsoft.maps.MapElementLayer;
 import com.microsoft.maps.MapElementTappedEventArgs;
 import com.microsoft.maps.MapFlyout;
 import com.microsoft.maps.MapIcon;
+import com.microsoft.maps.MapImage;
 import com.microsoft.maps.MapRenderMode;
-import com.microsoft.maps.MapTappedEventArgs;
+import com.microsoft.maps.MapScene;
 import com.microsoft.maps.MapView;
 import com.microsoft.maps.OnMapElementTappedListener;
 
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.StringBufferInputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class RouteDirections extends AppCompatActivity {
 //public class RouteDirections extends AppCompatActivity implements OnMapReadyCallback {
@@ -66,12 +91,19 @@ public class RouteDirections extends AppCompatActivity {
     private static final int REQUEST_LOCATION = 99;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
 
+    private int route_id;
+    private int route_type;
+    private String route_name;
+    private String route_gtfs_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routedirections);
-        int route_id = getIntent().getIntExtra("route_id", 1); // Get Route details to display
-        int route_type = getIntent().getIntExtra("route_type", 0);
+        route_id = getIntent().getIntExtra("route_id", 1); // Get Route details to display
+        route_type = getIntent().getIntExtra("route_type", 0);
+        route_name = getIntent().getStringExtra("route_name");
+        route_gtfs_id = getIntent().getStringExtra("route_gtfs_id");
         getUserLocation();
         getGeoLocation();
 

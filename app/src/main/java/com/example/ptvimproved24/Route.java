@@ -19,6 +19,8 @@ public class Route {
     private String route_direction_description;
     private String direction_name;
 
+    private String scheduleDepart;
+
 
     public Route(int route_type, int route_id, String route_name, String route_number, String route_gtfs_id, String direction) {
         this.route_type = route_type;
@@ -128,5 +130,13 @@ public class Route {
 
     public void setGeopath(ArrayList<RouteGeopath> geopath) {
         this.geopath = geopath;
+    }
+
+    public String getScheduleDepart() {
+        return scheduleDepart;
+    }
+
+    public void setScheduleDepart(String scheduleDepart) {
+        this.scheduleDepart = scheduleDepart;
     }
 }
