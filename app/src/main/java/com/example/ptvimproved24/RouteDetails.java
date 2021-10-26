@@ -95,15 +95,13 @@ public class RouteDetails extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        mMapView.setTransitFeaturesVisible(true);
         mPinLayer.addOnMapElementTappedListener(new OnMapElementTappedListener() {
             @Override
             public boolean onMapElementTapped(MapElementTappedEventArgs e) {
                 System.out.println("PinElement:"+e.mapElements);
                 if(e.mapElements.size()>0){
                     pushpin = (MapIcon) e.mapElements.get(0);
-//                    System.out.println("FlyoutT:"+pushpin.getFlyout().getTitle());
-//                    System.out.println("FlyoutD:"+pushpin.getFlyout().getDescription().split("\\:"));
                     String[] stopdetails = pushpin.getFlyout().getDescription().split("\\:");
                     int stopid = Integer.parseInt(stopdetails[stopdetails.length-1]);
                     System.out.println("stopid:"+stopid);
