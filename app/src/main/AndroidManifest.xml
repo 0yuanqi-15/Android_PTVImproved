@@ -20,7 +20,8 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PTVImproved24">
+        android:theme="@style/Theme.PTVImproved24"
+        android:usesCleartextTraffic="true">
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

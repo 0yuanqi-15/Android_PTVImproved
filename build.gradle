@@ -3,9 +3,8 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url 'https://microsoftmaps.jfrog.io/artifactory/Maven/'
-        }
+        maven { url 'https://microsoftmaps.jfrog.io/artifactory/Maven/' }
+        maven { url 'https://maven.mozilla.org/maven2/' }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.0"
