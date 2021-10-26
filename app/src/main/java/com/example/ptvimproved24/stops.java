@@ -53,6 +53,7 @@ public class stops extends AppCompatActivity {
 
         //show information in the layout
         detail = (ListView) findViewById(R.id.stops_nextservice);
+        detail.setNestedScrollingEnabled(true);
         Intent intent = getIntent();
         int stopId = intent.getIntExtra("index", 0);
         int routeType = intent.getIntExtra("type", 0);
