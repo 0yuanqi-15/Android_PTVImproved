@@ -92,7 +92,6 @@ public class RouteDirections extends AppCompatActivity {
     private MapIcon pushpin;
     private ListView mListView;
     private RouteDirectionAdapter routeDirectionAdapter;
-    private FusedLocationProviderClient fusedLocationClient;
     private double userLatitude;
     private double userLongitude;
     private LocationManager locationManager;
@@ -102,7 +101,6 @@ public class RouteDirections extends AppCompatActivity {
     StopHttpRequestHandler stopHttpRequestHandler = new StopHttpRequestHandler(this);
 
     private static final int REQUEST_LOCATION = 99;
-    private static final int REQUEST_CHECK_SETTINGS = 0x1;
 
     private int route_id;
     private int route_type;
@@ -136,7 +134,6 @@ public class RouteDirections extends AppCompatActivity {
         mListView.setAdapter(routeDirectionAdapter);
         routeDirectionHandler = new RouteDirectionsRequestsHandler(this);
         routeDirectionHandler.getRouteDirectionById(route_id, routeDirectionAdapter, latitude, longitude);
-
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -155,6 +152,7 @@ public class RouteDirections extends AppCompatActivity {
         ((FrameLayout)findViewById(R.id.map_view)).addView(mMapView);
         mPinLayer = new MapElementLayer();
         mMapView.getLayers().add(mPinLayer);
+        mMapView.setTransitFeaturesVisible(true);
         try {
             stopHttpRequestHandler.getStopsOnRouteToBingmap(route_id,route_type,mPinLayer,mMapView); // Pop stops in
         } catch (Exception e) {
