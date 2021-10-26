@@ -23,16 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.microsoft.maps.Geopoint;
@@ -79,7 +70,6 @@ public class RouteDirections extends AppCompatActivity {
     private MapIcon pushpin;
     private ListView mListView;
     private RouteDirectionAdapter routeDirectionAdapter;
-    private FusedLocationProviderClient fusedLocationClient;
     private double userLatitude;
     private double userLongitude;
     private LocationManager locationManager;
@@ -89,7 +79,6 @@ public class RouteDirections extends AppCompatActivity {
     StopHttpRequestHandler stopHttpRequestHandler = new StopHttpRequestHandler(this);
 
     private static final int REQUEST_LOCATION = 99;
-    private static final int REQUEST_CHECK_SETTINGS = 0x1;
 
     private int route_id;
     private int route_type;
@@ -104,22 +93,16 @@ public class RouteDirections extends AppCompatActivity {
         route_type = getIntent().getIntExtra("route_type", 0);
         route_name = getIntent().getStringExtra("route_name");
         route_gtfs_id = getIntent().getStringExtra("route_gtfs_id");
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getGeoLocation();
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        }
+
         getUserLocation();
         getGeoLocation();
-
-        //===========      Following is Belong to Bingmap
-        mMapView = new MapView(this, MapRenderMode.RASTER);  // or use MapRenderMode.RASTER for 2D map
-        mMapView.setCredentialsKey(BuildConfig.CREDENTIALS_KEY);
-        ((FrameLayout)findViewById(R.id.map_view)).addView(mMapView);
-        mPinLayer = new MapElementLayer();
-        mMapView.getLayers().add(mPinLayer);
-        try {
-            stopHttpRequestHandler.getStopsOnRouteToBingmap(route_id,route_type,mPinLayer,mMapView); // Pop stops in
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        mMapView.onCreate(savedInstanceState);
-        //==============      Above is Belong to Bingmap
 
         //int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
 //        getRoutePathById(routeid);
@@ -128,7 +111,7 @@ public class RouteDirections extends AppCompatActivity {
         mListView.setAdapter(routeDirectionAdapter);
         routeDirectionHandler = new RouteDirectionsRequestsHandler(this);
         routeDirectionHandler.getRouteDirectionById(route_id, routeDirectionAdapter, latitude, longitude);
-
+        mMapView.setTransitFeaturesVisible(true);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -142,13 +125,17 @@ public class RouteDirections extends AppCompatActivity {
             }
         });
 
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            getGeoLocation();
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        mMapView = new MapView(this, MapRenderMode.RASTER);  // or use MapRenderMode.RASTER for 2D map
+        mMapView.setCredentialsKey(BuildConfig.CREDENTIALS_KEY);
+        ((FrameLayout)findViewById(R.id.map_view)).addView(mMapView);
+        mPinLayer = new MapElementLayer();
+        mMapView.getLayers().add(mPinLayer);
+        try {
+            stopHttpRequestHandler.getStopsOnRouteToBingmap(route_id,route_type,mPinLayer,mMapView); // Pop stops in
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        mMapView.onCreate(savedInstanceState);
 
         mPinLayer.addOnMapElementTappedListener(new OnMapElementTappedListener() {
             @Override
@@ -165,17 +152,13 @@ public class RouteDirections extends AppCompatActivity {
                         Intent i = new Intent(RouteDirections.this,stops.class);
                         i.putExtra("index",stopid);
                         i.putExtra("type",route_type);
-//                        i.putExtra("name",pushpin.getFlyout().getTitle());
-//                        i.putExtra("suburb",stopdetails[1]);
+                        i.putExtra("name",pushpin.getFlyout().getTitle());
+                        i.putExtra("suburb",stopdetails[1].split("\\n")[0]);
                         startActivity(i);
                     }
                     System.out.println("Last click stopid:"+lastSelectedStopId);
                     lastSelectedStopId = stopid;
                     Toast.makeText(getApplicationContext(),"Click again to see next departures of "+pushpin.getFlyout().getTitle(),Toast.LENGTH_SHORT);
-//                    for(String ret: pushpin.getFlyout().getDescription().split("\\:")){
-//                        System.out.println(ret);
-//                    }
-//                    lastSelectedStopId = pushpin.getFlyout().getDescription().split("\\:")
                 }
                 return false;
             }
@@ -193,8 +176,8 @@ public class RouteDirections extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         if (item.getItemId() == R.id.save_route) {
-            int route_id = getIntent().getIntExtra("route_id", 1); // Get Route details to display
-            int route_type = getIntent().getIntExtra("route_type", 0);
+            route_id = getIntent().getIntExtra("route_id", 1); // Get Route details to display
+            route_type = getIntent().getIntExtra("route_type", 0);
             SharedPreferences.Editor editor = getSharedPreferences("saved_routes", Context.MODE_PRIVATE).edit();
             editor.putInt(Integer.toString(route_id), route_type);
             editor.apply();
@@ -202,6 +185,7 @@ public class RouteDirections extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void getUserLocation() {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override

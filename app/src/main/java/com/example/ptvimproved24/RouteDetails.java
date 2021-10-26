@@ -3,6 +3,7 @@ package com.example.ptvimproved24;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -44,9 +45,12 @@ import com.gun0912.tedpermission.normal.TedPermission;
 import com.microsoft.maps.Geopoint;
 import com.microsoft.maps.MapAnimationKind;
 import com.microsoft.maps.MapElementLayer;
+import com.microsoft.maps.MapElementTappedEventArgs;
+import com.microsoft.maps.MapIcon;
 import com.microsoft.maps.MapRenderMode;
 import com.microsoft.maps.MapScene;
 import com.microsoft.maps.MapView;
+import com.microsoft.maps.OnMapElementTappedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +66,8 @@ public class RouteDetails extends AppCompatActivity {
 
     private MapView mMapView;
     private MapElementLayer mPinLayer;
+    private MapIcon pushpin;
+    private int lastSelectedStopId=-1;
 
     StopHttpRequestHandler stopHttpRequestHandler = new StopHttpRequestHandler(this);
 
@@ -89,12 +95,31 @@ public class RouteDetails extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        //        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        //==============      Above is Belong to Bingmap
-
-        //int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
-//        getRoutePathById(routeid);
+        mMapView.setTransitFeaturesVisible(true);
+        mPinLayer.addOnMapElementTappedListener(new OnMapElementTappedListener() {
+            @Override
+            public boolean onMapElementTapped(MapElementTappedEventArgs e) {
+                System.out.println("PinElement:"+e.mapElements);
+                if(e.mapElements.size()>0){
+                    pushpin = (MapIcon) e.mapElements.get(0);
+                    String[] stopdetails = pushpin.getFlyout().getDescription().split("\\:");
+                    int stopid = Integer.parseInt(stopdetails[stopdetails.length-1]);
+                    System.out.println("stopid:"+stopid);
+                    if(stopid == lastSelectedStopId){
+                        Intent i = new Intent(RouteDetails.this,stops.class);
+                        i.putExtra("index",stopid);
+                        i.putExtra("type",route_type);
+                        i.putExtra("name",pushpin.getFlyout().getTitle());
+                        i.putExtra("suburb",stopdetails[1].split("\\n")[0]);
+                        startActivity(i);
+                    }
+                    System.out.println("Last click stopid:"+lastSelectedStopId);
+                    lastSelectedStopId = stopid;
+                    Toast.makeText(getApplicationContext(),"Click again to see next departures of "+pushpin.getFlyout().getTitle(),Toast.LENGTH_SHORT);
+                }
+                return false;
+            }
+        });
 
     }
 
