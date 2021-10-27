@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(intent);
 //                break;
             case R.id.menuact_disruption:
-                intent = new Intent(MainActivity.this, Disruption.class);
+                intent = new Intent(MainActivity.this, Disruptions.class);
                 startActivity(intent);
                 break;
             case R.id.menuact_stops:
