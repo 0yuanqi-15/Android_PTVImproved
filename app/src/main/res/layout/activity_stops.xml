@@ -23,7 +23,8 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:expandedTitleMarginBottom="50dp"
-            app:toolbarId="@+id/toolbar">
+            app:toolbarId="@+id/toolbar"
+            >
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -31,7 +32,8 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:title="Stop name"
-                app:popupTheme="@style/Theme.PTVImproved24.PopupOverlay" />
+                app:popupTheme="@style/Theme.PTVImproved24.PopupOverlay"
+                />
 
             <TextView
                 android:layout_width="match_parent"

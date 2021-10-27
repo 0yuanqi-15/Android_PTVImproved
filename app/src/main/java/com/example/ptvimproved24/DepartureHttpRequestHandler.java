@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -29,7 +30,7 @@ public class DepartureHttpRequestHandler {
 
     private final OkHttpClient client;
     private final FragmentActivity activity;
-    private HashMap<Integer, String> routeMap;
+    private HashMap<Integer, ArrayList<String>> routeMap;
     private HashMap<Integer, String> routeNameMap;
     //private HashMap<Integer, String> routeDirectionMap;
 
@@ -67,7 +68,12 @@ public class DepartureHttpRequestHandler {
             String flags = jsonObject.getString("flags");
             int departure_sequence = jsonObject.getInt("departure_sequence");
             if (routeMap.get(route_id) == null) {
-                routeMap.put(route_id, UTCToAEST(schedule_depart));
+                ArrayList<String> newArray = new ArrayList<>();
+                newArray.add(UTCToAEST(schedule_depart));
+                routeMap.put(route_id, newArray);
+            } else {
+                ArrayList<String> currentArray = routeMap.get(route_id);
+                currentArray.add(UTCToAEST(schedule_depart));
             }
             Departure d = new Departure(stop_id,route_id,run_id,run_ref,direction_id,new ArrayList<>(),schedule_depart,estimated_depart_utc,at_platform,platform_number,flags,departure_sequence);
             result.add(d);
@@ -77,7 +83,7 @@ public class DepartureHttpRequestHandler {
 
     private ArrayList<Route> getRouteArrayFromJSONObject(JSONObject jsonObject) throws JSONException {
         ArrayList<Route> result = new ArrayList<>();
-        for (Map.Entry<Integer, String> e : routeMap.entrySet()) {
+        for (Map.Entry<Integer, ArrayList<String>> e : routeMap.entrySet()) {
             JSONObject route = jsonObject.getJSONObject(Integer.toString(e.getKey()));
             int routeType = route.getInt("route_type");
             int routeId = route.getInt("route_id");
@@ -134,10 +140,10 @@ public class DepartureHttpRequestHandler {
                                 public void run() {
                                     ArrayList<String> displayRoute = new ArrayList<>();
                                     ArrayList<String> displayTime = new ArrayList<>();
-                                    for(Map.Entry<Integer, String> e : routeMap.entrySet()) {
+                                    for(Map.Entry<Integer, ArrayList<String>> e : routeMap.entrySet()) {
                                         String name = routeNameMap.get(e.getKey());
                                         displayRoute.add(restructureGtfsId(name));
-                                        displayTime.add(e.getValue());
+                                        displayTime.add(e.getValue().get(0));
                                     }
                                     stop.setRoutes(displayRoute);
                                     stop.setTimes(displayTime);
@@ -221,34 +227,26 @@ public class DepartureHttpRequestHandler {
                             JSONObject jsonObj = new JSONObject(responseBody);
                             JSONArray departures = jsonObj.getJSONArray("departures");
                             JSONObject routes = jsonObj.getJSONObject("routes");
-                            ArrayList<Departure> fetchedArray = getDepartureListFromJSONArray(departures);
+                            getDepartureListFromJSONArray(departures);
                             ArrayList<Route> routeArray = getRouteArrayFromJSONObject(routes);
-
-
 
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ArrayList<String> displayRoute = new ArrayList<>();
-                                    ArrayList<String> displayTime = new ArrayList<>();
-                                    ArrayList<String> displayDetail = new ArrayList<>();
-
-                                    for(Map.Entry<Integer, String> e : routeMap.entrySet()) {
-                                        String name = routeNameMap.get(e.getKey());
-
-                                        String direction = "";
-                                        //try {
-                                        //    direction = commonDataRequest.showDirectionsOnRoute(e.getKey());
-                                        //   System.out.println(direction);
-                                        //} catch (Exception exception) {
-                                        //    exception.printStackTrace();
-                                        //}
-                                        displayRoute.add(name);
-                                        displayTime.add(e.getValue());
-                                        displayDetail.add(name+"@"+e.getValue()+"@"+direction);
+                                    ArrayList<Route> resultArray = new ArrayList<>();
+                                    for(Route r : routeArray) {
+                                        ArrayList<String> times = routeMap.get(r.getRoute_id());
+                                        int fetchedIndex = 3 > times.size() ? times.size() : 3;
+                                        for (int i = 0; i < fetchedIndex; i ++) {
+                                            Route newRoute = new Route(r);
+                                            newRoute.setScheduleDepart(times.get(i));
+                                            String gtfsId = restructureGtfsId(newRoute.getRoute_gtfs_id());
+                                            newRoute.setRoute_gtfs_id(gtfsId);
+                                            resultArray.add(newRoute);
+                                        }
                                     }
                                     adapter.clear();
-                                    adapter.addAll(displayDetail.subList(0, displayDetail.size()));
+                                    adapter.addAll(resultArray);
                                     adapter.notifyDataSetChanged();
                                 }
                             });
@@ -294,10 +292,10 @@ public class DepartureHttpRequestHandler {
                                 public void run() {
                                     ArrayList<String> displayRoute = new ArrayList<>();
                                     ArrayList<String> displayTime = new ArrayList<>();
-                                    for(Map.Entry<Integer, String> e : routeMap.entrySet()) {
+                                    for(Map.Entry<Integer, ArrayList<String>> e : routeMap.entrySet()) {
                                         String name = routeNameMap.get(e.getKey());
                                         displayRoute.add(restructureGtfsId(name));
-                                        displayTime.add(e.getValue());
+                                        displayTime.add(e.getValue().get(0));
                                     }
                                     stop.setRoutes(displayRoute);
                                     stop.setTimes(displayTime);

@@ -3,12 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragment_JourneyPlanner">
 
-    <WebView
-        android:id="@+id/frag_journey_webview"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent">
 
+<!--        <WebView-->
+<!--            android:id="@+id/frag_journey_webview"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            />-->
+
+
+        <Button
+            android:id="@+id/fragbutton_journeyplanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click button to go to PTV Journey planner"
+            android:textAlignment="center"
+            android:layout_marginVertical="@dimen/activity_vertical_margin"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            tools:ignore="MissingConstraints"
+
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

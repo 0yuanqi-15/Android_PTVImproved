@@ -42,8 +42,10 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
     private LocationManager locationManager;
     private ListView nearStopListView;
     private ListView savedStopListView;
-    private NearStopListAdapter adapter;
+    private ListView savedRouteListView;
+    private NearStopListAdapter nearStopListAdapter;
     private SavedStopListAdapter savedStopListAdapter;
+    private SavedRouteListAdapter savedRouteListAdapter;
     private final float defaultLatitude = -37.818078f;
     private final float defaultLongitude = 144.96681f;
     private Float latitude;
@@ -69,6 +71,7 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         super.onViewCreated(view, savedInstanceState);
         nearStopListView = (ListView) view.findViewById(R.id.nearStops_view);
         savedStopListView = (ListView) view.findViewById(R.id.SavedStop_view);
+        savedRouteListView = (ListView) view.findViewById(R.id.savedRoutes_view);
         view.findViewById(R.id.nearbystopLabel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,13 +79,13 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
                     nearStopListView.setAdapter(new NearStopListAdapter(view.getContext(),R.layout.nearstop_view, new ArrayList<>()));
                     isNearStopShowing = false;
                 } else {
-                    nearStopListView.setAdapter(adapter);
+                    nearStopListView.setAdapter(nearStopListAdapter);
                     isNearStopShowing = true;
                 }
             }
         });
-        adapter = new NearStopListAdapter(view.getContext(),R.layout.nearstop_view, new ArrayList<>());
-        nearStopListView.setAdapter(adapter);
+        nearStopListAdapter = new NearStopListAdapter(view.getContext(),R.layout.nearstop_view, new ArrayList<>());
+        nearStopListView.setAdapter(nearStopListAdapter);
         stopHttpRequestHandler = new StopHttpRequestHandler(getActivity());
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
@@ -95,7 +98,7 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(view.getContext(), stops.class);
-                Stop clickedStop = adapter.getItem(i);
+                Stop clickedStop = nearStopListAdapter.getItem(i);
 
 
                 intent.putExtra("index", clickedStop.getStop_id());
@@ -184,7 +187,7 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 //        nearStopList.add(stop2);
 //        nearStopList.add(stop3);
 
-        stopHttpRequestHandler.getStopsFromLocation(adapter, latitude, longitude);
+        stopHttpRequestHandler.getStopsFromLocation(nearStopListAdapter, latitude, longitude);
 
     }
 
@@ -252,21 +255,79 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 
         }
 
+        savedStopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), stops.class);
+                SavedStop clickedStop = savedStopListAdapter.getItem(i);
+
+                intent.putExtra("index", Integer.valueOf(clickedStop.getStopid()));
+                intent.putExtra("type", Integer.valueOf(clickedStop.getRouteType()));
+                intent.putExtra("name", clickedStop.getStopname());
+                intent.putExtra("suburb", clickedStop.getSuburb());
+
+                startActivity(intent);
+            }
+        });
+
 
     }
 
     public void generateSavedRouteList(View v){
-        ListView mListView = (ListView) v.findViewById(R.id.savedRoutes_view);
+        ArrayList<SavedRoute> savedRouteArrayList = new ArrayList<>();
+        SavedRoute route1=new SavedRoute("703",13270,"Oakleigh - Box Hill via Clayton",2);
+        SavedRoute route2=new SavedRoute("3-3a",761,"Melbourne University - East Malvern",1);
+        savedRouteArrayList.add(route1);
+        savedRouteArrayList.add(route2);
 
-        SavedRoute route1=new SavedRoute("703","Oakleigh - Box Hill via Clayton");
-        SavedRoute route2=new SavedRoute("3-3a","Melbourne University - East Malvern");
 
-        ArrayList<SavedRoute> SavedRouteList = new ArrayList<>();
-        SavedRouteList.add(route1);
-        SavedRouteList.add(route2);
+        SharedPreferences pref = getContext().getSharedPreferences("saved_routes", Context.MODE_PRIVATE);
 
-        SavedRouteListAdapter adapter = new SavedRouteListAdapter(v.getContext(),R.layout.savedroutes_view, SavedRouteList);
-        mListView.setAdapter(adapter);
+        try {
+            if (pref != null) {
+                Map<String, ?> allEntries = pref.getAll();
+
+                for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+                    String routeid = entry.getKey();
+                    String stopinfo = pref.getString(routeid, (new JSONObject()).toString());
+
+                    Map<String,String> routeinfoMap = new HashMap<>();
+                    if (stopinfo != null) {
+                        JSONObject jsonObject = new JSONObject(stopinfo);
+                        Iterator<String> keysItr = jsonObject.keys();
+                        while (keysItr.hasNext()) {
+                            String key = keysItr.next();
+                            String value = jsonObject.getString(key);
+                            routeinfoMap.put(key, value);
+                        }
+                    }
+                    System.out.println("gtfs is " + routeinfoMap.get("gtfs_id"));
+                    System.out.println("route name is " + routeinfoMap.get("route_name"));
+                    System.out.println("id is " + routeid);
+                    SavedRoute route=new SavedRoute(routeinfoMap.get("gtfs_id"), Integer.parseInt(routeid), routeinfoMap.get("route_name"), Integer.parseInt(routeinfoMap.get("route_type")));
+                    savedRouteArrayList.add(route);
+                    Log.d("values", "saved route loaded success");
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        savedRouteListAdapter = new SavedRouteListAdapter(v.getContext(),R.layout.savedroutes_view,savedRouteArrayList);
+        savedRouteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent intent = new Intent(getActivity(), RouteDetails.class);
+                intent.putExtra("route_id", savedRouteListAdapter.getItem(position).getSavedRouteid());
+                intent.putExtra("route_type", savedRouteListAdapter.getItem(position).getSavedRouteType());
+                //intent.putExtra("route_name", savedRouteListAdapter.getItem(position).getSavedRoutename());
+
+                startActivity(intent);
+            }
+        });
+        savedRouteListView.setAdapter(savedRouteListAdapter);
     }
 
     @Override

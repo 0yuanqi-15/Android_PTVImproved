@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -52,6 +53,7 @@ public class stops extends AppCompatActivity {
 
         //show information in the layout
         detail = (ListView) findViewById(R.id.stops_nextservice);
+        detail.setNestedScrollingEnabled(true);
         Intent intent = getIntent();
         int stopId = intent.getIntExtra("index", 0);
         int routeType = intent.getIntExtra("type", 0);
@@ -62,7 +64,7 @@ public class stops extends AppCompatActivity {
         TextView stopsuburb = findViewById(R.id.text_stopsuburb);
         stopsuburb.setText(stopSuburb);
 
-        ArrayList<String> stopDetail = new ArrayList<>();
+        ArrayList<Route> stopDetail = new ArrayList<>();
 
         DepartureHttpRequestHandler departureHttpRequestHandler = new DepartureHttpRequestHandler(this);
 
@@ -71,6 +73,22 @@ public class stops extends AppCompatActivity {
         detail.setAdapter(adapter);
 
         departureHttpRequestHandler.getNextDepartureByStopId(stopId, routeType, adapter);
+
+        detail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(view.getContext(), RouteDirections.class);
+                Route route = adapter.getItem(i);
+
+                intent.putExtra("route_id", route.getRoute_id());
+                intent.putExtra("route_type", route.getRoute_type());
+                intent.putExtra("route_name", route.getRoute_name());
+                intent.putExtra("route_gtfs_id", route.getRoute_gtfs_id());
+
+                startActivity(intent);
+
+            }
+        });
 
         String PREFERENCE_NAME = "SavedStops";
         FloatingActionButton fab = binding.fab;
