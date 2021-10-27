@@ -56,5 +56,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.microsoft.maps:maps-sdk:1.1.4'
     implementation 'com.google.maps.android:android-maps-utils:2.2.3'
-    implementation "org.mozilla.geckoview:geckoview-beta:94.0.20211024185818"
+    implementation "androidx.webkit:webkit:1.4.0"
+    //implementation "org.mozilla.geckoview:geckoview-beta:94.0.20211024185818"
 }
