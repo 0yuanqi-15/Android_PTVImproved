@@ -104,7 +104,7 @@ public class DepartureHttpRequestHandler {
                     ArrayList<String> currentArray = routeMap.get(route_id);
                     currentArray.add(UTCToAEST(schedule_depart));
                 }
-                Departure d = new Departure(stop_id, route_id, run_id, run_ref, direction_id, new ArrayList<>(), schedule_depart, estimated_depart_utc, at_platform, platform_number, flags, departure_sequence);
+                Departure d = new Departure(stop_id,route_id,run_id,run_ref,direction_id,schedule_depart,estimated_depart_utc,at_platform,platform_number,flags,departure_sequence);
                 result.add(d);
             }
         }
@@ -150,13 +150,11 @@ public class DepartureHttpRequestHandler {
                 currentRunArray.add(runDestination);
 
             }
-            Departure d = new Departure(stop_id,route_id,run_id,run_ref,direction_id,new ArrayList<>(),schedule_depart,estimated_depart_utc,at_platform,platform_number,flags,departure_sequence);
+            Departure d = new Departure(stop_id,route_id,run_id,run_ref,direction_id,schedule_depart,estimated_depart_utc,at_platform,platform_number,flags,departure_sequence);
             result.add(d);
         }
         return result;
     }
-
-
 
     private ArrayList<Route> getRouteArrayFromJSONObject(JSONObject jsonObject) throws JSONException {
         ArrayList<Route> result = new ArrayList<>();

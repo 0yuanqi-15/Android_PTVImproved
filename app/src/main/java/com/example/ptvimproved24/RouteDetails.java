@@ -2,16 +2,11 @@ package com.example.ptvimproved24;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
@@ -19,38 +14,21 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.ptvimproved24.databinding.ActivityRoutedetailsBinding;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.example.ptvimproved24.datastructures.Pattern;
+import com.example.ptvimproved24.datastructures.PatternRequestHandler;
+import com.example.ptvimproved24.datastructures.RouteDirectionsRequestsHandler;
+import com.example.ptvimproved24.datastructures.Stop;
+import com.example.ptvimproved24.datastructures.StopHttpRequestHandler;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.microsoft.maps.Geopoint;
-import com.microsoft.maps.MapAnimationKind;
 import com.microsoft.maps.MapElementLayer;
 import com.microsoft.maps.MapElementTappedEventArgs;
 import com.microsoft.maps.MapIcon;
 import com.microsoft.maps.MapRenderMode;
-import com.microsoft.maps.MapScene;
 import com.microsoft.maps.MapView;
 import com.microsoft.maps.OnMapElementTappedListener;
 
@@ -75,6 +53,7 @@ public class RouteDetails extends AppCompatActivity {
     private int lastSelectedStopId=-1;
 
     StopHttpRequestHandler stopHttpRequestHandler = new StopHttpRequestHandler(this);
+    PatternRequestHandler patternRequestHandler = new PatternRequestHandler(this);
 
 //    private GoogleMap mMap;
     private ActivityRoutedetailsBinding binding;
@@ -84,18 +63,20 @@ public class RouteDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routedetails);
         String run_ref = getIntent().getStringExtra("run_ref");
+        if(run_ref==null){
+            run_ref="8724";
+        }
         int route_id = getIntent().getIntExtra("route_id",2); // Get Route details to display
         int route_type = getIntent().getIntExtra("route_type",1); // Get Route details to display
         getUserLocation();
         getGeoLocation();
 
-        mListView = (ListView) findViewById(R.id.route_directionlist);
-        routeDetailsAdapter = new RouteDetailsAdapter(this, R.layout.routedetails_view1, new ArrayList<>());
+        mListView = (ListView) findViewById(R.id.route_detailslist);
+        routeDetailsAdapter = new RouteDetailsAdapter(this, R.layout.routedetails_view, new ArrayList<>());
         mListView.setAdapter(routeDetailsAdapter);
 
         try {
-            stopHttpRequestHandler.getStopsOnRoute(route_id,route_type,routeDetailsAdapter);
-            // Pop stops in
+            patternRequestHandler.getPatternRequest(route_type,run_ref,routeDetailsAdapter);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -108,7 +89,7 @@ public class RouteDetails extends AppCompatActivity {
             intent.putExtra("index", clickedStop.getStop_id());
             intent.putExtra("type", clickedStop.getRouteType());
             intent.putExtra("name", clickedStop.getStop_name());
-            intent.putExtra("suburb", clickedStop.getStop_suburb());
+//            intent.putExtra("suburb", clickedStop.getStop_suburb());
             startActivity(intent);
         }
     });

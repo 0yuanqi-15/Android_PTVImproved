@@ -61,7 +61,7 @@ public class NearStopListAdapter extends ArrayAdapter<Stop> {
 //        return super.getView(position, convertView, parent);
         String stopname = getItem(position).getStop_name();
         String stopsuburb = getItem(position).getStop_suburb();
-        int stopdistance = getItem(position).getDistance();
+        int stopdistance = getItem(position).getStop_distance();
         ArrayList<String> routes = getItem(position).getRoutes();
         ArrayList<String> times = getItem(position).getTimes();
 

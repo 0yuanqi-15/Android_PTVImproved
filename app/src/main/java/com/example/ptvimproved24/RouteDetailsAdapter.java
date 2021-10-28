@@ -10,21 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.w3c.dom.Text;
+import com.example.ptvimproved24.datastructures.Pattern;
+import com.example.ptvimproved24.datastructures.Stop;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class RouteDetailsAdapter extends ArrayAdapter<Stop> {
     private Context mContext;
@@ -40,14 +29,16 @@ public class RouteDetailsAdapter extends ArrayAdapter<Stop> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        String direction_name = getItem(position).getStop_name();
-
+        String stop_name = getItem(position).getStop_name();
+        String stop_time = getItem(position).getStop_time();
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
 
-        TextView serviceTo = (TextView) convertView.findViewById(R.id.rdetails_terminus);
-        serviceTo.setText(direction_name);
+        TextView serviceName = (TextView) convertView.findViewById(R.id.stop_name);
+        TextView serviceTime = (TextView) convertView.findViewById(R.id.stop_time);
+        serviceName.setText(stop_name);
+        serviceTime.setText(stop_time);
 
 
         return convertView;

@@ -31,6 +31,20 @@ public class Departure {
         this.departure_sequence = departure_sequence;
     }
 
+    public Departure(int stop_id, int route_id, int run_id, String run_ref, int direction_id, String scheduled_departure_utc, String estimated_departure_utc, boolean at_platform, String platform_number, String flags, int departure_sequence) {
+        this.stop_id = stop_id;
+        this.route_id = route_id;
+        this.run_id = run_id;
+        this.run_ref = run_ref;
+        this.direction_id = direction_id;
+        this.scheduled_departure_utc = scheduled_departure_utc;
+        this.estimated_departure_utc = estimated_departure_utc;
+        this.at_platform = at_platform;
+        this.platform_number = platform_number;
+        this.flags = flags;
+        this.departure_sequence = departure_sequence;
+    }
+
     public Departure(int stop_id, int route_id, int run_id) {
         this.stop_id = stop_id;
         this.route_id = route_id;

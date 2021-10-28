@@ -106,7 +106,7 @@ public class RouteDirections extends AppCompatActivity {
         //int routeid = getIntent().getIntExtra("routeid",1); // Get Route details to display
 //        getRoutePathById(routeid);
         mListView = (ListView) findViewById(R.id.route_directionList);
-        routeDirectionAdapter = new RouteDirectionAdapter(this, R.layout.routedetails_view, new ArrayList<>());
+        routeDirectionAdapter = new RouteDirectionAdapter(this, R.layout.routedirections_view, new ArrayList<>());
         mListView.setAdapter(routeDirectionAdapter);
         routeDirectionHandler = new RouteDirectionsRequestsHandler(this);
         routeDirectionHandler.getRouteDirectionById(route_id, routeDirectionAdapter, latitude, longitude);
