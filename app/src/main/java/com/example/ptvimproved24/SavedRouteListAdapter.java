@@ -24,9 +24,9 @@ public class SavedRouteListAdapter extends ArrayAdapter<SavedRoute> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        String routename = getItem(position).getSavedRoutename();
+        String routename = getItem(position).getSavedRouteGtfsId();
         int routeid = getItem(position).getSavedRouteid();
-        String routedirection = getItem(position).getSavedRoutedirection();
+        String routedirection = getItem(position).getSavedRouteName();
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);

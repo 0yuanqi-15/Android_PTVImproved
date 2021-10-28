@@ -13,8 +13,11 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -42,6 +45,18 @@ public class DepartureHttpRequestHandler {
        // routeDirectionMap = new HashMap<>();
     }
 
+    private long timeGap(String timeStr) {
+        ZonedDateTime a = Instant.now().atZone(ZoneId.of("Australia/Melbourne"));
+        TemporalAccessor time = DateTimeFormatter
+                .ofLocalizedDateTime (FormatStyle.SHORT)
+                .withLocale (Locale.UK)
+                .withZone(ZoneId.of("Australia/Melbourne"))
+                .parse(timeStr);
+        ZonedDateTime b = ZonedDateTime.from(time);
+        long diffInMinutes = ChronoUnit.MINUTES.between(a, b);
+        return diffInMinutes;
+    }
+
     private String UTCToAEST(String utc) {
         String result = Instant.parse ( utc )
                         .atZone ( ZoneId.of ( "Australia/Sydney" ) )
@@ -67,16 +82,18 @@ public class DepartureHttpRequestHandler {
             String platform_number = jsonObject.getString("platform_number");
             String flags = jsonObject.getString("flags");
             int departure_sequence = jsonObject.getInt("departure_sequence");
-            if (routeMap.get(route_id) == null) {
-                ArrayList<String> newArray = new ArrayList<>();
-                newArray.add(UTCToAEST(schedule_depart));
-                routeMap.put(route_id, newArray);
-            } else {
-                ArrayList<String> currentArray = routeMap.get(route_id);
-                currentArray.add(UTCToAEST(schedule_depart));
+            if (timeGap(UTCToAEST(schedule_depart)) >= 0) {
+                if (routeMap.get(route_id) == null) {
+                    ArrayList<String> newArray = new ArrayList<>();
+                    newArray.add(UTCToAEST(schedule_depart));
+                    routeMap.put(route_id, newArray);
+                } else {
+                    ArrayList<String> currentArray = routeMap.get(route_id);
+                    currentArray.add(UTCToAEST(schedule_depart));
+                }
+                Departure d = new Departure(stop_id, route_id, run_id, run_ref, direction_id, new ArrayList<>(), schedule_depart, estimated_depart_utc, at_platform, platform_number, flags, departure_sequence);
+                result.add(d);
             }
-            Departure d = new Departure(stop_id,route_id,run_id,run_ref,direction_id,new ArrayList<>(),schedule_depart,estimated_depart_utc,at_platform,platform_number,flags,departure_sequence);
-            result.add(d);
         }
         return result;
     }
