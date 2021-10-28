@@ -1,5 +1,7 @@
 package com.example.ptvimproved24;
 
+import com.example.ptvimproved24.datastructures.Route;
+
 import java.util.ArrayList;
 
 public class StopDetail {

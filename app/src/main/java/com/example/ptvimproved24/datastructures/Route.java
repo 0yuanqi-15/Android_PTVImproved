@@ -1,6 +1,4 @@
-package com.example.ptvimproved24;
-
-import com.example.ptvimproved24.datastructures.RouteGeopath;
+package com.example.ptvimproved24.datastructures;
 
 import java.util.ArrayList;
 

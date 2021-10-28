@@ -25,6 +25,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.ptvimproved24.databinding.FragmentHomeBinding;
+import com.example.ptvimproved24.datastructures.DepartureHttpRequestHandler;
+import com.example.ptvimproved24.datastructures.Stop;
+import com.example.ptvimproved24.datastructures.StopHttpRequestHandler;
 import com.squareup.seismic.ShakeDetector;
 
 import org.json.JSONException;

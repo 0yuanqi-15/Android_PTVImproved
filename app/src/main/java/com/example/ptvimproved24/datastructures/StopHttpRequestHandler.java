@@ -1,12 +1,18 @@
-package com.example.ptvimproved24;
+package com.example.ptvimproved24.datastructures;
 
 import android.location.Location;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.ptvimproved24.Direction;
+import com.example.ptvimproved24.StopDetail;
+import com.example.ptvimproved24.StopLocation;
+import com.example.ptvimproved24.commonDataRequest;
+import com.example.ptvimproved24.datastructures.DepartureHttpRequestHandler;
+import com.example.ptvimproved24.datastructures.Route;
+import com.example.ptvimproved24.datastructures.Stop;
 import com.google.android.gms.maps.GoogleMap;
 import com.microsoft.maps.Geopoint;
 import com.microsoft.maps.MapAnimationKind;

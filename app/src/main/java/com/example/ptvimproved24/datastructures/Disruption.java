@@ -1,4 +1,7 @@
-package com.example.ptvimproved24;
+package com.example.ptvimproved24.datastructures;
+
+import com.example.ptvimproved24.datastructures.Route;
+import com.example.ptvimproved24.datastructures.Stop;
 
 import java.util.ArrayList;
 

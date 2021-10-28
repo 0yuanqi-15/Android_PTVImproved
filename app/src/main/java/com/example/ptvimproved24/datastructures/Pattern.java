@@ -1,8 +1,5 @@
 package com.example.ptvimproved24.datastructures;
 
-import com.example.ptvimproved24.Route;
-import com.example.ptvimproved24.Stop;
-
 import java.util.ArrayList;
 
 public class Pattern {

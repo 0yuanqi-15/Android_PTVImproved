@@ -1,4 +1,4 @@
-package com.example.ptvimproved24;
+package com.example.ptvimproved24.datastructures;
 
 import java.util.ArrayList;
 

@@ -1,9 +1,9 @@
 package com.example.ptvimproved24;
 
-import com.example.ptvimproved24.datastructures.RouteGeopath;
+import com.example.ptvimproved24.datastructures.Departure;
+import com.example.ptvimproved24.datastructures.Stop;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Direction {
     private int route_type;

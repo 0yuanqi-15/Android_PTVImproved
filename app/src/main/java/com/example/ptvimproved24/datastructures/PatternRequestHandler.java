@@ -63,10 +63,9 @@ public class PatternRequestHandler {
                     String responseBody = response.body().string();
                     try {
                         JSONObject jsonObj = new JSONObject(responseBody);
-//                        JSONArray runs = jsonObj.getJSONArray("runs");
-
                         JSONArray departures = jsonObj.getJSONArray("departures");
-                        JSONArray stops = jsonObj.getJSONArray(Integer.parseInt("stops"));
+                        JSONArray stops = jsonObj.getJSONArray("stops");
+                        JSONArray runs = jsonObj.getJSONArray("runs");
 
                         ArrayList<Pattern> patternsArrayList = getPatterns(departures);
                         activity.runOnUiThread(new Runnable() {

@@ -1,13 +1,10 @@
 package com.example.ptvimproved24.datastructures;
 
-import com.example.ptvimproved24.Disruption;
-import com.example.ptvimproved24.datastructures.RouteGeopath;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class RouteGeopathRequestHandler {
 

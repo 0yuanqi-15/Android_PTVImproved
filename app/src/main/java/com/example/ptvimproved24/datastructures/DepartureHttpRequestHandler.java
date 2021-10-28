@@ -1,16 +1,19 @@
-package com.example.ptvimproved24;
+package com.example.ptvimproved24.datastructures;
 
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.ptvimproved24.Direction;
+import com.example.ptvimproved24.SavedStop;
+import com.example.ptvimproved24.commonDataRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

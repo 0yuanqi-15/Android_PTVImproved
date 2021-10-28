@@ -1,4 +1,4 @@
-package com.example.ptvimproved24;
+package com.example.ptvimproved24.datastructures;
 
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -6,8 +6,11 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.ptvimproved24.commonDataRequest;
+import com.example.ptvimproved24.datastructures.Route;
 import com.example.ptvimproved24.datastructures.RouteGeopath;
 import com.example.ptvimproved24.datastructures.RouteGeopathRequestHandler;
+import com.example.ptvimproved24.datastructures.Stop;
 import com.microsoft.maps.MapView;
 
 import org.json.JSONArray;
@@ -15,7 +18,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import okhttp3.Call;
