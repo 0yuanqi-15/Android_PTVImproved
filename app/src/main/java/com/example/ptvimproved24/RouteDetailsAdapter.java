@@ -38,7 +38,7 @@ public class RouteDetailsAdapter extends ArrayAdapter<Stop> {
         TextView serviceName = (TextView) convertView.findViewById(R.id.stop_name);
         TextView serviceTime = (TextView) convertView.findViewById(R.id.stop_time);
         serviceName.setText(stop_name);
-        serviceTime.setText(stop_time);
+        serviceTime.setText(stop_time.substring(11,16));
 
 
         return convertView;

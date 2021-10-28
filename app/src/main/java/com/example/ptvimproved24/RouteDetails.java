@@ -52,7 +52,6 @@ public class RouteDetails extends AppCompatActivity {
     private MapIcon pushpin;
     private int lastSelectedStopId=-1;
 
-    StopHttpRequestHandler stopHttpRequestHandler = new StopHttpRequestHandler(this);
     PatternRequestHandler patternRequestHandler = new PatternRequestHandler(this);
 
 //    private GoogleMap mMap;
