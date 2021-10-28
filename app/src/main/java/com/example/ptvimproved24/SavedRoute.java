@@ -1,41 +1,41 @@
 package com.example.ptvimproved24;
 
 public class SavedRoute {
-    private String savedRoutename;
+    private String savedRouteGtfsId;
     private int savedRouteid;
-    private String savedRoutedirection;
+    private String savedRouteName;
     private int savedRouteType;
 
-    public SavedRoute(String savedRoutename, int savedRouteid, String savedRoutedirection, int savedRouteType) {
-        this.savedRoutename = savedRoutename;
+    public SavedRoute(String savedRouteGtfsId, int savedRouteid, String savedRouteName, int savedRouteType) {
+        this.savedRouteGtfsId = savedRouteGtfsId;
         this.savedRouteid = savedRouteid;
-        this.savedRoutedirection = savedRoutedirection;
+        this.savedRouteName = savedRouteName;
         this.savedRouteType = savedRouteType;
     }
 
-    public SavedRoute(String savedRoutename, int savedRouteid, int savedRouteType) {
-        this.savedRoutename = savedRoutename;
+    public SavedRoute(String savedRouteGtfsId, int savedRouteid, int savedRouteType) {
+        this.savedRouteGtfsId = savedRouteGtfsId;
         this.savedRouteid = savedRouteid;
         this.savedRouteType = savedRouteType;
     }
 
-    public SavedRoute(String savedRoutename, int savedRouteid, String savedRoutedirection) {
-        this.savedRoutename = savedRoutename;
+    public SavedRoute(String savedRouteGtfsId, int savedRouteid, String savedRouteName) {
+        this.savedRouteGtfsId = savedRouteGtfsId;
         this.savedRouteid = savedRouteid;
-        this.savedRoutedirection = savedRoutedirection;
+        this.savedRouteName = savedRouteName;
     }
 
-    public SavedRoute(String savedRoutename, String savedRoutedirection) {
-        this.savedRoutename = savedRoutename;
-        this.savedRoutedirection = savedRoutedirection;
+    public SavedRoute(String savedRouteGtfsId, String savedRouteName) {
+        this.savedRouteGtfsId = savedRouteGtfsId;
+        this.savedRouteName = savedRouteName;
     }
 
-    public String getSavedRoutename() {
-        return savedRoutename;
+    public String getSavedRouteGtfsId() {
+        return savedRouteGtfsId;
     }
 
-    public void setSavedRoutename(String savedRoutename) {
-        this.savedRoutename = savedRoutename;
+    public void setSavedRouteGtfsId(String savedRouteGtfsId) {
+        this.savedRouteGtfsId = savedRouteGtfsId;
     }
 
     public int getSavedRouteid() {
@@ -46,12 +46,12 @@ public class SavedRoute {
         this.savedRouteid = savedRouteid;
     }
 
-    public String getSavedRoutedirection() {
-        return savedRoutedirection;
+    public String getSavedRouteName() {
+        return savedRouteName;
     }
 
-    public void setSavedRoutedirection(String savedRoutedirection) {
-        this.savedRoutedirection = savedRoutedirection;
+    public void setSavedRouteName(String savedRouteName) {
+        this.savedRouteName = savedRouteName;
     }
 
     public int getSavedRouteType() {

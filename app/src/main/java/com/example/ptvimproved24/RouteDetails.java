@@ -12,6 +12,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -65,6 +67,9 @@ public class RouteDetails extends AppCompatActivity {
     int REQUEST_LOCATION =99;
 
     private MapView mMapView;
+    private ListView mListView;
+    private RouteDirectionsRequestsHandler routeDirectionHandler;
+    private RouteDetailsAdapter routeDetailsAdapter;
     private MapElementLayer mPinLayer;
     private MapIcon pushpin;
     private int lastSelectedStopId=-1;
@@ -82,6 +87,31 @@ public class RouteDetails extends AppCompatActivity {
         int route_type = getIntent().getIntExtra("route_type",1); // Get Route details to display
         getUserLocation();
         getGeoLocation();
+
+        mListView = (ListView) findViewById(R.id.route_directionlist);
+        routeDetailsAdapter = new RouteDetailsAdapter(this, R.layout.routedetails_view1, new ArrayList<>());
+        mListView.setAdapter(routeDetailsAdapter);
+
+        try {
+            stopHttpRequestHandler.getStopsOnRoute(route_id,route_type,routeDetailsAdapter);
+            // Pop stops in
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            Intent intent = new Intent(RouteDetails.this, stops.class);
+            Stop clickedStop = routeDetailsAdapter.getItem(i);
+            intent.putExtra("index", clickedStop.getStop_id());
+            intent.putExtra("type", clickedStop.getRouteType());
+            intent.putExtra("name", clickedStop.getStop_name());
+            intent.putExtra("suburb", clickedStop.getStop_suburb());
+            startActivity(intent);
+        }
+    });
+
 
         mMapView = new MapView(this, MapRenderMode.RASTER);
         mMapView.setCredentialsKey(BuildConfig.CREDENTIALS_KEY);
@@ -120,6 +150,7 @@ public class RouteDetails extends AppCompatActivity {
                 return false;
             }
         });
+
 
     }
 

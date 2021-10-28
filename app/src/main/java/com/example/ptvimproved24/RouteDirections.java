@@ -137,12 +137,10 @@ public class RouteDirections extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(RouteDirections.this, stops.class);
+                Intent intent = new Intent(RouteDirections.this, RouteDetails.class);
                 Direction clickedDirection = routeDirectionAdapter.getItem(i);
-                intent.putExtra("index", clickedDirection.getStops().get(0).getStop_id());
-                intent.putExtra("type", clickedDirection.getStops().get(0).getRouteType());
-                intent.putExtra("name", clickedDirection.getStops().get(0).getStop_name());
-                intent.putExtra("suburb", clickedDirection.getStops().get(0).getStop_suburb());
+                intent.putExtra("route_id", clickedDirection.getRoute_id());
+                intent.putExtra("route_type", clickedDirection.getRoute_type());
                 startActivity(intent);
             }
         });

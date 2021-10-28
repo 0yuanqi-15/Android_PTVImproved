@@ -10,7 +10,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class SavedStopListAdapter extends ArrayAdapter<SavedStop> {
     private Context mContext;
@@ -21,6 +29,29 @@ public class SavedStopListAdapter extends ArrayAdapter<SavedStop> {
         mResource = resource;
     }
 
+    private long timeGap(String timeStr) {
+        ZonedDateTime a = Instant.now().atZone(ZoneId.of("Australia/Melbourne"));
+        TemporalAccessor time = DateTimeFormatter
+                .ofLocalizedDateTime (FormatStyle.SHORT)
+                .withLocale (Locale.UK)
+                .withZone(ZoneId.of("Australia/Melbourne"))
+                .parse(timeStr);
+        ZonedDateTime b = ZonedDateTime.from(time);
+        long diffInMinutes = ChronoUnit.MINUTES.between(a, b);
+        return diffInMinutes;
+    }
+
+    private String gapInString(String timeStr) {
+        long gap = timeGap(timeStr);
+        String result = "";
+        if (gap > 60) {
+            result = gap/60 + "h";
+        } else {
+            result = gap + "m";
+        }
+        return result;
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -29,8 +60,6 @@ public class SavedStopListAdapter extends ArrayAdapter<SavedStop> {
         String stopsuburb = getItem(position).getSuburb();
         ArrayList<String> routes = getItem(position).getRoutes();
         ArrayList<String> times = getItem(position).getTimes();
-
-        SavedStop nearStop = new SavedStop(stopsuburb,stopname,routes,times);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
@@ -59,7 +88,7 @@ public class SavedStopListAdapter extends ArrayAdapter<SavedStop> {
 
         if (routes.size()>=1 && times.size()>=1){
             tvroute1.setText(routes.get(0));
-            tvtime1.setText(times.get(0));
+            tvtime1.setText(gapInString(times.get(0)));
             tvroute2.setText("");
             tvtime2.setText("");
             tvroute3.setText("");
@@ -68,14 +97,14 @@ public class SavedStopListAdapter extends ArrayAdapter<SavedStop> {
 
         if (routes.size()>=2 && times.size()>=2){
             tvroute2.setText(routes.get(1));
-            tvtime2.setText(times.get(1));
+            tvtime2.setText(gapInString(times.get(1)));
             tvroute3.setText("");
             tvtime3.setText("");
         }
 
         if (routes.size()>=3 && times.size()>=3){
             tvroute3.setText(routes.get(2));
-            tvtime3.setText(times.get(2));
+            tvtime3.setText(gapInString(times.get(2)));
         }
 
         return convertView;

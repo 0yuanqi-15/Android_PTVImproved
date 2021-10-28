@@ -164,23 +164,23 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 
     public void generateNearStopList(){
 
-        ArrayList<String> stop1route = new ArrayList<>();
-        stop1route.add("606");stop1route.add("606");stop1route.add("606");
-        ArrayList<String> stop1time = new ArrayList<>();
-        stop1time.add("Now");stop1time.add("17:15");stop1time.add("17:30");
-        Stop stop1=new Stop("Port melbourne","Cruikshank St/Liardet St",293,stop1route,stop1time);
-
-        ArrayList<String> stop2route = new ArrayList<>();
-        stop2route.add("606");stop2route.add("606");stop2route.add("606");
-        ArrayList<String> stop2time = new ArrayList<>();
-        stop2time.add("Now");stop2time.add("17:14");stop2time.add("17:29");
-        Stop stop2=new Stop("Albert Park","Bridport St / Richardson St",276,stop2route,stop2time);
-
-        ArrayList<String> stop3route = new ArrayList<>();
-        stop3route.add("236");stop3route.add("236");stop3route.add("236");
-        ArrayList<String> stop3time = new ArrayList<>();
-        stop3time.add("Now");stop3time.add("52 mins");stop3time.add("06:29 PM");
-        Stop stop3=new Stop("Albert Park","Graham St/ Pickles St",162,stop3route,stop3time);
+//        ArrayList<String> stop1route = new ArrayList<>();
+//        stop1route.add("606");stop1route.add("606");stop1route.add("606");
+//        ArrayList<String> stop1time = new ArrayList<>();
+//        stop1time.add("Now");stop1time.add("17:15");stop1time.add("17:30");
+//        Stop stop1=new Stop("Port melbourne","Cruikshank St/Liardet St",293,stop1route,stop1time);
+//
+//        ArrayList<String> stop2route = new ArrayList<>();
+//        stop2route.add("606");stop2route.add("606");stop2route.add("606");
+//        ArrayList<String> stop2time = new ArrayList<>();
+//        stop2time.add("Now");stop2time.add("17:14");stop2time.add("17:29");
+//        Stop stop2=new Stop("Albert Park","Bridport St / Richardson St",276,stop2route,stop2time);
+//
+//        ArrayList<String> stop3route = new ArrayList<>();
+//        stop3route.add("236");stop3route.add("236");stop3route.add("236");
+//        ArrayList<String> stop3time = new ArrayList<>();
+//        stop3time.add("Now");stop3time.add("52 mins");stop3time.add("06:29 PM");
+//        Stop stop3=new Stop("Albert Park","Graham St/ Pickles St",162,stop3route,stop3time);
 
 //        ArrayList<NearStop> nearStopList = new ArrayList<>();
 //        nearStopList.add(stop1);
@@ -275,10 +275,10 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 
     public void generateSavedRouteList(View v){
         ArrayList<SavedRoute> savedRouteArrayList = new ArrayList<>();
-        SavedRoute route1=new SavedRoute("703",13270,"Oakleigh - Box Hill via Clayton",2);
-        SavedRoute route2=new SavedRoute("3-3a",761,"Melbourne University - East Malvern",1);
-        savedRouteArrayList.add(route1);
-        savedRouteArrayList.add(route2);
+//        SavedRoute route1=new SavedRoute("703",13270,"Oakleigh - Box Hill via Clayton",2);
+//        SavedRoute route2=new SavedRoute("3-3a",761,"Melbourne University - East Malvern",1);
+//        savedRouteArrayList.add(route1);
+//        savedRouteArrayList.add(route2);
 
 
         SharedPreferences pref = getContext().getSharedPreferences("saved_routes", Context.MODE_PRIVATE);
@@ -319,11 +319,11 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         savedRouteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent intent = new Intent(getActivity(), RouteDetails.class);
+                Intent intent = new Intent(getActivity(), RouteDirections.class);
                 intent.putExtra("route_id", savedRouteListAdapter.getItem(position).getSavedRouteid());
                 intent.putExtra("route_type", savedRouteListAdapter.getItem(position).getSavedRouteType());
-                //intent.putExtra("route_name", savedRouteListAdapter.getItem(position).getSavedRoutename());
-
+                intent.putExtra("route_name", savedRouteListAdapter.getItem(position).getSavedRouteName());
+                intent.putExtra("route_gtfs_id", savedRouteListAdapter.getItem(position).getSavedRouteGtfsId());
                 startActivity(intent);
             }
         });

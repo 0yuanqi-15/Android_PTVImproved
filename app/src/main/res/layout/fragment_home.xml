@@ -12,9 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="Nearby Stops:"
         android:clickable="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:text="Nearby Stops:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:drawableLeft="@drawable/outline_location_on_24"
+        android:background="@color/quantum_grey"/>
 
     <ListView
         android:id="@+id/nearStops_view"
@@ -22,7 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/nearbystopLabel"
         android:dividerHeight="2px"
-        android:maxHeight="190sp" />
+        android:maxHeight="190sp"
+        android:layout_margin="@dimen/fab_margin"/>
 
     <TextView
         android:id="@+id/SavedStopLabel"
@@ -31,14 +34,17 @@
         android:layout_below="@id/nearStops_view"
         android:layout_marginTop="10dp"
         android:text="Saved Stops:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:drawableLeft="@drawable/outline_favorite_24"
+        android:background="@color/quantum_grey"/>
 
     <ListView
         android:id="@+id/SavedStop_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/SavedStopLabel"
-        android:maxHeight="190sp" />
+        android:maxHeight="190sp"
+        android:layout_margin="@dimen/text_margin"/>
 
     <TextView
         android:id="@+id/savedRoute_label"
@@ -47,12 +53,17 @@
         android:layout_below="@id/SavedStop_view"
         android:layout_marginTop="10dp"
         android:text="Saved Routes:"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:drawableLeft="@drawable/outline_star_24"
+        android:background="@color/quantum_grey"
+        />
 
     <ListView
         android:id="@+id/savedRoutes_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/savedRoute_label"
-        android:maxHeight="190sp" />
+        android:maxHeight="190sp"
+        android:layout_margin="@dimen/text_margin"
+        />
 </RelativeLayout>

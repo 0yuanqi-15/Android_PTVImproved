@@ -10,7 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
 
 public class NearStopListAdapter extends ArrayAdapter<Stop> {
 
@@ -22,6 +31,28 @@ public class NearStopListAdapter extends ArrayAdapter<Stop> {
         mResource = resource;
     }
 
+    private long timeGap(String timeStr) {
+        ZonedDateTime a = Instant.now().atZone(ZoneId.of("Australia/Melbourne"));
+        TemporalAccessor time = DateTimeFormatter
+                .ofLocalizedDateTime (FormatStyle.SHORT)
+                .withLocale (Locale.UK)
+                .withZone(ZoneId.of("Australia/Melbourne"))
+                .parse(timeStr);
+        ZonedDateTime b = ZonedDateTime.from(time);
+        long diffInMinutes = ChronoUnit.MINUTES.between(a, b);
+        return diffInMinutes;
+    }
+
+    private String gapInString(String timeStr) {
+        long gap = timeGap(timeStr);
+        String result = "";
+        if (gap > 60) {
+            result = gap/60 + "h";
+        } else {
+            result = gap + "m";
+        }
+        return result;
+    }
 
     @NonNull
     @Override
@@ -32,8 +63,6 @@ public class NearStopListAdapter extends ArrayAdapter<Stop> {
         int stopdistance = getItem(position).getDistance();
         ArrayList<String> routes = getItem(position).getRoutes();
         ArrayList<String> times = getItem(position).getTimes();
-
-        Stop stop = new Stop(stopsuburb,stopname,stopdistance,routes,times);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
@@ -52,19 +81,22 @@ public class NearStopListAdapter extends ArrayAdapter<Stop> {
         tvSuburb.setText(stopsuburb);
         tvDistance.setText(stopdistance+"m away");
 
-        if (routes.size()>=1 && times.size()>=1){
+        if (routes.size()>=1){
             tvroute1.setText(routes.get(0));
-            tvtime1.setText(times.get(0));
+            String time = routes.get(0).equals("--") ? "--:--" : gapInString(times.get(0));
+            tvtime1.setText(time);
         }
 
-        if (routes.size()>=2 && times.size()>=2){
+        if (routes.size()>=2){
             tvroute2.setText(routes.get(1));
-            tvtime2.setText(times.get(1));
+            String time = routes.get(1).equals("--") ? "--:--" : gapInString(times.get(1));
+            tvtime2.setText(time);
         }
 
-        if (routes.size()>=3 && times.size()>=3){
+        if (routes.size()>=3){
             tvroute3.setText(routes.get(2));
-            tvtime3.setText(times.get(2));
+            String time = routes.get(2).equals("--") ? "--:--" : gapInString(times.get(2));
+            tvtime3.setText(time);
         }
 
         return convertView;
