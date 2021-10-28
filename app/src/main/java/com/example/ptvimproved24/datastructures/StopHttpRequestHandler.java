@@ -158,43 +158,6 @@ public class StopHttpRequestHandler {
         }
     }
 
-    public void getStopsFromLocation(GoogleMap googleMap, float latitude, float longitude) {
-        try {
-            String url = commonDataRequest.nearByStopsOnSelect(latitude, longitude);
-            Request request = new Request.Builder().url(url).build();
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    e.printStackTrace();
-                }
-
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    if (response.isSuccessful()){
-                        String responseBody = response.body().string();
-                        try {
-                            JSONObject jsonObj = new JSONObject(responseBody);
-                            JSONArray stops = jsonObj.getJSONArray("stops");
-                            ArrayList<Stop> stopsArray = getStoppingList(stops);
-                            activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    for(int i = 0 ; i < stopsArray.size(); i ++) {
-                                        System.out.println(stopsArray.get(i));
-                                    }
-                                }
-                            });
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void getStopsOnRouteToBingmap(int route_id, int route_type, MapElementLayer mPinLayer,MapView mapView) throws Exception {
         String url = commonDataRequest.showRoutesStop(route_id, route_type);
         Request request = new Request.Builder().url(url).build();

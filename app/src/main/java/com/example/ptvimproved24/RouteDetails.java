@@ -75,11 +75,11 @@ public class RouteDetails extends AppCompatActivity {
         routeDetailsAdapter = new RouteDetailsAdapter(this, R.layout.routedetails_view, new ArrayList<>());
         mListView.setAdapter(routeDetailsAdapter);
 
-        try {
-            patternRequestHandler.getPatternRequest(route_type,run_ref,routeDetailsAdapter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            patternRequestHandler.getPatternRequest(route_type,run_ref,routeDetailsAdapter);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
@@ -89,7 +89,7 @@ public class RouteDetails extends AppCompatActivity {
             intent.putExtra("index", clickedStop.getStop_id());
             intent.putExtra("type", clickedStop.getRouteType());
             intent.putExtra("name", clickedStop.getStop_name());
-//            intent.putExtra("suburb", clickedStop.getStop_suburb());
+            intent.putExtra("suburb", clickedStop.getStop_suburb());
             startActivity(intent);
         }
     });
@@ -102,8 +102,7 @@ public class RouteDetails extends AppCompatActivity {
         mPinLayer = new MapElementLayer();
         mMapView.getLayers().add(mPinLayer);
         try {
-            stopHttpRequestHandler.getStopsOnRouteToBingmap(route_id,route_type,mPinLayer,mMapView);
-            // Pop stops in
+            patternRequestHandler.getPatternRequest(route_type,run_ref,routeDetailsAdapter,mPinLayer,mMapView);
         } catch (Exception e) {
             e.printStackTrace();
         }

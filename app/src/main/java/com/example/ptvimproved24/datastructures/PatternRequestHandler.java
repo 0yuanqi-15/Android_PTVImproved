@@ -6,6 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.ptvimproved24.commonDataRequest;
+import com.microsoft.maps.Geopoint;
+import com.microsoft.maps.MapAnimationKind;
+import com.microsoft.maps.MapElementLayer;
+import com.microsoft.maps.MapFlyout;
+import com.microsoft.maps.MapIcon;
+import com.microsoft.maps.MapScene;
+import com.microsoft.maps.MapView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,8 +79,7 @@ public class PatternRequestHandler {
         return stopsList;
     }
 
-
-    public void getPatternRequest(int route_type, String run_ref, ArrayAdapter adapter) throws Exception {
+    public void getPatternRequest(int route_type, String run_ref, ArrayAdapter adapter, MapElementLayer mPinLayer, MapView mapView) throws Exception {
         String url = commonDataRequest.showPatternonRoute(run_ref, route_type);
         System.out.println("PatternURL:"+url);
         Request request = new Request.Builder().url(url).build();
@@ -110,6 +116,30 @@ public class PatternRequestHandler {
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                mPinLayer.getElements().clear();
+                                double avglat=0,avglng=0;
+                                for (int i = 0; i < patterns.size(); i++) {
+                                    MapIcon pushpin = new MapIcon();
+                                    pushpin.setLocation(new Geopoint(patterns.get(i).getStop_latitude(),patterns.get(i).getStop_longitude()));
+                                    pushpin.setTitle(patterns.get(i).getStop_name());
+                                    avglng+=patterns.get(i).getStop_longitude();
+                                    avglat+=patterns.get(i).getStop_latitude();
+                                    mPinLayer.getElements().add(pushpin);
+                                    MapFlyout mapFlyout = new MapFlyout();
+                                    mapFlyout.setTitle(patterns.get(i).getStop_name());
+                                    mapFlyout.setDescription("Suburb:"+patterns.get(i).getStop_suburb()+"\nStop Id:"+patterns.get(i).getStop_id());
+                                    pushpin.setFlyout(mapFlyout);
+                                }
+                                avglat = avglat/patterns.size();
+                                avglng = avglng/patterns.size();
+                                if (route_type == 0){
+                                    mapView.setScene(MapScene.createFromLocationAndZoomLevel(new Geopoint(avglat,avglng), 11), MapAnimationKind.DEFAULT);
+                                } else if(route_type == 1 || route_type ==2 || route_type ==4){
+                                    mapView.setScene(MapScene.createFromLocationAndZoomLevel(new Geopoint(avglat,avglng), 14), MapAnimationKind.DEFAULT);
+                                } else {
+                                    mapView.setScene(MapScene.createFromLocationAndZoomLevel(new Geopoint(avglat,avglng), 7), MapAnimationKind.DEFAULT);
+                                }
+
                                 adapter.clear();
                                 adapter.addAll(patterns);
                                 adapter.notifyDataSetChanged();
