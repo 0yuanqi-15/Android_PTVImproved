@@ -299,10 +299,11 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         savedRouteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent intent = new Intent(getActivity(), RouteDetails.class);
+                Intent intent = new Intent(getActivity(), RouteDirections.class);
                 intent.putExtra("route_id", savedRouteListAdapter.getItem(position).getSavedRouteid());
                 intent.putExtra("route_type", savedRouteListAdapter.getItem(position).getSavedRouteType());
-
+                intent.putExtra("route_name", savedRouteListAdapter.getItem(position).getSavedRoutedirection());
+                intent.putExtra("route_gtfs_id", savedRouteListAdapter.getItem(position).getSavedRoutename());
                 startActivity(intent);
             }
         });
