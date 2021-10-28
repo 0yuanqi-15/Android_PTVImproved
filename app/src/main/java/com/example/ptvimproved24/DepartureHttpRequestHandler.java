@@ -32,6 +32,12 @@ public class DepartureHttpRequestHandler {
     private final FragmentActivity activity;
     private HashMap<Integer, ArrayList<String>> routeMap;
     private HashMap<Integer, String> routeNameMap;
+
+    private HashMap<Integer, String> runDestinationMap;
+
+    private HashMap<Integer, ArrayList<String>> routeRunMap;
+
+    private JSONObject runs;
     //private HashMap<Integer, String> routeDirectionMap;
 
     public DepartureHttpRequestHandler(FragmentActivity act) {
@@ -39,6 +45,10 @@ public class DepartureHttpRequestHandler {
         activity = act;
         routeMap = new HashMap<>();
         routeNameMap = new HashMap<>();
+
+        runDestinationMap = new HashMap<>();
+        routeRunMap = new HashMap<>();
+        runs = new JSONObject();
        // routeDirectionMap = new HashMap<>();
     }
 
@@ -80,6 +90,53 @@ public class DepartureHttpRequestHandler {
         }
         return result;
     }
+
+    //change this to additionally get destination name of the departure
+    private ArrayList<Departure> getDepartureArrayListFromJSONArray(JSONArray jsonArray) throws JSONException {
+        ArrayList<Departure> result = new ArrayList<>();
+        for(int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            int stop_id = jsonObject.getInt("stop_id");
+            int route_id = jsonObject.getInt("route_id");
+            int run_id = jsonObject.getInt("run_id");
+            String run_ref = jsonObject.getString("run_ref");
+            int direction_id = jsonObject.getInt("direction_id");
+            JSONArray disruption_ids = jsonObject.getJSONArray("disruption_ids");
+            String schedule_depart = jsonObject.getString("scheduled_departure_utc");
+            String estimated_depart_utc = jsonObject.getString("estimated_departure_utc");
+            boolean at_platform = jsonObject.getBoolean("at_platform");
+            String platform_number = jsonObject.getString("platform_number");
+            String flags = jsonObject.getString("flags");
+            int departure_sequence = jsonObject.getInt("departure_sequence");
+            if (routeMap.get(route_id) == null) {
+                ArrayList<String> newArray = new ArrayList<>();
+                newArray.add(UTCToAEST(schedule_depart));
+                routeMap.put(route_id, newArray);
+
+                ArrayList<String> newRunArray = new ArrayList<>();
+                System.out.println(runs);
+                JSONObject run = runs.getJSONObject(run_ref);
+                String runDestination = run.getString("destination_name");
+                newRunArray.add(runDestination);
+                routeRunMap.put(route_id, newRunArray);
+
+            } else {
+                ArrayList<String> currentArray = routeMap.get(route_id);
+                currentArray.add(UTCToAEST(schedule_depart));
+
+                ArrayList<String> currentRunArray = routeRunMap.get(route_id);
+                JSONObject run = runs.getJSONObject(run_ref);
+                String runDestination = run.getString("destination_name");
+                currentRunArray.add(runDestination);
+
+            }
+            Departure d = new Departure(stop_id,route_id,run_id,run_ref,direction_id,new ArrayList<>(),schedule_depart,estimated_depart_utc,at_platform,platform_number,flags,departure_sequence);
+            result.add(d);
+        }
+        return result;
+    }
+
+
 
     private ArrayList<Route> getRouteArrayFromJSONObject(JSONObject jsonObject) throws JSONException {
         ArrayList<Route> result = new ArrayList<>();
@@ -227,7 +284,11 @@ public class DepartureHttpRequestHandler {
                             JSONObject jsonObj = new JSONObject(responseBody);
                             JSONArray departures = jsonObj.getJSONArray("departures");
                             JSONObject routes = jsonObj.getJSONObject("routes");
-                            getDepartureListFromJSONArray(departures);
+
+                            //get runs information
+                            runs = jsonObj.getJSONObject("runs");
+
+                            getDepartureArrayListFromJSONArray(departures);
                             ArrayList<Route> routeArray = getRouteArrayFromJSONObject(routes);
 
                             activity.runOnUiThread(new Runnable() {
@@ -236,12 +297,20 @@ public class DepartureHttpRequestHandler {
                                     ArrayList<Route> resultArray = new ArrayList<>();
                                     for(Route r : routeArray) {
                                         ArrayList<String> times = routeMap.get(r.getRoute_id());
+
+                                        //get destinations
+                                        ArrayList<String> destinations = routeRunMap.get(r.getRoute_id());
+
                                         int fetchedIndex = 3 > times.size() ? times.size() : 3;
                                         for (int i = 0; i < fetchedIndex; i ++) {
                                             Route newRoute = new Route(r);
                                             newRoute.setScheduleDepart(times.get(i));
                                             String gtfsId = restructureGtfsId(newRoute.getRoute_gtfs_id());
                                             newRoute.setRoute_gtfs_id(gtfsId);
+
+                                            //record destination for the route
+                                            newRoute.setDestination_name(destinations.get(i));
+
                                             resultArray.add(newRoute);
                                         }
                                     }
