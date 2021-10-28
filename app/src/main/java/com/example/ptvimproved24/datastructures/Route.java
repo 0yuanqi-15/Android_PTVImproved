@@ -16,10 +16,10 @@ public class Route {
 
     private String route_direction_description;
     private String direction_name;
-
     private String destination_name;
-
     private String scheduleDepart;
+
+    private String run_ref;
 
     public Route(Route r) {
         this.route_type = r.getRoute_type();

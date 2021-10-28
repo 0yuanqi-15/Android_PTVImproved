@@ -306,7 +306,7 @@ public class DepartureHttpRequestHandler {
                             //get runs information
                             runs = jsonObj.getJSONObject("runs");
 
-                            getDepartureArrayListFromJSONArray(departures);
+                            ArrayList<Departure> departureArrayList = getDepartureArrayListFromJSONArray(departures);
                             ArrayList<Route> routeArray = getRouteArrayFromJSONObject(routes);
 
                             activity.runOnUiThread(new Runnable() {
@@ -328,7 +328,6 @@ public class DepartureHttpRequestHandler {
 
                                             //record destination for the route
                                             newRoute.setDestination_name(destinations.get(i));
-
                                             resultArray.add(newRoute);
                                         }
                                     }

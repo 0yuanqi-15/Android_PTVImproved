@@ -81,6 +81,7 @@ public class stops extends AppCompatActivity {
                 Route route = adapter.getItem(i);
 
                 intent.putExtra("route_id", route.getRoute_id());
+//                intent.putExtra("run_ref",departure.getRun_ref());
                 intent.putExtra("route_type", route.getRoute_type());
                 intent.putExtra("route_name", route.getRoute_name());
                 intent.putExtra("route_gtfs_id", route.getRoute_gtfs_id());
