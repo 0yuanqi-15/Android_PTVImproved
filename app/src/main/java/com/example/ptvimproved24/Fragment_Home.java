@@ -255,10 +255,10 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
 
     public void generateSavedRouteList(View v){
         ArrayList<SavedRoute> savedRouteArrayList = new ArrayList<>();
-        SavedRoute route1=new SavedRoute("703",13270,"Oakleigh - Box Hill via Clayton",2);
-        SavedRoute route2=new SavedRoute("3-3a",761,"Melbourne University - East Malvern",1);
-        savedRouteArrayList.add(route1);
-        savedRouteArrayList.add(route2);
+//        SavedRoute route1=new SavedRoute("703",13270,"Oakleigh - Box Hill via Clayton",2);
+//        SavedRoute route2=new SavedRoute("3-3a",761,"Melbourne University - East Malvern",1);
+//        savedRouteArrayList.add(route1);
+//        savedRouteArrayList.add(route2);
 
 
         SharedPreferences pref = getContext().getSharedPreferences("saved_routes", Context.MODE_PRIVATE);
@@ -302,7 +302,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
                 Intent intent = new Intent(getActivity(), RouteDetails.class);
                 intent.putExtra("route_id", savedRouteListAdapter.getItem(position).getSavedRouteid());
                 intent.putExtra("route_type", savedRouteListAdapter.getItem(position).getSavedRouteType());
-                //intent.putExtra("route_name", savedRouteListAdapter.getItem(position).getSavedRoutename());
 
                 startActivity(intent);
             }

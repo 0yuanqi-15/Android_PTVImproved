@@ -1,6 +1,7 @@
 package com.example.ptvimproved24;
 
 import android.location.Location;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
@@ -229,6 +230,39 @@ public class StopHttpRequestHandler {
                                 avglat = avglat/stopsArray.size();
                                 avglng = avglng/stopsArray.size();
                                 mapView.setScene(MapScene.createFromLocationAndZoomLevel(new Geopoint(avglat,avglng), 12), MapAnimationKind.DEFAULT);
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    public void getStopsOnRoute(int route_id, int route_type, ArrayAdapter adapter) throws Exception {
+        String url = commonDataRequest.showRoutesStop(route_id, route_type);
+        Request request = new Request.Builder().url(url).build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()){
+                    String responseBody = response.body().string();
+                    try {
+                        JSONObject jsonObj = new JSONObject(responseBody);
+                        JSONArray stops = jsonObj.getJSONArray("stops");
+                        ArrayList<Stop> stopsArray = getStoppingList(stops);
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.clear();
+                                adapter.addAll(stopsArray);
+                                adapter.notifyDataSetChanged();
                             }
                         });
                     } catch (JSONException e) {
