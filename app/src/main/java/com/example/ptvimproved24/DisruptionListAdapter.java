@@ -11,6 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.ptvimproved24.datastructures.Disruption;
+import com.example.ptvimproved24.datastructures.Route;
+import com.example.ptvimproved24.datastructures.Stop;
+
 import java.util.ArrayList;
 
 class DisruptionListAdapter extends ArrayAdapter<Disruption> {

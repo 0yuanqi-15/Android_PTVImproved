@@ -68,8 +68,8 @@ public class commonDataRequest {
     }
 
 //     Patterns
-    public static String showPatternonRoute(int runId, int routeType) throws Exception{    // View the stopping pattern for a specific trip/service run
-        return buildAPIrequest("/v3/pattern/run/"+runId+"/route_type/"+routeType+"?expand=all");
+    public static String showPatternonRoute(String run_ref, int routeType) throws Exception{    // View the stopping pattern for a specific trip/service run
+        return buildAPIrequest("/v3/pattern/run/"+run_ref+"/route_type/"+routeType+"?expand=All");
     }
 
 //     Routes

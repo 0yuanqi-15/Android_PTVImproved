@@ -10,8 +10,7 @@
     <FrameLayout
         android:id="@+id/map_view"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        app:layout_constraintDimensionRatio="1:1"
+        android:layout_height="300dp"
         />
 
     <ListView

@@ -83,6 +83,7 @@ public class RouteDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routedetails);
+        String run_ref = getIntent().getStringExtra("run_ref");
         int route_id = getIntent().getIntExtra("route_id",2); // Get Route details to display
         int route_type = getIntent().getIntExtra("route_type",1); // Get Route details to display
         getUserLocation();

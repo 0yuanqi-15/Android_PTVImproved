@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
-import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 
 import android.location.Location;
@@ -32,52 +31,29 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
+import com.example.ptvimproved24.datastructures.RouteDirectionsRequestsHandler;
+import com.example.ptvimproved24.datastructures.RouteHttpRequestHandler;
 
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
+import com.example.ptvimproved24.datastructures.StopHttpRequestHandler;
 import com.google.android.material.snackbar.Snackbar;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
-import com.microsoft.maps.Geopoint;
-import com.microsoft.maps.MapAnimationKind;
-import com.microsoft.maps.MapElement;
-import com.microsoft.maps.MapElementCollection;
 import com.microsoft.maps.MapElementLayer;
 import com.microsoft.maps.MapElementTappedEventArgs;
 import com.microsoft.maps.MapFlyout;
 import com.microsoft.maps.MapIcon;
-import com.microsoft.maps.MapImage;
 import com.microsoft.maps.MapRenderMode;
-import com.microsoft.maps.MapScene;
 import com.microsoft.maps.MapView;
 import com.microsoft.maps.OnMapElementTappedListener;
 
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.StringBufferInputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class RouteDirections extends AppCompatActivity {
 //public class RouteDirections extends AppCompatActivity implements OnMapReadyCallback {
