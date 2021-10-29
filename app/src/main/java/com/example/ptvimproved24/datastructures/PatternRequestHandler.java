@@ -20,7 +20,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,6 +42,15 @@ public class PatternRequestHandler {
         activity = act;
     }
 
+    private String UTCToAEST(String utc) {
+        String result = Instant.parse ( utc )
+                .atZone ( ZoneId.of ( "Australia/Sydney" ) )
+                .format (
+                        DateTimeFormatter.ofLocalizedDateTime ( FormatStyle.SHORT )
+                                .withLocale ( Locale.UK ));
+        return result;
+    }
+
     private ArrayList<Departure> getDeparturesOnPattern(JSONArray jsonArray) throws JSONException {
         ArrayList<Departure> departureArrayList = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -47,7 +61,7 @@ public class PatternRequestHandler {
             String run_ref = departure.getString("run_ref");
             int direction_id = departure.getInt("direction_id");
 //            Skipping disruptions ids
-            String scheduled_departure_utc = departure.getString("scheduled_departure_utc");
+            String scheduled_departure_utc = UTCToAEST(departure.getString("scheduled_departure_utc"));
             String estimated_departure_utc = departure.getString("estimated_departure_utc");
             boolean at_platform = departure.getBoolean("at_platform");
             String platform_number = departure.getString("platform_number");

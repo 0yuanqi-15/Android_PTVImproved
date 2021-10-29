@@ -16,7 +16,7 @@ android:layout_height="match_parent">
         android:layout_width="100dp"
         android:minWidth="75dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="0dp"
+        android:layout_marginRight="15dp"
         android:textAlignment="center"
         android:text="13:10" />
 
