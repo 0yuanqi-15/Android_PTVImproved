@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment_Home">
+    tools:context=".Fragment_Home"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/nearbystopLabel"
@@ -20,7 +21,8 @@
     <ListView
         android:id="@+id/nearStops_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
         android:layout_below="@+id/nearbystopLabel"
         android:dividerHeight="2px"
         android:maxHeight="190sp"
@@ -40,9 +42,10 @@
     <ListView
         android:id="@+id/SavedStop_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
         android:layout_below="@+id/SavedStopLabel"
-        android:maxHeight="190sp"
+
         android:layout_margin="@dimen/text_margin"/>
 
     <TextView
@@ -60,9 +63,10 @@
     <ListView
         android:id="@+id/savedRoutes_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
         android:layout_below="@+id/savedRoute_label"
-        android:maxHeight="190sp"
+
         android:layout_margin="@dimen/text_margin"
         />
-</RelativeLayout>
+</LinearLayout>
