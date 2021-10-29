@@ -2,6 +2,7 @@ package com.example.ptvimproved24;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -9,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -16,7 +18,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -128,10 +129,42 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activities_menu, menu);
-
+        getMenuInflater().inflate(R.menu.activities_menu, menu); // popping up test window
         // return true so that the menu pop up is opened
+
+        MenuItem menuItem = menu.findItem(R.id.search);
+        MenuItem.OnActionExpandListener onActionExpandListener = new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+//                Toast.makeText(MainActivity.this,"Search View showed",Toast.LENGTH_SHORT);
+//                onSearchRequested();
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                return true;
+            }
+        };
+        menu.findItem(R.id.search).setOnActionExpandListener(onActionExpandListener);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Type route, stops or location to search");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                System.out.println(newText);
+                if (newText.length() >=3){
+                    
+                }
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -141,29 +174,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String FRAGMENTD = "Fragment_Disruptions";
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        return super.onOptionsItemSelected(item);
+
         Intent intent = new Intent();
         switch (item.getItemId()) {
-//            case R.id.menuact_home:
-//                intent = new Intent(MainActivity.this, MainActivity.class);
-//                intent.putExtra("fragmentToDisplay", 1);
-//                startActivity(intent);
-//                break;
-//            case R.id.menuact_stopselect:
-//                intent = new Intent(MainActivity.this, MainActivity.class);
-//                intent.putExtra("fragmentToDisplay",2);
-//                startActivity(intent);
-//                break;
-//            case R.id.menuact_journeyplanner:
-//                intent = new Intent(MainActivity.this, MainActivity.class);
-//                intent.putExtra("fragmentToDisplay",3);
-//                startActivity(intent);
-//                break;
-//            case R.id.menuact_disruptions:
-//                intent = new Intent(MainActivity.this, MainActivity.class);
-//                intent.putExtra("fragmentToDisplay", 4);
-//                startActivity(intent);
-//                break;
             case R.id.menuact_disruption:
                 intent = new Intent(MainActivity.this, Disruptions.class);
                 startActivity(intent);

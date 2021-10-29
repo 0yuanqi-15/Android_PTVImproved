@@ -17,11 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ptvimproved24.databinding.ActivityRoutedetailsBinding;
-import com.example.ptvimproved24.datastructures.Pattern;
 import com.example.ptvimproved24.datastructures.PatternRequestHandler;
 import com.example.ptvimproved24.datastructures.RouteDirectionsRequestsHandler;
 import com.example.ptvimproved24.datastructures.Stop;
-import com.example.ptvimproved24.datastructures.StopHttpRequestHandler;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.microsoft.maps.Geopoint;
