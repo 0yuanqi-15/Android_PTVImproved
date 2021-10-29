@@ -128,30 +128,32 @@ public class DepartureHttpRequestHandler {
             String platform_number = jsonObject.getString("platform_number");
             String flags = jsonObject.getString("flags");
             int departure_sequence = jsonObject.getInt("departure_sequence");
-            if (routeMap.get(route_id) == null) {
-                ArrayList<String> newArray = new ArrayList<>();
-                newArray.add(UTCToAEST(schedule_depart));
-                routeMap.put(route_id, newArray);
+            if (timeGap(UTCToAEST(schedule_depart)) >= 0) {
+                if (routeMap.get(route_id) == null) {
+                    ArrayList<String> newArray = new ArrayList<>();
+                    newArray.add(UTCToAEST(schedule_depart));
+                    routeMap.put(route_id, newArray);
 
-                ArrayList<String> newRunArray = new ArrayList<>();
-                System.out.println(runs);
-                JSONObject run = runs.getJSONObject(run_ref);
-                String runDestination = run.getString("destination_name");
-                newRunArray.add(runDestination);
-                routeRunMap.put(route_id, newRunArray);
+                    ArrayList<String> newRunArray = new ArrayList<>();
+                    System.out.println(runs);
+                    JSONObject run = runs.getJSONObject(run_ref);
+                    String runDestination = run.getString("destination_name");
+                    newRunArray.add(runDestination);
+                    routeRunMap.put(route_id, newRunArray);
 
-            } else {
-                ArrayList<String> currentArray = routeMap.get(route_id);
-                currentArray.add(UTCToAEST(schedule_depart));
+                } else {
+                    ArrayList<String> currentArray = routeMap.get(route_id);
+                    currentArray.add(UTCToAEST(schedule_depart));
 
-                ArrayList<String> currentRunArray = routeRunMap.get(route_id);
-                JSONObject run = runs.getJSONObject(run_ref);
-                String runDestination = run.getString("destination_name");
-                currentRunArray.add(runDestination);
+                    ArrayList<String> currentRunArray = routeRunMap.get(route_id);
+                    JSONObject run = runs.getJSONObject(run_ref);
+                    String runDestination = run.getString("destination_name");
+                    currentRunArray.add(runDestination);
 
+                }
+                Departure d = new Departure(stop_id, route_id, run_id, run_ref, direction_id, schedule_depart, estimated_depart_utc, at_platform, platform_number, flags, departure_sequence);
+                result.add(d);
             }
-            Departure d = new Departure(stop_id,route_id,run_id,run_ref,direction_id,schedule_depart,estimated_depart_utc,at_platform,platform_number,flags,departure_sequence);
-            result.add(d);
         }
         return result;
     }

@@ -52,21 +52,21 @@ public class StopDetailAdapter extends ArrayAdapter<Route> {
         TextView time = (TextView) convertView.findViewById(R.id.stop_time);
         ImageView image = (ImageView) convertView.findViewById(R.id.stop_time_image);
 
-        if (routeType == 1) {
-            route.setBackgroundColor(Color.YELLOW);
-            image.setBackgroundColor(Color.YELLOW);
+        if (routeType == 0) {
+            route.setBackgroundColor(Color.rgb(0, 114, 206));
+            image.setBackgroundColor(Color.rgb(0, 114, 206));
         }
-        else if (routeType == 2) {
-            route.setBackgroundColor(Color.GREEN);
-            image.setBackgroundColor(Color.GREEN);
+        else if (routeType == 1) {
+            route.setBackgroundColor(Color.rgb(120, 190, 32));
+            image.setBackgroundColor(Color.rgb(120, 190, 32));
+        }
+        else if (routeType == 2 || routeType == 4) {
+            route.setBackgroundColor(Color.rgb(255, 130, 0));
+            image.setBackgroundColor(Color.rgb(255, 130, 0));
         }
         else if (routeType == 3) {
-            route.setBackgroundColor(Color.RED);
-            image.setBackgroundColor(Color.RED);
-        }
-        else if (routeType == 4) {
-            route.setBackgroundColor(Color.BLUE);
-            image.setBackgroundColor(Color.BLUE);
+            route.setBackgroundColor(Color.rgb(127, 13, 130));
+            image.setBackgroundColor(Color.rgb(127, 13, 130));
         }
 
         direction.setText("To: " + stopDirection);
