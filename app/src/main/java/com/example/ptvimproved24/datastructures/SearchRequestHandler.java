@@ -30,6 +30,14 @@ public class SearchRequestHandler {
         activity = act;
     }
 
+    private String restructureGtfsId(String gtfsId) {
+        String result = gtfsId.substring(2);
+        while (result.charAt(0) == '0') {
+            result = result.substring(1);
+        }
+        return result;
+    }
+
     private ArrayList<Stop> getStopsFromSearch(JSONArray jsonArray) throws JSONException {
         ArrayList<Stop> stopsList = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -93,7 +101,7 @@ public class SearchRequestHandler {
                                 searchResults.add(new SearchResults(stopsList.get(i).getStop_id(),stopsList.get(i).getRouteType(),stopsList.get(i).getStop_name(),0,stopsList.get(i).getStop_suburb()));
                             }
                             for (int i = 0; i < routesList.size(); i++) {
-                                searchResults.add(new SearchResults(routesList.get(i).getRoute_id(),routesList.get(i).getRoute_type(),routesList.get(i).getRoute_gtfs_id().substring(2),1,routesList.get(i).getRoute_name()));
+                                searchResults.add(new SearchResults(routesList.get(i).getRoute_id(),routesList.get(i).getRoute_type(),routesList.get(i).getRoute_name(),1,restructureGtfsId(routesList.get(i).getRoute_gtfs_id())));
                             }
                             activity.runOnUiThread(new Runnable() {
                                 @Override

@@ -21,12 +21,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.ptvimproved24.databinding.ActivityMainBinding;
 import com.example.ptvimproved24.datastructures.PatternRequestHandler;
 import com.example.ptvimproved24.datastructures.SearchRequestHandler;
+import com.example.ptvimproved24.datastructures.SearchResults;
+import com.example.ptvimproved24.datastructures.Stop;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -69,19 +72,6 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         }
-//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-//        checkLocationPermission();
-//
-//        fusedLocationClient.getLastLocation()
-//                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-//                    @Override
-//                    public void onSuccess(Location location) {
-//                        // Got last known location. In some rare situations this can be null.
-//                        if (location != null) {
-//                            // Logic to handle location object
-//                        }
-//                    }
-//                });
 
         Log.d(TAG, "onCreate: Started");
 
@@ -119,6 +109,29 @@ public class MainActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.search_list);
         searchDetailsAdapter = new SearchListAdapter(this, R.layout.searchdetails_view, new ArrayList<>());
         mListView.setAdapter(searchDetailsAdapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                SearchResults clickedResult = searchDetailsAdapter.getItem(i);
+
+                if (clickedResult.getTarget_type() == 0) {
+                    Intent intent = new Intent(view.getContext(), stops.class);
+                    intent.putExtra("index", clickedResult.getTarget_id());
+                    intent.putExtra("type", clickedResult.getRoute_type());
+                    intent.putExtra("name", clickedResult.getTarget_name());
+                    intent.putExtra("suburb", clickedResult.getNote());
+                    startActivity(intent);
+                } else if (clickedResult.getTarget_type() == 1) {
+                    Intent intent = new Intent(view.getContext(), RouteDirections.class);
+                    intent.putExtra("route_id", clickedResult.getTarget_id());
+                    intent.putExtra("route_type", clickedResult.getRoute_type());
+                    intent.putExtra("route_name", clickedResult.getTarget_name());
+                    intent.putExtra("route_gtfs_id", clickedResult.getNote());
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void getUserLocation() {

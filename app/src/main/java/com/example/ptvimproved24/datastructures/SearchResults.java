@@ -5,7 +5,7 @@ public class SearchResults {
     private int route_type; // Route type
     private String target_name; // route name / stop name
     private int target_type; // 0=stops, 1=routes
-    private String note;
+    private String note; //stop suburb / route gtfs id
 
     public SearchResults(int target_id, int route_type, String target_name, int target_type) {
         this.target_id = target_id;
