@@ -77,14 +77,14 @@ public class stops extends AppCompatActivity {
         detail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(view.getContext(), RouteDirections.class);
+                Intent intent = new Intent(view.getContext(), RouteDetails.class);
                 Route route = adapter.getItem(i);
 
-                intent.putExtra("route_id", route.getRoute_id());
-//                intent.putExtra("run_ref",departure.getRun_ref());
+                //intent.putExtra("route_id", route.getRoute_id());
+                intent.putExtra("run_ref",route.getRun_ref());
                 intent.putExtra("route_type", route.getRoute_type());
-                intent.putExtra("route_name", route.getRoute_name());
-                intent.putExtra("route_gtfs_id", route.getRoute_gtfs_id());
+                //intent.putExtra("route_name", route.getRoute_name());
+                //intent.putExtra("route_gtfs_id", route.getRoute_gtfs_id());
 
                 startActivity(intent);
 

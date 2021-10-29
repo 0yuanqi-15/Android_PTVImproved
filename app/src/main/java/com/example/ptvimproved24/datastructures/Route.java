@@ -154,4 +154,12 @@ public class Route {
     public void setDestination_name(String destination_name) {
         this.destination_name = destination_name;
     }
+
+    public String getRun_ref() {
+        return run_ref;
+    }
+
+    public void setRun_ref(String run_ref) {
+        this.run_ref = run_ref;
+    }
 }

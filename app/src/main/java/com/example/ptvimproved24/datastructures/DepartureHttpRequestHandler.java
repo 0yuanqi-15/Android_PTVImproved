@@ -39,7 +39,7 @@ public class DepartureHttpRequestHandler {
     private HashMap<Integer, ArrayList<String>> routeMap;
     private HashMap<Integer, String> routeNameMap;
 
-    private HashMap<Integer, String> runDestinationMap;
+    private HashMap<String, String> runDestinationMap;
 
     private HashMap<Integer, ArrayList<String>> routeRunMap;
 
@@ -128,30 +128,34 @@ public class DepartureHttpRequestHandler {
             String platform_number = jsonObject.getString("platform_number");
             String flags = jsonObject.getString("flags");
             int departure_sequence = jsonObject.getInt("departure_sequence");
-            if (routeMap.get(route_id) == null) {
-                ArrayList<String> newArray = new ArrayList<>();
-                newArray.add(UTCToAEST(schedule_depart));
-                routeMap.put(route_id, newArray);
+            if (timeGap(UTCToAEST(schedule_depart)) >= 0) {
+                if (routeMap.get(route_id) == null) {
+                    ArrayList<String> newArray = new ArrayList<>();
+                    newArray.add(UTCToAEST(schedule_depart));
+                    routeMap.put(route_id, newArray);
 
-                ArrayList<String> newRunArray = new ArrayList<>();
-                System.out.println(runs);
-                JSONObject run = runs.getJSONObject(run_ref);
-                String runDestination = run.getString("destination_name");
-                newRunArray.add(runDestination);
-                routeRunMap.put(route_id, newRunArray);
+                    ArrayList<String> newRunArray = new ArrayList<>();
+                    //System.out.println(runs);
+                    JSONObject run = runs.getJSONObject(run_ref);
+                    String runDestination = run.getString("destination_name");
+                    newRunArray.add(run_ref);
+                    routeRunMap.put(route_id, newRunArray);
+                    runDestinationMap.put(run_ref, runDestination);
 
-            } else {
-                ArrayList<String> currentArray = routeMap.get(route_id);
-                currentArray.add(UTCToAEST(schedule_depart));
+                } else {
+                    ArrayList<String> currentArray = routeMap.get(route_id);
+                    currentArray.add(UTCToAEST(schedule_depart));
 
-                ArrayList<String> currentRunArray = routeRunMap.get(route_id);
-                JSONObject run = runs.getJSONObject(run_ref);
-                String runDestination = run.getString("destination_name");
-                currentRunArray.add(runDestination);
+                    ArrayList<String> currentRunArray = routeRunMap.get(route_id);
+                    JSONObject run = runs.getJSONObject(run_ref);
+                    String runDestination = run.getString("destination_name");
+                    currentRunArray.add(run_ref);
+                    runDestinationMap.put(run_ref, runDestination);
 
+                }
+                Departure d = new Departure(stop_id, route_id, run_id, run_ref, direction_id, schedule_depart, estimated_depart_utc, at_platform, platform_number, flags, departure_sequence);
+                result.add(d);
             }
-            Departure d = new Departure(stop_id,route_id,run_id,run_ref,direction_id,schedule_depart,estimated_depart_utc,at_platform,platform_number,flags,departure_sequence);
-            result.add(d);
         }
         return result;
     }
@@ -316,8 +320,8 @@ public class DepartureHttpRequestHandler {
                                     for(Route r : routeArray) {
                                         ArrayList<String> times = routeMap.get(r.getRoute_id());
 
-                                        //get destinations
-                                        ArrayList<String> destinations = routeRunMap.get(r.getRoute_id());
+                                        //get runRefs
+                                        ArrayList<String> runRefs = routeRunMap.get(r.getRoute_id());
 
                                         int fetchedIndex = 3 > times.size() ? times.size() : 3;
                                         for (int i = 0; i < fetchedIndex; i ++) {
@@ -327,7 +331,8 @@ public class DepartureHttpRequestHandler {
                                             newRoute.setRoute_gtfs_id(gtfsId);
 
                                             //record destination for the route
-                                            newRoute.setDestination_name(destinations.get(i));
+                                            newRoute.setRun_ref(runRefs.get(i));
+                                            newRoute.setDestination_name(runDestinationMap.get(runRefs.get(i)));
                                             resultArray.add(newRoute);
                                         }
                                     }
