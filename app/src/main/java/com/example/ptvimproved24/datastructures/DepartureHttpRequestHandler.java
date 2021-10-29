@@ -323,7 +323,7 @@ public class DepartureHttpRequestHandler {
                                         //get runRefs
                                         ArrayList<String> runRefs = routeRunMap.get(r.getRoute_id());
 
-                                        int fetchedIndex = 3 > times.size() ? times.size() : 3;
+                                        int fetchedIndex = Math.min(10, times.size());
                                         for (int i = 0; i < fetchedIndex; i ++) {
                                             Route newRoute = new Route(r);
                                             newRoute.setScheduleDepart(times.get(i));
