@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
+public class Fragment_Home extends Fragment {
 
     private FragmentHomeBinding binding;
     private StopHttpRequestHandler stopHttpRequestHandler;
@@ -54,8 +54,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
     private Float latitude;
     private Float longitude;
 
-    private Boolean isNearStopShowing;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -65,28 +63,15 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         latitude = defaultLatitude;
         longitude = defaultLongitude;
-        isNearStopShowing = true;
 
         SensorManager sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
-        ShakeDetector sd = new ShakeDetector(this);
-        sd.start(sensorManager);
+        //ShakeDetector sd = new ShakeDetector(this);
+        //sd.start(sensorManager);
 
         super.onViewCreated(view, savedInstanceState);
         nearStopListView = (ListView) view.findViewById(R.id.nearStops_view);
         savedStopListView = (ListView) view.findViewById(R.id.SavedStop_view);
         savedRouteListView = (ListView) view.findViewById(R.id.savedRoutes_view);
-        view.findViewById(R.id.nearbystopLabel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isNearStopShowing) {
-                    nearStopListView.setAdapter(new NearStopListAdapter(view.getContext(),R.layout.nearstop_view, new ArrayList<>()));
-                    isNearStopShowing = false;
-                } else {
-                    nearStopListView.setAdapter(nearStopListAdapter);
-                    isNearStopShowing = true;
-                }
-            }
-        });
         nearStopListAdapter = new NearStopListAdapter(view.getContext(),R.layout.nearstop_view, new ArrayList<>());
         nearStopListView.setAdapter(nearStopListAdapter);
         stopHttpRequestHandler = new StopHttpRequestHandler(getActivity());
@@ -333,10 +318,10 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         savedRouteListView.setAdapter(savedRouteListAdapter);
     }
 
-    @Override
-    public void hearShake() {
-        getGeoLocation();
-        generateNearStopList();
-        Toast.makeText(getContext(), "Reloading", Toast.LENGTH_SHORT).show();
-    }
+//    @Override
+//    public void hearShake() {
+//        getGeoLocation();
+//        generateNearStopList();
+//        Toast.makeText(getContext(), "Reloading", Toast.LENGTH_SHORT).show();
+//    }
 }
