@@ -16,7 +16,7 @@
     <ListView
         android:id="@+id/route_detailslist"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/map_view" />
 
 
