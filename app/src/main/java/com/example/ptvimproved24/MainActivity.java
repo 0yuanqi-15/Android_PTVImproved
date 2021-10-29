@@ -11,6 +11,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -19,9 +20,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.ptvimproved24.databinding.ActivityMainBinding;
+import com.example.ptvimproved24.datastructures.PatternRequestHandler;
+import com.example.ptvimproved24.datastructures.SearchRequestHandler;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,6 +41,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
 
     private ActivityMainBinding binding;
+    SearchRequestHandler searchRequestHandler = new SearchRequestHandler(this);
+    private ListView mListView;
+    private SearchListAdapter searchDetailsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +114,11 @@ public class MainActivity extends AppCompatActivity {
         if (fragmentToDisplay == 4) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_Disruptions()).addToBackStack(null).commit();
         }
+
+        MainActivity.this.findViewById(R.id.search_list).setVisibility(View.GONE);
+        mListView = (ListView) findViewById(R.id.search_list);
+        searchDetailsAdapter = new SearchListAdapter(this, R.layout.searchdetails_view, new ArrayList<>());
+        mListView.setAdapter(searchDetailsAdapter);
     }
 
     private void getUserLocation() {
@@ -138,11 +152,15 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemActionExpand(MenuItem menuItem) {
 //                Toast.makeText(MainActivity.this,"Search View showed",Toast.LENGTH_SHORT);
 //                onSearchRequested();
+                MainActivity.this.findViewById(R.id.search_list).setVisibility(View.VISIBLE);
+                MainActivity.this.findViewById(R.id.nav_host_fragment_activity_main).setVisibility(View.GONE);
                 return true;
             }
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                MainActivity.this.findViewById(R.id.search_list).setVisibility(View.GONE);
+                MainActivity.this.findViewById(R.id.nav_host_fragment_activity_main).setVisibility(View.VISIBLE);
                 return true;
             }
         };
@@ -159,7 +177,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 System.out.println(newText);
                 if (newText.length() >=3){
-                    
+                    try {
+                        searchRequestHandler.getSearchResults(newText,searchDetailsAdapter);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 return false;
             }
