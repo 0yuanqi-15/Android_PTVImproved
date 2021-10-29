@@ -46,7 +46,9 @@ public class SearchListAdapter extends ArrayAdapter<SearchResults> {
                 search_service.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_baseline_flag_24_vline,0,0,0);
             }
             search_service.setText("");
+            search_service.setCompoundDrawablePadding(50);
             search_details.setText(getItem(position).getTarget_name());
+
         } else if (getItem(position).getTarget_type() == 1){
             // Routes
             if (getItem(position).getRoute_type() == 0){
@@ -58,8 +60,9 @@ public class SearchListAdapter extends ArrayAdapter<SearchResults> {
             } else if(getItem(position).getRoute_type() == 3){
                 search_service.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_baseline_directions_transit_24_color,0,0,0);
             }
-            search_service.setText(getItem(position).getTarget_name().replaceAll("^(0+)", ""));
-            search_details.setText(getItem(position).getNote());
+            search_details.setText(getItem(position).getTarget_name().replaceAll("^(0+)", "") +" / "+ getItem(position).getNote());
+            search_service.setText("");
+            search_service.setCompoundDrawablePadding(50);
         }
 
 
