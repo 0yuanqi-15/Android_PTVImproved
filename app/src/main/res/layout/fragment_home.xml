@@ -43,7 +43,6 @@
         android:id="@+id/SavedStop_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
         android:layout_below="@+id/SavedStopLabel"
 
         android:layout_margin="@dimen/text_margin"/>
@@ -64,7 +63,6 @@
         android:id="@+id/savedRoutes_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
         android:layout_below="@+id/savedRoute_label"
 
         android:layout_margin="@dimen/text_margin"
