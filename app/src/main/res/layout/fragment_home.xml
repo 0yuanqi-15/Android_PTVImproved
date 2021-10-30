@@ -22,10 +22,9 @@
         android:id="@+id/nearStops_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:gravity="center_vertical"
         android:layout_below="@+id/nearbystopLabel"
         android:dividerHeight="2px"
-        android:maxHeight="190sp"
         android:layout_margin="@dimen/fab_margin"/>
 
     <TextView
@@ -44,7 +43,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_below="@+id/SavedStopLabel"
-
         android:layout_margin="@dimen/text_margin"/>
 
     <TextView
