@@ -7,4 +7,24 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="ptv_primary">#D92B26</color>
+    <color name="ptv_network_grey">#333434</color>
+    <color name="ptv_mild_grey">#707372</color>
+    <color name="ptv_light_warm_grey">#D7D2CB</color>
+    <color name="ptv_metro_blue">#0072CE</color>
+    <color name="ptv_metro_Sandringham">#F178AF</color>
+    <color name="ptv_metro_FrankstonWerribeeWilliamston">#028430</color>
+    <color name="ptv_metro_CranbournePakenham">#279FD5</color>
+    <color name="ptv_metro_BelgraveLilydaleAlameinGlenWaverley">#152C6B</color>
+    <color name="ptv_metro_ShowgroundsFlemington">#95979A</color>
+    <color name="ptv_metro_SunburyCraigieburnUpfield">#FFBE00</color>
+    <color name="ptv_metro_MerndaHurstbridge">#BE1014</color>
+    <color name="ptv_tram">#78BE20</color>
+    <color name="ptv_tram_35">#85714D</color>
+    <color name="ptv_bus">#FF8200</color>
+    <color name="ptv_vline_train">#8F1A95</color>
+    <color name="ptv_vline_coach">#A57FB2</color>
+    <color name="ptv_ferry">#00A499</color>
+    <color name="ptv_disruptions">#FE5000</color>
+    <color name="ptv_specialEvent">#CE0058</color>
 </resources>
