@@ -84,7 +84,7 @@ public class Fragment_StopSelect extends Fragment implements
                              @Nullable Bundle savedInstanceState) {
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         getGeoLocation();
-        return inflater.inflate(R.layout.fragment_navigation_mapselect, container, false);
+        return inflater.inflate(R.layout.fragment_mapselect_gms, container, false);
     }
 
     @Override

@@ -91,12 +91,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        int fragmentToDisplay = getIntent().getIntExtra("fragmentToDisplay", 0);
+        int fragmentToDisplay = getIntent().getIntExtra("fragmentToDisplay", 1);
         if (fragmentToDisplay == 1) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_Home()).addToBackStack(null).commit();
         }
         if (fragmentToDisplay == 2) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_StopSelect()).addToBackStack(null).commit();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_StopSelect()).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_StopSelect_bingmap()).addToBackStack(null).commit();
         }
         if (fragmentToDisplay == 3) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_JourneyPlanner()).addToBackStack(null).commit();
@@ -202,11 +203,6 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
-
-    public static final String FRAGMENTA = "Fragment_Home";
-    public static final String FRAGMENTB = "Fragment_StopSelect";
-    public static final String FRAGMENTC = "Fragment_JourneyPlanner";
-    public static final String FRAGMENTD = "Fragment_Disruptions";
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
