@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
         android:fitsSystemWindows="true"
-        android:theme="@style/Theme.PTVImproved24.AppBarOverlay">
+        android:theme="@style/Theme.PTVImproved24.AppBarOverlay"
+        >
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
@@ -20,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/ptv_network_grey"
+            android:background="@color/ptv_network_grey"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:expandedTitleMarginBottom="50dp"
             app:toolbarId="@+id/toolbar"
