@@ -33,8 +33,8 @@ class DisruptionListAdapter extends ArrayAdapter<Disruption> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 //        return super.getView(position, convertView, parent);
 
-        String title = getItem(position).getTitle();
-        String publishDatetime = getItem(position).getPublishDatetime();
+        String title = "\u0020\u0020"+getItem(position).getTitle();
+        String publishDatetime = "\u0020\u0020Last\u0020Update:\u0020"+getItem(position).getPublishDatetime();
         String disruption_status = getItem(position).getDisruption_status();
         String referenceLink = getItem(position).getReflink();
         int disruptionid = getItem(position).getDisruptionid();
