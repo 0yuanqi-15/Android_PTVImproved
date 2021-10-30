@@ -12,11 +12,13 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -150,6 +152,22 @@ public class Fragment_Home extends Fragment {
         }
     }
 
+    private void resetListViewHeight (ListView listView, ArrayAdapter adapter) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int maxHeight = displayMetrics.heightPixels / 5;
+        int totalHeight = 0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, listView);
+            listItem.measure(0,0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = Math.min(maxHeight, totalHeight);
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
     public void generateNearStopList(){
 
 //        ArrayList<String> stop1route = new ArrayList<>();
@@ -237,6 +255,8 @@ public class Fragment_Home extends Fragment {
         savedStopListAdapter  = new SavedStopListAdapter(v.getContext(),R.layout.savedstops_view, savedStopList);
         savedStopListView.setAdapter(savedStopListAdapter);
 
+        resetListViewHeight(savedStopListView, savedStopListAdapter);
+
         for (SavedStop eachSaveStop: savedStopList){
             Log.d("values", ("id of " + eachSaveStop.getStopname() + "is" + eachSaveStop.getStopid()));
             new DepartureHttpRequestHandler(getActivity()).getNextDepartureBySavedStop(eachSaveStop, savedStopListAdapter);
@@ -316,6 +336,8 @@ public class Fragment_Home extends Fragment {
             }
         });
         savedRouteListView.setAdapter(savedRouteListAdapter);
+
+        resetListViewHeight(savedRouteListView, savedRouteListAdapter);
     }
 
 //    @Override
