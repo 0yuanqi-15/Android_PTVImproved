@@ -71,6 +71,7 @@ public class StopDetailAdapter extends ArrayAdapter<Route> {
 
         direction.setText("To: " + stopDirection);
         route.setText(stopRoute);
+//        route.setSelected(true);
         time.setText(stopTime);
 
         return convertView;
