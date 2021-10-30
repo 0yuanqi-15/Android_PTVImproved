@@ -128,7 +128,7 @@ public class RouteDirections extends AppCompatActivity {
         mMapView.getLayers().add(mPinLayer);
         mMapView.setTransitFeaturesVisible(true);
         try {
-            stopHttpRequestHandler.getStopsOnRouteToBingmap(route_id,route_type,mPinLayer,mMapView); // Pop stops in
+            stopHttpRequestHandler.getRouteStopsOnRouteToBingmap(route_id,route_type,mPinLayer,mMapView); // Pop stops in
         } catch (Exception e) {
             e.printStackTrace();
         }
