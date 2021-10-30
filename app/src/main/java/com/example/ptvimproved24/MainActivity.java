@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        int fragmentToDisplay = getIntent().getIntExtra("fragmentToDisplay", 1);
+        int fragmentToDisplay = getIntent().getIntExtra("fragmentToDisplay", 0);
         if (fragmentToDisplay == 1) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_Home()).addToBackStack(null).commit();
         }
