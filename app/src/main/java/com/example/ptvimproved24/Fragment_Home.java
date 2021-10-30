@@ -101,22 +101,22 @@ public class Fragment_Home extends Fragment {
         });
 
         //add saved stop listener
-        savedStopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(view.getContext(), stops.class);
-                SavedStop clickedStop = savedStopListAdapter.getItem(i);
-
-                intent.putExtra("index", Integer.parseInt(clickedStop.getStopid()));
-                intent.putExtra("type", Integer.parseInt(clickedStop.getRouteType()));
-                intent.putExtra("name", clickedStop.getStopname());
-                intent.putExtra("suburb", clickedStop.getSuburb());
-
-                System.out.println(clickedStop.getRouteType());
-                startActivity(intent);
-
-            }
-        });
+//        savedStopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Intent intent = new Intent(view.getContext(), stops.class);
+//                SavedStop clickedStop = savedStopListAdapter.getItem(i);
+//
+//                intent.putExtra("index", Integer.parseInt(clickedStop.getStopid()));
+//                intent.putExtra("type", Integer.parseInt(clickedStop.getRouteType()));
+//                intent.putExtra("name", clickedStop.getStopname());
+//                intent.putExtra("suburb", clickedStop.getSuburb());
+//
+//                System.out.println(clickedStop.getRouteType());
+//                startActivity(intent);
+//
+//            }
+//        });
 
 
     }
@@ -222,12 +222,13 @@ public class Fragment_Home extends Fragment {
 
         String PREFERENCE_NAME = "SavedStops";
         SharedPreferences pref = getContext().getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
-
+        int count = 0;
         try {
             if (pref != null) {
                 Map<String, ?> allEntries = pref.getAll();
 
                 for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+                    count++;
                     String stopid = entry.getKey();
                     String stopinfo = pref.getString(stopid, (new JSONObject()).toString());
 
@@ -247,6 +248,10 @@ public class Fragment_Home extends Fragment {
                     Log.d("values", "saved stop loaded success");
 
                 }
+                if(count == 0){
+                    SavedStop stop1=new SavedStop("-1","Nothing saved yet","","Example saved stop");
+                    savedStopList.add(stop1);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -258,25 +263,32 @@ public class Fragment_Home extends Fragment {
         resetListViewHeight(savedStopListView, savedStopListAdapter);
 
         for (SavedStop eachSaveStop: savedStopList){
+            if (eachSaveStop.getStopid().equals("-1")){
+                continue;
+            }
             Log.d("values", ("id of " + eachSaveStop.getStopname() + "is" + eachSaveStop.getStopid()));
             new DepartureHttpRequestHandler(getActivity()).getNextDepartureBySavedStop(eachSaveStop, savedStopListAdapter);
 
         }
 
-        savedStopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), stops.class);
-                SavedStop clickedStop = savedStopListAdapter.getItem(i);
+        if (count != 0){
+            savedStopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    SavedStop clickedStop = savedStopListAdapter.getItem(i);
 
-                intent.putExtra("index", Integer.valueOf(clickedStop.getStopid()));
-                intent.putExtra("type", Integer.valueOf(clickedStop.getRouteType()));
-                intent.putExtra("name", clickedStop.getStopname());
-                intent.putExtra("suburb", clickedStop.getSuburb());
+                    Intent intent = new Intent(getActivity(), stops.class);
 
-                startActivity(intent);
-            }
-        });
+
+                    intent.putExtra("index", Integer.valueOf(clickedStop.getStopid()));
+                    intent.putExtra("type", Integer.valueOf(clickedStop.getRouteType()));
+                    intent.putExtra("name", clickedStop.getStopname());
+                    intent.putExtra("suburb", clickedStop.getSuburb());
+
+                    startActivity(intent);
+                }
+            });
+        }
 
 
     }
@@ -294,8 +306,9 @@ public class Fragment_Home extends Fragment {
         try {
             if (pref != null) {
                 Map<String, ?> allEntries = pref.getAll();
-
+                int count = 0;
                 for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+                    count++;
                     String routeid = entry.getKey();
                     String stopinfo = pref.getString(routeid, (new JSONObject()).toString());
 
@@ -317,6 +330,10 @@ public class Fragment_Home extends Fragment {
                     Log.d("values", "saved route loaded success");
 
                 }
+                if (count == 0){
+                    SavedRoute route2=new SavedRoute("Example",-1,"Nothing saved yet",1);
+                    savedRouteArrayList.add(route2);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -327,6 +344,9 @@ public class Fragment_Home extends Fragment {
         savedRouteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                if (savedRouteListAdapter.getItem(position).getSavedRouteid() ==-1){
+                    return;
+                }
                 Intent intent = new Intent(getActivity(), RouteDirections.class);
                 intent.putExtra("route_id", savedRouteListAdapter.getItem(position).getSavedRouteid());
                 intent.putExtra("route_type", savedRouteListAdapter.getItem(position).getSavedRouteType());

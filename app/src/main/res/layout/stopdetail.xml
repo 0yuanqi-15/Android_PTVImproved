@@ -2,11 +2,14 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:shrinkColumns="2">
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_vertical">
 
         <TextView
             android:id="@+id/stop_route"
@@ -18,31 +21,36 @@
 
         <TextView
             android:id="@+id/stop_direction"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minWidth="50dp"
-            android:textSize="40px"/>
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:layout_weight="0.6"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_column="2"
+            android:textSize="40px"
+        />
 
-    </TableRow>
 
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/stop_time_image"
-            android:layout_width="50dp"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:src="@drawable/outline_watch_later_24"/>
 
 
         <TextView
             android:id="@+id/stop_time"
-            android:layout_width="wrap_content"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:minWidth="75dp"
             android:textSize="50px"/>
 
+
     </TableRow>
+
 
 </TableLayout>

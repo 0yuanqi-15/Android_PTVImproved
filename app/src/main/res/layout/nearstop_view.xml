@@ -7,7 +7,8 @@
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp">
 
         <TextView
             android:id="@+id/nearstop_name"
@@ -60,7 +61,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="right"
-        android:gravity="right">
+        android:gravity="right"
+        android:layout_marginBottom="3dp">
 
         <TextView
             android:id="@+id/nearstop_distance"
