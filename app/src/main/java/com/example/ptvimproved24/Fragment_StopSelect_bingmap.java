@@ -54,32 +54,12 @@ public class Fragment_StopSelect_bingmap extends Fragment{
         View v = inflater.inflate(R.layout.fragment_mapselect_bing, container, false);
         getGeoLocation();
 
-        mMapView = new MapView(getContext(), MapRenderMode.VECTOR);  // or use MapRenderMode.RASTER for 2D map
+        mMapView = new MapView(getContext(), MapRenderMode.RASTER);  // or use MapRenderMode.RASTER for 2D map
         mMapView.setCredentialsKey(BuildConfig.CREDENTIALS_KEY);
         ((FrameLayout) v.findViewById(R.id.map_view_stopselect)).addView(mMapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.getLayers().add(mPinLayer);
         mMapView.setScene(MapScene.createFromLocationAndZoomLevel(new Geopoint(cameraLat,cameraLng),zoomLevel), MapAnimationKind.DEFAULT);
-
-        mMapView.addOnMapCameraChangedListener(new OnMapCameraChangedListener() {
-            @Override
-            public boolean onMapCameraChanged(MapCameraChangedEventArgs mapCameraChangedEventArgs) {
-                cameraLat = (float) mapCameraChangedEventArgs.camera.getLocation().getPosition().getLatitude();
-                cameraLng = (float) mapCameraChangedEventArgs.camera.getLocation().getPosition().getLongitude();
-                float camAltitude = (float) mapCameraChangedEventArgs.camera.getLocation().getPosition().getAltitude();
-                System.out.println("Camera:"+cameraLat+","+cameraLng+"\t"+camAltitude);
-                try {
-                    stopHttpRequestHandler.getStopsToBingmap(cameraLat, cameraLng, mPinLayer, mMapView, camAltitude);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if (camAltitude > 8000) {
-                    Toast.makeText(getContext(), "Zoom in to see more stops...", Toast.LENGTH_SHORT);
-                }
-//                Camera Changed, change loading stops, get camera range, and set the
-                return false;
-            }
-        });
 
         mPinLayer.addOnMapElementTappedListener(new OnMapElementTappedListener() {
             @Override
@@ -105,6 +85,26 @@ public class Fragment_StopSelect_bingmap extends Fragment{
                     lastSelectedStopId = stopid;
                     Toast.makeText(getContext(),"Click again to see next departures of "+pushpin.getFlyout().getTitle(),Toast.LENGTH_SHORT);
                 }
+                return false;
+            }
+        });
+
+        mMapView.addOnMapCameraChangedListener(new OnMapCameraChangedListener() {
+            @Override
+            public boolean onMapCameraChanged(MapCameraChangedEventArgs mapCameraChangedEventArgs) {
+                cameraLat = (float) mapCameraChangedEventArgs.camera.getLocation().getPosition().getLatitude();
+                cameraLng = (float) mapCameraChangedEventArgs.camera.getLocation().getPosition().getLongitude();
+                float camAltitude = (float) mapCameraChangedEventArgs.camera.getLocation().getPosition().getAltitude();
+                System.out.println("Camera:"+cameraLat+","+cameraLng+"\t"+camAltitude);
+                try {
+                    stopHttpRequestHandler.getStopsToBingmap(cameraLat, cameraLng, mPinLayer, mMapView, camAltitude);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (camAltitude > 8000) {
+                    Toast.makeText(getContext(), "Zoom in to see more stops...", Toast.LENGTH_SHORT);
+                }
+//                Camera Changed, change loading stops, get camera range, and set the
                 return false;
             }
         });
