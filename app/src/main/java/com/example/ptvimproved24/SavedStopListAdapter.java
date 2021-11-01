@@ -78,7 +78,7 @@ public class SavedStopListAdapter extends ArrayAdapter<SavedStop> {
 
         if(routes == null || times == null){
             tvroute1.setText("");
-            tvtime1.setText("Nothing found");
+            tvtime1.setText("");
             tvroute2.setText("");
             tvtime2.setText("");
             tvroute3.setText("");

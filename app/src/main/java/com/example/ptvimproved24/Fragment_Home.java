@@ -66,10 +66,6 @@ public class Fragment_Home extends Fragment {
         latitude = defaultLatitude;
         longitude = defaultLongitude;
 
-        SensorManager sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
-        //ShakeDetector sd = new ShakeDetector(this);
-        //sd.start(sensorManager);
-
         super.onViewCreated(view, savedInstanceState);
         nearStopListView = (ListView) view.findViewById(R.id.nearStops_view);
         savedStopListView = (ListView) view.findViewById(R.id.SavedStop_view);
@@ -90,35 +86,14 @@ public class Fragment_Home extends Fragment {
                 Intent intent = new Intent(view.getContext(), stops.class);
                 Stop clickedStop = nearStopListAdapter.getItem(i);
 
-
                 intent.putExtra("index", clickedStop.getStop_id());
                 intent.putExtra("type", clickedStop.getRouteType());
                 intent.putExtra("name", clickedStop.getStop_name());
                 intent.putExtra("suburb", clickedStop.getStop_suburb());
-                startActivity(intent);
 
+                startActivity(intent);
             }
         });
-
-        //add saved stop listener
-//        savedStopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent intent = new Intent(view.getContext(), stops.class);
-//                SavedStop clickedStop = savedStopListAdapter.getItem(i);
-//
-//                intent.putExtra("index", Integer.parseInt(clickedStop.getStopid()));
-//                intent.putExtra("type", Integer.parseInt(clickedStop.getRouteType()));
-//                intent.putExtra("name", clickedStop.getStopname());
-//                intent.putExtra("suburb", clickedStop.getSuburb());
-//
-//                System.out.println(clickedStop.getRouteType());
-//                startActivity(intent);
-//
-//            }
-//        });
-
-
     }
 
     @Override
@@ -139,10 +114,6 @@ public class Fragment_Home extends Fragment {
                     }
                 }
             });
-//            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//            System.out.println("locationfraghome:"+location);
-//            latitude = (float) location.getLatitude();
-//            longitude = (float) location.getLongitude();
         } catch (SecurityException e) {
             Toast.makeText(getActivity(),
                     "Default geolocation is used, please retry after enable location service.",
@@ -169,55 +140,10 @@ public class Fragment_Home extends Fragment {
     }
 
     public void generateNearStopList(){
-
-//        ArrayList<String> stop1route = new ArrayList<>();
-//        stop1route.add("606");stop1route.add("606");stop1route.add("606");
-//        ArrayList<String> stop1time = new ArrayList<>();
-//        stop1time.add("Now");stop1time.add("17:15");stop1time.add("17:30");
-//        Stop stop1=new Stop("Port melbourne","Cruikshank St/Liardet St",293,stop1route,stop1time);
-//
-//        ArrayList<String> stop2route = new ArrayList<>();
-//        stop2route.add("606");stop2route.add("606");stop2route.add("606");
-//        ArrayList<String> stop2time = new ArrayList<>();
-//        stop2time.add("Now");stop2time.add("17:14");stop2time.add("17:29");
-//        Stop stop2=new Stop("Albert Park","Bridport St / Richardson St",276,stop2route,stop2time);
-//
-//        ArrayList<String> stop3route = new ArrayList<>();
-//        stop3route.add("236");stop3route.add("236");stop3route.add("236");
-//        ArrayList<String> stop3time = new ArrayList<>();
-//        stop3time.add("Now");stop3time.add("52 mins");stop3time.add("06:29 PM");
-//        Stop stop3=new Stop("Albert Park","Graham St/ Pickles St",162,stop3route,stop3time);
-
-//        ArrayList<NearStop> nearStopList = new ArrayList<>();
-//        nearStopList.add(stop1);
-//        nearStopList.add(stop2);
-//        nearStopList.add(stop3);
-
         stopHttpRequestHandler.getStopsFromLocation(nearStopListAdapter, latitude, longitude);
-
     }
 
     public void generateSavedStopList(View v){
-
-
-//        ArrayList<String> stop1route = new ArrayList<>();
-//        stop1route.add("703");stop1route.add("737");stop1route.add("862");
-//        ArrayList<String> stop1time = new ArrayList<>();
-//        stop1time.add("Now");stop1time.add("Now");stop1time.add("Now");
-//        SavedStop stop1=new SavedStop("Clayton","Monash University",stop1route,stop1time);
-//
-//        ArrayList<String> stop2route = new ArrayList<>();
-//        stop2route.add("862");stop2route.add("802");stop2route.add("900");
-//        ArrayList<String> stop2time = new ArrayList<>();
-//        stop2time.add("Now");stop2time.add("Now");stop2time.add("Now");
-//        SavedStop stop2=new SavedStop("Chadstone","Chadstone Shopping Centre / Eastern Access Rd",stop2route,stop2time);
-//
-//        ArrayList<String> stop3route = new ArrayList<>();
-//        stop3route.add("631");stop3route.add("631");stop3route.add("631");
-//        ArrayList<String> stop3time = new ArrayList<>();
-//        stop3time.add("Now");stop3time.add("6 mins");stop3time.add("7 mins");
-//        SavedStop stop3=new SavedStop("Clayton","Princes Hwy / Blackburn Rd",stop3route,stop3time);
-
         ArrayList<SavedStop> savedStopList = new ArrayList<>();
 
         String PREFERENCE_NAME = "SavedStops";
@@ -249,7 +175,7 @@ public class Fragment_Home extends Fragment {
 
                 }
                 if(count == 0){
-                    SavedStop stop1=new SavedStop("-1","Nothing saved yet","","Example saved stop");
+                    SavedStop stop1=new SavedStop("-1","","","Nothing saved yet");
                     savedStopList.add(stop1);
                 }
             }
@@ -278,8 +204,6 @@ public class Fragment_Home extends Fragment {
                     SavedStop clickedStop = savedStopListAdapter.getItem(i);
 
                     Intent intent = new Intent(getActivity(), stops.class);
-
-
                     intent.putExtra("index", Integer.valueOf(clickedStop.getStopid()));
                     intent.putExtra("type", Integer.valueOf(clickedStop.getRouteType()));
                     intent.putExtra("name", clickedStop.getStopname());
@@ -295,11 +219,6 @@ public class Fragment_Home extends Fragment {
 
     public void generateSavedRouteList(View v){
         ArrayList<SavedRoute> savedRouteArrayList = new ArrayList<>();
-//        SavedRoute route1=new SavedRoute("703",13270,"Oakleigh - Box Hill via Clayton",2);
-//        SavedRoute route2=new SavedRoute("3-3a",761,"Melbourne University - East Malvern",1);
-//        savedRouteArrayList.add(route1);
-//        savedRouteArrayList.add(route2);
-
 
         SharedPreferences pref = getContext().getSharedPreferences("saved_routes", Context.MODE_PRIVATE);
 
@@ -331,7 +250,7 @@ public class Fragment_Home extends Fragment {
 
                 }
                 if (count == 0){
-                    SavedRoute route2=new SavedRoute("Example",-1,"Nothing saved yet",1);
+                    SavedRoute route2=new SavedRoute("",-1,"Nothing saved yet",1);
                     savedRouteArrayList.add(route2);
                 }
             }
