@@ -115,9 +115,11 @@ public class RouteDirections extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(RouteDirections.this, RouteDetails.class);
                 Direction clickedDirection = routeDirectionAdapter.getItem(i);
-                intent.putExtra("route_id", clickedDirection.getRoute_id());
-                intent.putExtra("route_type", clickedDirection.getRoute_type());
-                startActivity(intent);
+                if (clickedDirection.getDeparturesForNearestStop().size() > 0) {
+                    intent.putExtra("run_ref", clickedDirection.getDeparturesForNearestStop().get(0).getRun_ref());
+                    intent.putExtra("route_type", clickedDirection.getRoute_type());
+                    startActivity(intent);
+                }
             }
         });
 
@@ -128,7 +130,7 @@ public class RouteDirections extends AppCompatActivity {
         mMapView.getLayers().add(mPinLayer);
         mMapView.setTransitFeaturesVisible(true);
         try {
-            stopHttpRequestHandler.getStopsOnRouteToBingmap(route_id,route_type,mPinLayer,mMapView); // Pop stops in
+            stopHttpRequestHandler.getRouteStopsOnRouteToBingmap(route_id,route_type,mPinLayer,mMapView); // Pop stops in
         } catch (Exception e) {
             e.printStackTrace();
         }

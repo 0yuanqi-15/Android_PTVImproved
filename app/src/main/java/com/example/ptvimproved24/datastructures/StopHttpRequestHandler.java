@@ -1,9 +1,11 @@
 package com.example.ptvimproved24.datastructures;
 
+import android.content.Context;
 import android.location.Location;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.ptvimproved24.Direction;
@@ -38,11 +40,18 @@ import okhttp3.Response;
 public class StopHttpRequestHandler {
     private OkHttpClient client;
     private FragmentActivity activity;
+    private Fragment fragment;
 
     public StopHttpRequestHandler(FragmentActivity act) {
         client = new OkHttpClient();
         activity = act;
     }
+
+    public StopHttpRequestHandler(Fragment fragment){
+        client = new OkHttpClient();
+        this.fragment = fragment;
+    }
+
 
     private ArrayList<String> getRoutesByStop(JSONArray routes) throws JSONException {
         ArrayList<String> result = new ArrayList<>();
@@ -158,7 +167,61 @@ public class StopHttpRequestHandler {
         }
     }
 
-    public void getStopsOnRouteToBingmap(int route_id, int route_type, MapElementLayer mPinLayer,MapView mapView) throws Exception {
+    public void getStopsToBingmap(float latitude, float longitude, MapElementLayer mPinLayer, MapView mapView,double ZoomLevel) throws Exception {
+        String url = commonDataRequest.nearByTrainStopsOnSelect(latitude,longitude);
+        if (ZoomLevel<=8000){
+            url = commonDataRequest.nearByStopsOnSelect(latitude,longitude);
+        }
+        System.out.println("RequestURL:"+url);
+        Request request = new Request.Builder().url(url).build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()){
+                    String responseBody = response.body().string();
+                    try {
+                        JSONObject jsonObj = new JSONObject(responseBody);
+                        System.out.println(responseBody);
+                        JSONArray stops = jsonObj.getJSONArray("stops");
+                        ArrayList<Stop> stopsArray = getStoppingList(stops);
+                        fragment.getActivity().runOnUiThread(new Runnable() {
+//                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mPinLayer.getElements().clear();
+                                for (int i = 0; i < stopsArray.size(); i++) {
+                                    Geopoint location = new Geopoint(stopsArray.get(i).getStop_latitude(),stopsArray.get(i).getStop_longitude());  // your pin lat-long coordinates
+                                    String title = stopsArray.get(i).getStop_name();       // title to be shown next to the pin
+                                    int routeType = stopsArray.get(i).getRouteType();       // title to be shown next to the pin
+//            Bitmap pinBitmap = ...   // your pin graphic (optional)
+                                    MapIcon pushpin = new MapIcon();
+                                    pushpin.setLocation(location);
+                                    pushpin.setTitle(title);
+                                    Object data = stopsArray.get(i);
+                                    pushpin.setTag(data);
+//            pushpin.setImage(new MapImage(pinBitmap));
+                                    mPinLayer.getElements().add(pushpin);
+                                    MapFlyout mapFlyout = new MapFlyout();
+                                    mapFlyout.setTitle(stopsArray.get(i).getStop_name());
+                                    mapFlyout.setDescription("Suburb:"+stopsArray.get(i).getStop_suburb()+"\nStop Id:"+stopsArray.get(i).getStop_id());
+                                    pushpin.setFlyout(mapFlyout);
+                                }
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    public void getRouteStopsOnRouteToBingmap(int route_id, int route_type, MapElementLayer mPinLayer, MapView mapView) throws Exception {
         String url = commonDataRequest.showRoutesStop(route_id, route_type);
         Request request = new Request.Builder().url(url).build();
         client.newCall(request).enqueue(new Callback() {

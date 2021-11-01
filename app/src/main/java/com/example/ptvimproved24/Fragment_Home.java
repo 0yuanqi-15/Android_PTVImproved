@@ -12,11 +12,13 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -38,7 +40,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
+public class Fragment_Home extends Fragment {
 
     private FragmentHomeBinding binding;
     private StopHttpRequestHandler stopHttpRequestHandler;
@@ -54,8 +56,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
     private Float latitude;
     private Float longitude;
 
-    private Boolean isNearStopShowing;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -65,28 +65,11 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         latitude = defaultLatitude;
         longitude = defaultLongitude;
-        isNearStopShowing = true;
-
-        SensorManager sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
-        ShakeDetector sd = new ShakeDetector(this);
-        sd.start(sensorManager);
 
         super.onViewCreated(view, savedInstanceState);
         nearStopListView = (ListView) view.findViewById(R.id.nearStops_view);
         savedStopListView = (ListView) view.findViewById(R.id.SavedStop_view);
         savedRouteListView = (ListView) view.findViewById(R.id.savedRoutes_view);
-        view.findViewById(R.id.nearbystopLabel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isNearStopShowing) {
-                    nearStopListView.setAdapter(new NearStopListAdapter(view.getContext(),R.layout.nearstop_view, new ArrayList<>()));
-                    isNearStopShowing = false;
-                } else {
-                    nearStopListView.setAdapter(nearStopListAdapter);
-                    isNearStopShowing = true;
-                }
-            }
-        });
         nearStopListAdapter = new NearStopListAdapter(view.getContext(),R.layout.nearstop_view, new ArrayList<>());
         nearStopListView.setAdapter(nearStopListAdapter);
         stopHttpRequestHandler = new StopHttpRequestHandler(getActivity());
@@ -103,35 +86,14 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
                 Intent intent = new Intent(view.getContext(), stops.class);
                 Stop clickedStop = nearStopListAdapter.getItem(i);
 
-
                 intent.putExtra("index", clickedStop.getStop_id());
                 intent.putExtra("type", clickedStop.getRouteType());
                 intent.putExtra("name", clickedStop.getStop_name());
                 intent.putExtra("suburb", clickedStop.getStop_suburb());
-                startActivity(intent);
 
+                startActivity(intent);
             }
         });
-
-        //add saved stop listener
-        savedStopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(view.getContext(), stops.class);
-                SavedStop clickedStop = savedStopListAdapter.getItem(i);
-
-                intent.putExtra("index", Integer.parseInt(clickedStop.getStopid()));
-                intent.putExtra("type", Integer.parseInt(clickedStop.getRouteType()));
-                intent.putExtra("name", clickedStop.getStopname());
-                intent.putExtra("suburb", clickedStop.getSuburb());
-
-                System.out.println(clickedStop.getRouteType());
-                startActivity(intent);
-
-            }
-        });
-
-
     }
 
     @Override
@@ -152,10 +114,6 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
                     }
                 }
             });
-//            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//            System.out.println("locationfraghome:"+location);
-//            latitude = (float) location.getLatitude();
-//            longitude = (float) location.getLongitude();
         } catch (SecurityException e) {
             Toast.makeText(getActivity(),
                     "Default geolocation is used, please retry after enable location service.",
@@ -165,66 +123,38 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         }
     }
 
+    private void resetListViewHeight (ListView listView, ArrayAdapter adapter, int frag) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int maxHeight = displayMetrics.heightPixels / frag;
+        int totalHeight = 0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, listView);
+            listItem.measure(0,0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = Math.min(maxHeight, totalHeight);
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
     public void generateNearStopList(){
-
-//        ArrayList<String> stop1route = new ArrayList<>();
-//        stop1route.add("606");stop1route.add("606");stop1route.add("606");
-//        ArrayList<String> stop1time = new ArrayList<>();
-//        stop1time.add("Now");stop1time.add("17:15");stop1time.add("17:30");
-//        Stop stop1=new Stop("Port melbourne","Cruikshank St/Liardet St",293,stop1route,stop1time);
-//
-//        ArrayList<String> stop2route = new ArrayList<>();
-//        stop2route.add("606");stop2route.add("606");stop2route.add("606");
-//        ArrayList<String> stop2time = new ArrayList<>();
-//        stop2time.add("Now");stop2time.add("17:14");stop2time.add("17:29");
-//        Stop stop2=new Stop("Albert Park","Bridport St / Richardson St",276,stop2route,stop2time);
-//
-//        ArrayList<String> stop3route = new ArrayList<>();
-//        stop3route.add("236");stop3route.add("236");stop3route.add("236");
-//        ArrayList<String> stop3time = new ArrayList<>();
-//        stop3time.add("Now");stop3time.add("52 mins");stop3time.add("06:29 PM");
-//        Stop stop3=new Stop("Albert Park","Graham St/ Pickles St",162,stop3route,stop3time);
-
-//        ArrayList<NearStop> nearStopList = new ArrayList<>();
-//        nearStopList.add(stop1);
-//        nearStopList.add(stop2);
-//        nearStopList.add(stop3);
-
         stopHttpRequestHandler.getStopsFromLocation(nearStopListAdapter, latitude, longitude);
-
     }
 
     public void generateSavedStopList(View v){
-
-
-//        ArrayList<String> stop1route = new ArrayList<>();
-//        stop1route.add("703");stop1route.add("737");stop1route.add("862");
-//        ArrayList<String> stop1time = new ArrayList<>();
-//        stop1time.add("Now");stop1time.add("Now");stop1time.add("Now");
-//        SavedStop stop1=new SavedStop("Clayton","Monash University",stop1route,stop1time);
-//
-//        ArrayList<String> stop2route = new ArrayList<>();
-//        stop2route.add("862");stop2route.add("802");stop2route.add("900");
-//        ArrayList<String> stop2time = new ArrayList<>();
-//        stop2time.add("Now");stop2time.add("Now");stop2time.add("Now");
-//        SavedStop stop2=new SavedStop("Chadstone","Chadstone Shopping Centre / Eastern Access Rd",stop2route,stop2time);
-//
-//        ArrayList<String> stop3route = new ArrayList<>();
-//        stop3route.add("631");stop3route.add("631");stop3route.add("631");
-//        ArrayList<String> stop3time = new ArrayList<>();
-//        stop3time.add("Now");stop3time.add("6 mins");stop3time.add("7 mins");
-//        SavedStop stop3=new SavedStop("Clayton","Princes Hwy / Blackburn Rd",stop3route,stop3time);
-
         ArrayList<SavedStop> savedStopList = new ArrayList<>();
 
         String PREFERENCE_NAME = "SavedStops";
         SharedPreferences pref = getContext().getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
-
+        int count = 0;
         try {
             if (pref != null) {
                 Map<String, ?> allEntries = pref.getAll();
 
                 for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+                    count++;
                     String stopid = entry.getKey();
                     String stopinfo = pref.getString(stopid, (new JSONObject()).toString());
 
@@ -244,6 +174,10 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
                     Log.d("values", "saved stop loaded success");
 
                 }
+                if(count == 0){
+                    SavedStop stop1=new SavedStop("-1","","","Nothing saved yet");
+                    savedStopList.add(stop1);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -252,45 +186,48 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         savedStopListAdapter  = new SavedStopListAdapter(v.getContext(),R.layout.savedstops_view, savedStopList);
         savedStopListView.setAdapter(savedStopListAdapter);
 
+        resetListViewHeight(savedStopListView, savedStopListAdapter, 5);
+
         for (SavedStop eachSaveStop: savedStopList){
+            if (eachSaveStop.getStopid().equals("-1")){
+                continue;
+            }
             Log.d("values", ("id of " + eachSaveStop.getStopname() + "is" + eachSaveStop.getStopid()));
             new DepartureHttpRequestHandler(getActivity()).getNextDepartureBySavedStop(eachSaveStop, savedStopListAdapter);
 
         }
 
-        savedStopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), stops.class);
-                SavedStop clickedStop = savedStopListAdapter.getItem(i);
+        if (count != 0){
+            savedStopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    SavedStop clickedStop = savedStopListAdapter.getItem(i);
 
-                intent.putExtra("index", Integer.valueOf(clickedStop.getStopid()));
-                intent.putExtra("type", Integer.valueOf(clickedStop.getRouteType()));
-                intent.putExtra("name", clickedStop.getStopname());
-                intent.putExtra("suburb", clickedStop.getSuburb());
+                    Intent intent = new Intent(getActivity(), stops.class);
+                    intent.putExtra("index", Integer.valueOf(clickedStop.getStopid()));
+                    intent.putExtra("type", Integer.valueOf(clickedStop.getRouteType()));
+                    intent.putExtra("name", clickedStop.getStopname());
+                    intent.putExtra("suburb", clickedStop.getSuburb());
 
-                startActivity(intent);
-            }
-        });
+                    startActivity(intent);
+                }
+            });
+        }
 
 
     }
 
     public void generateSavedRouteList(View v){
         ArrayList<SavedRoute> savedRouteArrayList = new ArrayList<>();
-//        SavedRoute route1=new SavedRoute("703",13270,"Oakleigh - Box Hill via Clayton",2);
-//        SavedRoute route2=new SavedRoute("3-3a",761,"Melbourne University - East Malvern",1);
-//        savedRouteArrayList.add(route1);
-//        savedRouteArrayList.add(route2);
-
 
         SharedPreferences pref = getContext().getSharedPreferences("saved_routes", Context.MODE_PRIVATE);
 
         try {
             if (pref != null) {
                 Map<String, ?> allEntries = pref.getAll();
-
+                int count = 0;
                 for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+                    count++;
                     String routeid = entry.getKey();
                     String stopinfo = pref.getString(routeid, (new JSONObject()).toString());
 
@@ -312,6 +249,10 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
                     Log.d("values", "saved route loaded success");
 
                 }
+                if (count == 0){
+                    SavedRoute route2=new SavedRoute("",-1,"Nothing saved yet",1);
+                    savedRouteArrayList.add(route2);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -322,6 +263,9 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
         savedRouteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                if (savedRouteListAdapter.getItem(position).getSavedRouteid() ==-1){
+                    return;
+                }
                 Intent intent = new Intent(getActivity(), RouteDirections.class);
                 intent.putExtra("route_id", savedRouteListAdapter.getItem(position).getSavedRouteid());
                 intent.putExtra("route_type", savedRouteListAdapter.getItem(position).getSavedRouteType());
@@ -331,12 +275,14 @@ public class Fragment_Home extends Fragment implements ShakeDetector.Listener {
             }
         });
         savedRouteListView.setAdapter(savedRouteListAdapter);
+
+        resetListViewHeight(savedRouteListView, savedRouteListAdapter, 10);
     }
 
-    @Override
-    public void hearShake() {
-        getGeoLocation();
-        generateNearStopList();
-        Toast.makeText(getContext(), "Reloading", Toast.LENGTH_SHORT).show();
-    }
+//    @Override
+//    public void hearShake() {
+//        getGeoLocation();
+//        generateNearStopList();
+//        Toast.makeText(getContext(), "Reloading", Toast.LENGTH_SHORT).show();
+//    }
 }

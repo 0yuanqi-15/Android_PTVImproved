@@ -24,7 +24,7 @@ public class MapItems implements ClusterItem {
         this.title = title;
         this.snippet = snippet;
         switch (routeType){
-            case 0:icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_train_24);break;
+            case 0:icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_train_24_color);break;
             case 1:icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_tram_24);break;
             case 2:icon = BitmapDescriptorFactory.fromResource(R.drawable.baseline_directions_bus_filled_24);break;
             case 3:icon = BitmapDescriptorFactory.fromResource(R.drawable.baseline_train_24);break;

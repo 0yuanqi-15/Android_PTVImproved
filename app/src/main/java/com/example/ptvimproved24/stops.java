@@ -3,7 +3,9 @@ package com.example.ptvimproved24;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import com.example.ptvimproved24.datastructures.DepartureHttpRequestHandler;
@@ -39,6 +41,9 @@ public class stops extends AppCompatActivity {
     private ActivityStopsBinding binding;
     private ListView detail;
 
+    int stopId;
+    int routeType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,12 +60,34 @@ public class stops extends AppCompatActivity {
         detail = (ListView) findViewById(R.id.stops_nextservice);
         detail.setNestedScrollingEnabled(true);
         Intent intent = getIntent();
-        int stopId = intent.getIntExtra("index", 0);
-        int routeType = intent.getIntExtra("type", 0);
+        stopId = intent.getIntExtra("index", 0);
+        routeType = intent.getIntExtra("type", 0);
         String stopName = intent.getStringExtra("name");
         String stopSuburb = intent.getStringExtra("suburb");
 
         toolBarLayout.setTitle(stopName);
+        switch (routeType){
+            case 0:
+                this.findViewById(R.id.toolbar_layout).setBackgroundColor(0xFF0072CE);
+                toolBarLayout.setContentScrimColor(0xFF0072CE);
+                break;
+            case 1:
+                this.findViewById(R.id.toolbar_layout).setBackgroundColor(0xFF78BE20);
+                toolBarLayout.setContentScrimColor(0xFF78BE20);
+                break;
+            case 2:
+            case 4:
+                this.findViewById(R.id.toolbar_layout).setBackgroundColor(0xFFFF8200);
+                toolBarLayout.setContentScrimColor(0xFFFF8200);
+                break;
+            case 3:
+                this.findViewById(R.id.toolbar_layout).setBackgroundColor(0xFF8F1A95);
+                toolBarLayout.setContentScrimColor(0xFF8F1A95);
+                break;
+            default:
+                break;
+        }
+
         TextView stopsuburb = findViewById(R.id.text_stopsuburb);
         stopsuburb.setText(stopSuburb);
 
@@ -77,14 +104,14 @@ public class stops extends AppCompatActivity {
         detail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(view.getContext(), RouteDirections.class);
+                Intent intent = new Intent(view.getContext(), RouteDetails.class);
                 Route route = adapter.getItem(i);
 
-                intent.putExtra("route_id", route.getRoute_id());
-//                intent.putExtra("run_ref",departure.getRun_ref());
+                //intent.putExtra("route_id", route.getRoute_id());
+                intent.putExtra("run_ref",route.getRun_ref());
                 intent.putExtra("route_type", route.getRoute_type());
-                intent.putExtra("route_name", route.getRoute_name());
-                intent.putExtra("route_gtfs_id", route.getRoute_gtfs_id());
+                //intent.putExtra("route_name", route.getRoute_name());
+                //intent.putExtra("route_gtfs_id", route.getRoute_gtfs_id());
 
                 startActivity(intent);
 

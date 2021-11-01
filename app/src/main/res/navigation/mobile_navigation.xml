@@ -17,9 +17,9 @@
         tools:layout="@layout/fragment_disruptions" />
     <fragment
         android:id="@+id/navigation_mapselect"
-        android:name="com.example.ptvimproved24.Fragment_StopSelect"
+        android:name="com.example.ptvimproved24.Fragment_StopSelect_bingmap"
         android:label="@string/title_ss"
-        tools:layout="@layout/fragment_navigation_mapselect" />
+        tools:layout="@layout/fragment_mapselect_bing" />
     <fragment
         android:id="@+id/navigation_journey_planner"
         android:name="com.example.ptvimproved24.Fragment_JourneyPlanner"

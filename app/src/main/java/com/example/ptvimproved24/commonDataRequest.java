@@ -119,14 +119,14 @@ public class commonDataRequest {
     }
 
     public static String nearByStopsOnSelect(float latitude, float longtitude) throws Exception {    // View all stops near a specific location
-        return buildAPIrequest("/v3/stops/location/"+latitude+","+longtitude+"?max_results=500&max_distance=5000");
+        return buildAPIrequest("/v3/stops/location/"+latitude+","+longtitude+"?max_results=100&max_distance=8000");
     }
 
     public static String nearByTrainStopsOnSelect(float latitude, float longtitude) throws Exception {    // View metro and vline stops only at large scale
-        return buildAPIrequest("/v3/stops/location/"+latitude+","+longtitude+"?route_types=0&route_types=3&max_results=750&max_distance=9999999");
+        return "https://ptv.testingstar.top/stops03.json";
     }
 
     public static String nearByVlineStopsOnSelect(float latitude, float longtitude) throws Exception {    // View vline stops only at large scale
-        return buildAPIrequest("/v3/stops/location/"+latitude+","+longtitude+"?route_types=3&max_results=750&max_distance=9999999");
+        return "https://ptv.testingstar.top/stops03.json";
     }
 }

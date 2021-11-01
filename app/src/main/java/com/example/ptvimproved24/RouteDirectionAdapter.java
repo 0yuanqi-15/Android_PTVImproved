@@ -46,10 +46,20 @@ public class RouteDirectionAdapter extends ArrayAdapter<Direction> {
     private String gapInString(String timeStr) {
         long gap = timeGap(timeStr);
         String result = "";
-        if (gap > 60) {
-            result = gap/60 + "h";
+        String appendStr = "";
+        if (gap <= 1) {
+            appendStr = " < 1 min";
+            result = appendStr;
+        } else if (gap > 60) {
+            long hours = gap / 60;
+            if (hours < 24) {
+                appendStr = hours > 1 ? " hours" : " hour";
+                result = hours + appendStr;
+            } else {
+                result = " > 1 day";
+            }
         } else {
-            result = gap + "m";
+            result = gap + " mins";
         }
         return result;
     }
@@ -60,8 +70,8 @@ public class RouteDirectionAdapter extends ArrayAdapter<Direction> {
 
         String direction_name = getItem(position).getDirection_name();
 
-        String nearestStopName = "--";
-        String time1 = "--:--";
+        String nearestStopName = "";
+        String time1 = "No departure";
         String time2 = "";
         String time3 = "";
 

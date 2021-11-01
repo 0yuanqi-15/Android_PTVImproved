@@ -2,6 +2,7 @@ package com.example.ptvimproved24;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -9,6 +10,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -16,11 +19,17 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.ptvimproved24.databinding.ActivityMainBinding;
+import com.example.ptvimproved24.datastructures.PatternRequestHandler;
+import com.example.ptvimproved24.datastructures.SearchRequestHandler;
+import com.example.ptvimproved24.datastructures.SearchResults;
+import com.example.ptvimproved24.datastructures.Stop;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -35,6 +44,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
 
     private ActivityMainBinding binding;
+    SearchRequestHandler searchRequestHandler = new SearchRequestHandler(this);
+    private ListView mListView;
+    private SearchListAdapter searchDetailsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,19 +72,6 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         }
-//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-//        checkLocationPermission();
-//
-//        fusedLocationClient.getLastLocation()
-//                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-//                    @Override
-//                    public void onSuccess(Location location) {
-//                        // Got last known location. In some rare situations this can be null.
-//                        if (location != null) {
-//                            // Logic to handle location object
-//                        }
-//                    }
-//                });
 
         Log.d(TAG, "onCreate: Started");
 
@@ -96,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_Home()).addToBackStack(null).commit();
         }
         if (fragmentToDisplay == 2) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_StopSelect()).addToBackStack(null).commit();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_StopSelect()).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_StopSelect_bingmap()).addToBackStack(null).commit();
         }
         if (fragmentToDisplay == 3) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_JourneyPlanner()).addToBackStack(null).commit();
@@ -104,6 +105,34 @@ public class MainActivity extends AppCompatActivity {
         if (fragmentToDisplay == 4) {
             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_activity_main, new Fragment_Disruptions()).addToBackStack(null).commit();
         }
+
+        MainActivity.this.findViewById(R.id.search_list).setVisibility(View.GONE);
+        mListView = (ListView) findViewById(R.id.search_list);
+        searchDetailsAdapter = new SearchListAdapter(this, R.layout.searchdetails_view, new ArrayList<>());
+        mListView.setAdapter(searchDetailsAdapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                SearchResults clickedResult = searchDetailsAdapter.getItem(i);
+
+                if (clickedResult.getTarget_type() == 0) {
+                    Intent intent = new Intent(view.getContext(), stops.class);
+                    intent.putExtra("index", clickedResult.getTarget_id());
+                    intent.putExtra("type", clickedResult.getRoute_type());
+                    intent.putExtra("name", clickedResult.getTarget_name());
+                    intent.putExtra("suburb", clickedResult.getNote());
+                    startActivity(intent);
+                } else if (clickedResult.getTarget_type() == 1) {
+                    Intent intent = new Intent(view.getContext(), RouteDirections.class);
+                    intent.putExtra("route_id", clickedResult.getTarget_id());
+                    intent.putExtra("route_type", clickedResult.getRoute_type());
+                    intent.putExtra("route_name", clickedResult.getTarget_name());
+                    intent.putExtra("route_gtfs_id", clickedResult.getNote());
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void getUserLocation() {
@@ -128,42 +157,59 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activities_menu, menu);
-
+        getMenuInflater().inflate(R.menu.activities_menu, menu); // popping up test window
         // return true so that the menu pop up is opened
+
+        MenuItem menuItem = menu.findItem(R.id.search);
+        MenuItem.OnActionExpandListener onActionExpandListener = new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+//                Toast.makeText(MainActivity.this,"Search View showed",Toast.LENGTH_SHORT);
+//                onSearchRequested();
+                MainActivity.this.findViewById(R.id.search_list).setVisibility(View.VISIBLE);
+                MainActivity.this.findViewById(R.id.nav_host_fragment_activity_main).setVisibility(View.GONE);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                MainActivity.this.findViewById(R.id.search_list).setVisibility(View.GONE);
+                MainActivity.this.findViewById(R.id.nav_host_fragment_activity_main).setVisibility(View.VISIBLE);
+                return true;
+            }
+        };
+        menu.findItem(R.id.search).setOnActionExpandListener(onActionExpandListener);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Type route, stops or location to search");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                System.out.println(newText);
+                if (newText.length() >=3){
+                    try {
+                        searchRequestHandler.getSearchResults(newText,searchDetailsAdapter);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                return false;
+            }
+        });
+
         return true;
     }
 
-    public static final String FRAGMENTA = "Fragment_Home";
-    public static final String FRAGMENTB = "Fragment_StopSelect";
-    public static final String FRAGMENTC = "Fragment_JourneyPlanner";
-    public static final String FRAGMENTD = "Fragment_Disruptions";
-
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        return super.onOptionsItemSelected(item);
+
         Intent intent = new Intent();
         switch (item.getItemId()) {
-//            case R.id.menuact_home:
-//                intent = new Intent(MainActivity.this, MainActivity.class);
-//                intent.putExtra("fragmentToDisplay", 1);
-//                startActivity(intent);
-//                break;
-//            case R.id.menuact_stopselect:
-//                intent = new Intent(MainActivity.this, MainActivity.class);
-//                intent.putExtra("fragmentToDisplay",2);
-//                startActivity(intent);
-//                break;
-//            case R.id.menuact_journeyplanner:
-//                intent = new Intent(MainActivity.this, MainActivity.class);
-//                intent.putExtra("fragmentToDisplay",3);
-//                startActivity(intent);
-//                break;
-//            case R.id.menuact_disruptions:
-//                intent = new Intent(MainActivity.this, MainActivity.class);
-//                intent.putExtra("fragmentToDisplay", 4);
-//                startActivity(intent);
-//                break;
             case R.id.menuact_disruption:
                 intent = new Intent(MainActivity.this, Disruptions.class);
                 startActivity(intent);
