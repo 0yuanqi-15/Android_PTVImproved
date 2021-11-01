@@ -123,10 +123,10 @@ public class Fragment_Home extends Fragment {
         }
     }
 
-    private void resetListViewHeight (ListView listView, ArrayAdapter adapter) {
+    private void resetListViewHeight (ListView listView, ArrayAdapter adapter, int frag) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int maxHeight = displayMetrics.heightPixels / 5;
+        int maxHeight = displayMetrics.heightPixels / frag;
         int totalHeight = 0;
         for (int i = 0; i < adapter.getCount(); i++) {
             View listItem = adapter.getView(i, null, listView);
@@ -186,7 +186,7 @@ public class Fragment_Home extends Fragment {
         savedStopListAdapter  = new SavedStopListAdapter(v.getContext(),R.layout.savedstops_view, savedStopList);
         savedStopListView.setAdapter(savedStopListAdapter);
 
-        resetListViewHeight(savedStopListView, savedStopListAdapter);
+        resetListViewHeight(savedStopListView, savedStopListAdapter, 5);
 
         for (SavedStop eachSaveStop: savedStopList){
             if (eachSaveStop.getStopid().equals("-1")){
@@ -276,7 +276,7 @@ public class Fragment_Home extends Fragment {
         });
         savedRouteListView.setAdapter(savedRouteListAdapter);
 
-        resetListViewHeight(savedRouteListView, savedRouteListAdapter);
+        resetListViewHeight(savedRouteListView, savedRouteListAdapter, 10);
     }
 
 //    @Override
