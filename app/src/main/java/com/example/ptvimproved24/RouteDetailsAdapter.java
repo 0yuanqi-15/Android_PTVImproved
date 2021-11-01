@@ -48,7 +48,9 @@ public class RouteDetailsAdapter extends ArrayAdapter<Stop> {
         long gap = timeGap(timeStr);
         String result = "";
         String appendStr = "";
-        if (gap <= 1) {
+        if (gap < 0) {
+            result = "Passed";
+        } else if (gap <= 1) {
             appendStr = " < 1 min";
             result = appendStr;
         } else if (gap > 60) {
