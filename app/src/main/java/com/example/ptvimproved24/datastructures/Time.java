@@ -54,18 +54,25 @@ public class Time {
         long gap = timeGap(timeStr);
         String result = "";
         String appendStr = "";
-        if (gap <= 1) {
+
+        if (gap < 0) {
+            result = "Passed";
+        }
+        else if (gap <= 1) {
             appendStr = " < 1 min";
             result = appendStr;
-        } else if (gap > 60) {
+        }
+        else if (gap > 60) {
             long hours = gap / 60;
             if (hours < 24) {
                 appendStr = hours > 1 ? " hours" : " hour";
                 result = hours + appendStr;
-            } else {
+            }
+            else {
                 result = " > 1 day";
             }
-        } else {
+        }
+        else {
             result = gap + " mins";
         }
         return result;
