@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.ptvimproved24.datastructures.Time;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -23,44 +25,50 @@ import java.util.Locale;
 public class SavedStopListAdapter extends ArrayAdapter<SavedStop> {
     private Context mContext;
     int mResource;
+
+    private Time time;
+
     public SavedStopListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<SavedStop> objects) {
         super(context, resource, objects);
         mContext =context;
         mResource = resource;
+
+        time = Time.getInstance();
+
     }
 
-    private long timeGap(String timeStr) {
-        ZonedDateTime a = Instant.now().atZone(ZoneId.of("Australia/Melbourne"));
-        TemporalAccessor time = DateTimeFormatter
-                .ofLocalizedDateTime (FormatStyle.SHORT)
-                .withLocale (Locale.UK)
-                .withZone(ZoneId.of("Australia/Melbourne"))
-                .parse(timeStr);
-        ZonedDateTime b = ZonedDateTime.from(time);
-        long diffInMinutes = ChronoUnit.MINUTES.between(a, b);
-        return diffInMinutes;
-    }
+//    private long timeGap(String timeStr) {
+//        ZonedDateTime a = Instant.now().atZone(ZoneId.of("Australia/Melbourne"));
+//        TemporalAccessor time = DateTimeFormatter
+//                .ofLocalizedDateTime (FormatStyle.SHORT)
+//                .withLocale (Locale.UK)
+//                .withZone(ZoneId.of("Australia/Melbourne"))
+//                .parse(timeStr);
+//        ZonedDateTime b = ZonedDateTime.from(time);
+//        long diffInMinutes = ChronoUnit.MINUTES.between(a, b);
+//        return diffInMinutes;
+//    }
 
-    private String gapInString(String timeStr) {
-        long gap = timeGap(timeStr);
-        String result = "";
-        String appendStr = "";
-        if (gap <= 1) {
-            appendStr = " < 1 min";
-            result = appendStr;
-        } else if (gap > 60) {
-            long hours = gap / 60;
-            if (hours < 24) {
-                appendStr = hours > 1 ? " hours" : " hour";
-                result = hours + appendStr;
-            } else {
-                result = " > 1 day";
-            }
-        } else {
-            result = gap + " mins";
-        }
-        return result;
-    }
+//    private String gapInString(String timeStr) {
+//        long gap = timeGap(timeStr);
+//        String result = "";
+//        String appendStr = "";
+//        if (gap <= 1) {
+//            appendStr = " < 1 min";
+//            result = appendStr;
+//        } else if (gap > 60) {
+//            long hours = gap / 60;
+//            if (hours < 24) {
+//                appendStr = hours > 1 ? " hours" : " hour";
+//                result = hours + appendStr;
+//            } else {
+//                result = " > 1 day";
+//            }
+//        } else {
+//            result = gap + " mins";
+//        }
+//        return result;
+//    }
 
     @NonNull
     @Override
@@ -98,7 +106,7 @@ public class SavedStopListAdapter extends ArrayAdapter<SavedStop> {
 
         if (routes.size()>=1 && times.size()>=1){
             tvroute1.setText(routes.get(0));
-            tvtime1.setText(gapInString(times.get(0)));
+            tvtime1.setText(time.gapInString(times.get(0)));
             tvroute2.setText("");
             tvtime2.setText("");
             tvroute3.setText("");
@@ -107,14 +115,14 @@ public class SavedStopListAdapter extends ArrayAdapter<SavedStop> {
 
         if (routes.size()>=2 && times.size()>=2){
             tvroute2.setText(routes.get(1));
-            tvtime2.setText(gapInString(times.get(1)));
+            tvtime2.setText(time.gapInString(times.get(1)));
             tvroute3.setText("");
             tvtime3.setText("");
         }
 
         if (routes.size()>=3 && times.size()>=3){
             tvroute3.setText(routes.get(2));
-            tvtime3.setText(gapInString(times.get(2)));
+            tvtime3.setText(time.gapInString(times.get(2)));
         }
 
         return convertView;

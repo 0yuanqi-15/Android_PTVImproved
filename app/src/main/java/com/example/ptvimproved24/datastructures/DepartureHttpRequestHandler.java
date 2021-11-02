@@ -44,6 +44,8 @@ public class DepartureHttpRequestHandler {
     private HashMap<Integer, ArrayList<String>> routeRunMap;
 
     private JSONObject runs;
+
+    private Time time;
     //private HashMap<Integer, String> routeDirectionMap;
 
     public DepartureHttpRequestHandler(FragmentActivity act) {
@@ -55,29 +57,31 @@ public class DepartureHttpRequestHandler {
         runDestinationMap = new HashMap<>();
         routeRunMap = new HashMap<>();
         runs = new JSONObject();
+
+        time = Time.getInstance();
        // routeDirectionMap = new HashMap<>();
     }
 
-    private long timeGap(String timeStr) {
-        ZonedDateTime a = Instant.now().atZone(ZoneId.of("Australia/Melbourne"));
-        TemporalAccessor time = DateTimeFormatter
-                .ofLocalizedDateTime (FormatStyle.SHORT)
-                .withLocale (Locale.UK)
-                .withZone(ZoneId.of("Australia/Melbourne"))
-                .parse(timeStr);
-        ZonedDateTime b = ZonedDateTime.from(time);
-        long diffInMinutes = ChronoUnit.MINUTES.between(a, b);
-        return diffInMinutes;
-    }
+//    private long timeGap(String timeStr) {
+//        ZonedDateTime a = Instant.now().atZone(ZoneId.of("Australia/Melbourne"));
+//        TemporalAccessor time = DateTimeFormatter
+//                .ofLocalizedDateTime (FormatStyle.SHORT)
+//                .withLocale (Locale.UK)
+//                .withZone(ZoneId.of("Australia/Melbourne"))
+//                .parse(timeStr);
+//        ZonedDateTime b = ZonedDateTime.from(time);
+//        long diffInMinutes = ChronoUnit.MINUTES.between(a, b);
+//        return diffInMinutes;
+//    }
 
-    private String UTCToAEST(String utc) {
-        String result = Instant.parse ( utc )
-                        .atZone ( ZoneId.of ( "Australia/Sydney" ) )
-                        .format (
-                        DateTimeFormatter.ofLocalizedDateTime ( FormatStyle.SHORT )
-                                .withLocale ( Locale.UK ));
-        return result;
-    }
+//    private String UTCToAEST(String utc) {
+//        String result = Instant.parse ( utc )
+//                        .atZone ( ZoneId.of ( "Australia/Sydney" ) )
+//                        .format (
+//                        DateTimeFormatter.ofLocalizedDateTime ( FormatStyle.SHORT )
+//                                .withLocale ( Locale.UK ));
+//        return result;
+//    }
 
     private ArrayList<Departure> getDepartureListFromJSONArray(JSONArray jsonArray) throws JSONException {
         ArrayList<Departure> result = new ArrayList<>();
@@ -95,14 +99,14 @@ public class DepartureHttpRequestHandler {
             String platform_number = jsonObject.getString("platform_number");
             String flags = jsonObject.getString("flags");
             int departure_sequence = jsonObject.getInt("departure_sequence");
-            if (timeGap(UTCToAEST(schedule_depart)) >= 0) {
+            if (time.timeGap(time.UTCToAEST(schedule_depart)) >= 0) {
                 if (routeMap.get(route_id) == null) {
                     ArrayList<String> newArray = new ArrayList<>();
-                    newArray.add(UTCToAEST(schedule_depart));
+                    newArray.add(time.UTCToAEST(schedule_depart));
                     routeMap.put(route_id, newArray);
                 } else {
                     ArrayList<String> currentArray = routeMap.get(route_id);
-                    currentArray.add(UTCToAEST(schedule_depart));
+                    currentArray.add(time.UTCToAEST(schedule_depart));
                 }
                 Departure d = new Departure(stop_id,route_id,run_id,run_ref,direction_id,schedule_depart,estimated_depart_utc,at_platform,platform_number,flags,departure_sequence);
                 result.add(d);
@@ -128,10 +132,10 @@ public class DepartureHttpRequestHandler {
             String platform_number = jsonObject.getString("platform_number");
             String flags = jsonObject.getString("flags");
             int departure_sequence = jsonObject.getInt("departure_sequence");
-            if (timeGap(UTCToAEST(schedule_depart)) >= 0) {
+            if (time.timeGap(time.UTCToAEST(schedule_depart)) >= 0) {
                 if (routeMap.get(route_id) == null) {
                     ArrayList<String> newArray = new ArrayList<>();
-                    newArray.add(UTCToAEST(schedule_depart));
+                    newArray.add(time.UTCToAEST(schedule_depart));
                     routeMap.put(route_id, newArray);
 
                     ArrayList<String> newRunArray = new ArrayList<>();
@@ -144,7 +148,7 @@ public class DepartureHttpRequestHandler {
 
                 } else {
                     ArrayList<String> currentArray = routeMap.get(route_id);
-                    currentArray.add(UTCToAEST(schedule_depart));
+                    currentArray.add(time.UTCToAEST(schedule_depart));
 
                     ArrayList<String> currentRunArray = routeRunMap.get(route_id);
                     JSONObject run = runs.getJSONObject(run_ref);
@@ -263,7 +267,7 @@ public class DepartureHttpRequestHandler {
                             JSONArray departures = jsonObj.getJSONArray("departures");
                             ArrayList<Departure> departuresArray = getDepartureListFromJSONArray(departures);
                             for (Departure d : departuresArray) {
-                                d.setScheduled_departure_utc(UTCToAEST(d.getScheduled_departure_utc()));
+                                d.setScheduled_departure_utc(time.UTCToAEST(d.getScheduled_departure_utc()));
                             }
                             direction.setDeparturesForNearestStop(departuresArray);
                             activity.runOnUiThread(new Runnable() {

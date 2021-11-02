@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.ptvimproved24.datastructures.Departure;
+import com.example.ptvimproved24.datastructures.Time;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -25,44 +26,49 @@ import java.util.Locale;
 public class RouteDirectionAdapter extends ArrayAdapter<Direction> {
     private Context mContext;
     int mResource;
+
+    private Time time;
+
     public RouteDirectionAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Direction> objects) {
         super(context, resource, objects);
         mContext =context;
         mResource = resource;
+
+        time = Time.getInstance();
     }
 
-    private long timeGap(String timeStr) {
-        ZonedDateTime a = Instant.now().atZone(ZoneId.of("Australia/Melbourne"));
-        TemporalAccessor time = DateTimeFormatter
-                .ofLocalizedDateTime (FormatStyle.SHORT)
-                .withLocale (Locale.UK)
-                .withZone(ZoneId.of("Australia/Melbourne"))
-                .parse(timeStr);
-        ZonedDateTime b = ZonedDateTime.from(time);
-        long diffInMinutes = ChronoUnit.MINUTES.between(a, b);
-        return diffInMinutes;
-    }
+//    private long timeGap(String timeStr) {
+//        ZonedDateTime a = Instant.now().atZone(ZoneId.of("Australia/Melbourne"));
+//        TemporalAccessor time = DateTimeFormatter
+//                .ofLocalizedDateTime (FormatStyle.SHORT)
+//                .withLocale (Locale.UK)
+//                .withZone(ZoneId.of("Australia/Melbourne"))
+//                .parse(timeStr);
+//        ZonedDateTime b = ZonedDateTime.from(time);
+//        long diffInMinutes = ChronoUnit.MINUTES.between(a, b);
+//        return diffInMinutes;
+//    }
 
-    private String gapInString(String timeStr) {
-        long gap = timeGap(timeStr);
-        String result = "";
-        String appendStr = "";
-        if (gap <= 1) {
-            appendStr = " < 1 min";
-            result = appendStr;
-        } else if (gap > 60) {
-            long hours = gap / 60;
-            if (hours < 24) {
-                appendStr = hours > 1 ? " hours" : " hour";
-                result = hours + appendStr;
-            } else {
-                result = " > 1 day";
-            }
-        } else {
-            result = gap + " mins";
-        }
-        return result;
-    }
+//    private String gapInString(String timeStr) {
+//        long gap = timeGap(timeStr);
+//        String result = "";
+//        String appendStr = "";
+//        if (gap <= 1) {
+//            appendStr = " < 1 min";
+//            result = appendStr;
+//        } else if (gap > 60) {
+//            long hours = gap / 60;
+//            if (hours < 24) {
+//                appendStr = hours > 1 ? " hours" : " hour";
+//                result = hours + appendStr;
+//            } else {
+//                result = " > 1 day";
+//            }
+//        } else {
+//            result = gap + " mins";
+//        }
+//        return result;
+//    }
 
     @NonNull
     @Override
@@ -92,7 +98,7 @@ public class RouteDirectionAdapter extends ArrayAdapter<Direction> {
         ArrayList<Departure> meaningfulDepartures = new ArrayList<>();
         if (getItem(position).getDeparturesForNearestStop().size() > 0) {
             for (Departure d : getItem(position).getDeparturesForNearestStop()) {
-                long diff = timeGap(d.getScheduled_departure_utc());
+                long diff = time.timeGap(d.getScheduled_departure_utc());
                 if (diff >= 0) {
                     meaningfulDepartures.add(d);
                 }
@@ -101,17 +107,17 @@ public class RouteDirectionAdapter extends ArrayAdapter<Direction> {
 
         if (meaningfulDepartures.size() > 0) {
             time1 = meaningfulDepartures.get(0).getScheduled_departure_utc();
-            timeDiff1 = gapInString(time1);
+            timeDiff1 = time.gapInString(time1);
         }
 
         if (meaningfulDepartures.size() > 1) {
             time2 = meaningfulDepartures.get(1).getScheduled_departure_utc();
-            timeDiff2 = gapInString(time2);
+            timeDiff2 = time.gapInString(time2);
         }
 
         if (meaningfulDepartures.size() > 2) {
             time3 = meaningfulDepartures.get(2).getScheduled_departure_utc();
-            timeDiff3 = gapInString(time3);
+            timeDiff3 = time.gapInString(time3);
         }
 
         TextView nearStopName = (TextView) convertView.findViewById(R.id.rdetails_stopname);
