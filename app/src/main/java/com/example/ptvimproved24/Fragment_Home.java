@@ -76,8 +76,8 @@ public class Fragment_Home extends Fragment {
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
         getGeoLocation();
-        generateSavedStopList(view);
-        generateSavedRouteList(view);
+        generateSavedStopList();
+        generateSavedRouteList();
 
         //add listener here
         nearStopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -143,7 +143,7 @@ public class Fragment_Home extends Fragment {
         stopHttpRequestHandler.getStopsFromLocation(nearStopListAdapter, latitude, longitude);
     }
 
-    public void generateSavedStopList(View v){
+    public void generateSavedStopList(){
         ArrayList<SavedStop> savedStopList = new ArrayList<>();
 
         String PREFERENCE_NAME = "SavedStops";
@@ -183,7 +183,7 @@ public class Fragment_Home extends Fragment {
             e.printStackTrace();
         }
 
-        savedStopListAdapter  = new SavedStopListAdapter(v.getContext(),R.layout.savedstops_view, savedStopList);
+        savedStopListAdapter  = new SavedStopListAdapter(getContext(),R.layout.savedstops_view, savedStopList);
         savedStopListView.setAdapter(savedStopListAdapter);
 
         resetListViewHeight(savedStopListView, savedStopListAdapter, 5);
@@ -217,7 +217,7 @@ public class Fragment_Home extends Fragment {
 
     }
 
-    public void generateSavedRouteList(View v){
+    public void generateSavedRouteList(){
         ArrayList<SavedRoute> savedRouteArrayList = new ArrayList<>();
 
         SharedPreferences pref = getContext().getSharedPreferences("saved_routes", Context.MODE_PRIVATE);
@@ -259,7 +259,7 @@ public class Fragment_Home extends Fragment {
         }
 
 
-        savedRouteListAdapter = new SavedRouteListAdapter(v.getContext(),R.layout.savedroutes_view,savedRouteArrayList);
+        savedRouteListAdapter = new SavedRouteListAdapter(getContext(),R.layout.savedroutes_view,savedRouteArrayList);
         savedRouteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -279,10 +279,10 @@ public class Fragment_Home extends Fragment {
         resetListViewHeight(savedRouteListView, savedRouteListAdapter, 10);
     }
 
-//    @Override
-//    public void hearShake() {
-//        getGeoLocation();
-//        generateNearStopList();
-//        Toast.makeText(getContext(), "Reloading", Toast.LENGTH_SHORT).show();
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        generateSavedRouteList();
+        generateSavedStopList();
+    }
 }
