@@ -52,6 +52,13 @@
             android:textSize="50px"
             android:layout_marginRight="@dimen/text_margin"/>
 
+        <ImageView
+            android:id="@+id/route_detail_image"
+            android:layout_width="30dp"
+            android:minWidth="30dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/outline_keyboard_arrow_right_24"/>
+
 
     </TableRow>
 
