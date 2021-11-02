@@ -9,6 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:minHeight="60dp"
         android:layout_gravity="center_vertical">
 
         <TextView
@@ -16,7 +17,8 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:textSize="50px"/>
+            android:textSize="50px"
+            android:layout_marginLeft="@dimen/text_margin"/>
 
 
         <TextView
@@ -47,7 +49,8 @@
             android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:minWidth="75dp"
-            android:textSize="50px"/>
+            android:textSize="50px"
+            android:layout_marginRight="@dimen/text_margin"/>
 
 
     </TableRow>

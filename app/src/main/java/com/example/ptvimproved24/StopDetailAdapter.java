@@ -2,6 +2,7 @@ package com.example.ptvimproved24;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.example.ptvimproved24.datastructures.Route;
 import com.example.ptvimproved24.datastructures.Time;
@@ -58,21 +61,29 @@ public class StopDetailAdapter extends ArrayAdapter<Route> {
         TextView time = (TextView) convertView.findViewById(R.id.stop_time);
         ImageView image = (ImageView) convertView.findViewById(R.id.stop_time_image);
 
+        Drawable unwrappedDrawable = AppCompatResources.getDrawable(mContext, R.drawable.outline_watch_later_24);
+        Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
+
+
         if (routeType == 0) {
             route.setBackgroundColor(Color.rgb(0, 114, 206));
-            image.setBackgroundColor(Color.rgb(0, 114, 206));
+            DrawableCompat.setTint(wrappedDrawable, Color.rgb(0, 114, 206));
+            //image.setBackgroundColor(Color.rgb(0, 114, 206));
         }
         else if (routeType == 1) {
             route.setBackgroundColor(Color.rgb(120, 190, 32));
-            image.setBackgroundColor(Color.rgb(120, 190, 32));
+            DrawableCompat.setTint(wrappedDrawable, Color.rgb(120, 190, 32));
+            //image.setBackgroundColor(Color.rgb(120, 190, 32));
         }
         else if (routeType == 2 || routeType == 4) {
             route.setBackgroundColor(Color.rgb(255, 130, 0));
-            image.setBackgroundColor(Color.rgb(255, 130, 0));
+            DrawableCompat.setTint(wrappedDrawable, Color.rgb(255, 130, 0));
+            //image.setBackgroundColor(Color.rgb(255, 130, 0));
         }
         else if (routeType == 3) {
             route.setBackgroundColor(Color.rgb(127, 13, 130));
-            image.setBackgroundColor(Color.rgb(127, 13, 130));
+            DrawableCompat.setTint(wrappedDrawable, Color.rgb(127, 13, 130));
+            //image.setBackgroundColor(Color.rgb(127, 13, 130));
         }
 
         direction.setText("To: " + stopDirection);

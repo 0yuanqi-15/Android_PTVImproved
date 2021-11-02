@@ -13,12 +13,18 @@ android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/stop_time"
-        android:layout_width="100dp"
-        android:minWidth="75dp"
+        android:layout_width="65dp"
+        android:minWidth="65dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="5dp"
         android:textAlignment="center"
         android:text="13:10" />
+
+    <ImageView
+        android:id="@+id/stop_location_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/outline_location_on_24"/>
 
     <TextView
         android:id="@+id/stop_name"
