@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -168,8 +170,16 @@ public class RouteDirections extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.route_menu, menu);
+        String PREFERENCE_NAME = "saved_routes";
+        SharedPreferences pref = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        if (pref.contains(Integer.toString(route_id))) {
+            Drawable yourdrawable = menu.getItem(0).getIcon();
+            yourdrawable.mutate();
+            yourdrawable.setColorFilter(getResources().getColor(R.color.ptv_disruptions), PorterDuff.Mode.SRC_IN);
+        }
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -202,6 +212,10 @@ public class RouteDirections extends AppCompatActivity {
                         Snackbar.make(mMapView, "This stop has been removed from you save-list", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                         popWindow.dismiss();
+
+                        Drawable yourdrawable = item.getIcon();
+                        yourdrawable.mutate();
+                        yourdrawable.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
                     }
                 });
 
@@ -228,6 +242,10 @@ public class RouteDirections extends AppCompatActivity {
 
             Snackbar.make(mMapView, "Route saved successfully!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
+
+            Drawable yourdrawable = item.getIcon();
+            yourdrawable.mutate();
+            yourdrawable.setColorFilter(getResources().getColor(R.color.ptv_disruptions), PorterDuff.Mode.SRC_IN);
 
             return true;
         }

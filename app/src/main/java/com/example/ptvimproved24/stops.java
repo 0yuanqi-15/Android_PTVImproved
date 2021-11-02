@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -15,7 +16,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.util.Log;
 import android.view.Gravity;
@@ -120,9 +124,17 @@ public class stops extends AppCompatActivity {
 
         String PREFERENCE_NAME = "SavedStops";
         FloatingActionButton fab = binding.fab;
+
+        SharedPreferences pref = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        if (pref.contains(Integer.toString(stopId))){
+            int color = ContextCompat.getColor(getApplicationContext(), R.color.ptv_network_grey);
+            fab.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);}
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 SharedPreferences pref = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
                 if (pref.contains(Integer.toString(stopId))){
 
@@ -148,6 +160,9 @@ public class stops extends AppCompatActivity {
                             Snackbar.make(view, "This stop has been removed from you save-list", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                             popWindow.dismiss();
+
+                            int color = ContextCompat.getColor(getApplicationContext(), R.color.white);
+                            fab.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
                         }
                     });
 
@@ -181,6 +196,8 @@ public class stops extends AppCompatActivity {
                 Log.i(TAG, "write success");
                 Snackbar.make(view, "Stop saved successfully", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                int color = ContextCompat.getColor(getApplicationContext(), R.color.ptv_network_grey);
+                fab.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
 
             }
         });
