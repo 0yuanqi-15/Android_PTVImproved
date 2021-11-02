@@ -44,10 +44,20 @@ public class SavedStopListAdapter extends ArrayAdapter<SavedStop> {
     private String gapInString(String timeStr) {
         long gap = timeGap(timeStr);
         String result = "";
-        if (gap > 60) {
-            result = gap/60 + "h";
+        String appendStr = "";
+        if (gap <= 1) {
+            appendStr = " < 1 min";
+            result = appendStr;
+        } else if (gap > 60) {
+            long hours = gap / 60;
+            if (hours < 24) {
+                appendStr = hours > 1 ? " hours" : " hour";
+                result = hours + appendStr;
+            } else {
+                result = " > 1 day";
+            }
         } else {
-            result = gap + "m";
+            result = gap + " mins";
         }
         return result;
     }

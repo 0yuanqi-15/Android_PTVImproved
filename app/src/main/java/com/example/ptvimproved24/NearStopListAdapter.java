@@ -54,7 +54,7 @@ public class NearStopListAdapter extends ArrayAdapter<Stop> {
         } else if (gap > 60) {
             long hours = gap / 60;
             if (hours < 24) {
-                appendStr = hours > 1 ? " hours" : " < 1 hour";
+                appendStr = hours > 1 ? " hours" : " hour";
                 result = hours + appendStr;
             } else {
                 result = " > 1 day";
