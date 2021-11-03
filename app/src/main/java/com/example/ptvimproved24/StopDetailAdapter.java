@@ -18,29 +18,17 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import com.example.ptvimproved24.datastructures.Route;
 import com.example.ptvimproved24.datastructures.Time;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class StopDetailAdapter extends ArrayAdapter<Route> {
 
     private Context mContext;
     int mResource;
 
-    private Time time;
-
     public StopDetailAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Route> objects) {
         super(context, resource, objects);
         mContext =context;
         mResource = resource;
-
-        time = Time.getInstance();
     }
 
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -51,7 +39,7 @@ public class StopDetailAdapter extends ArrayAdapter<Route> {
 
         int routeType = getItem(position).getRoute_type();
 
-        stopTime = time.gapInString(stopTime);
+        stopTime = Time.getInstance().gapInString(stopTime);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
@@ -93,38 +81,5 @@ public class StopDetailAdapter extends ArrayAdapter<Route> {
 
         return convertView;
     }
-
-//    private long timeGap(String timeStr) {
-//        ZonedDateTime a = Instant.now().atZone(ZoneId.of("Australia/Melbourne"));
-//        TemporalAccessor time = DateTimeFormatter
-//                .ofLocalizedDateTime (FormatStyle.SHORT)
-//                .withLocale (Locale.UK)
-//                .withZone(ZoneId.of("Australia/Melbourne"))
-//                .parse(timeStr);
-//        ZonedDateTime b = ZonedDateTime.from(time);
-//        long diffInMinutes = ChronoUnit.MINUTES.between(a, b);
-//        return diffInMinutes;
-//    }
-
-//    private String gapInString(String timeStr) {
-//        long gap = timeGap(timeStr);
-//        String result = "";
-//        String appendStr = "";
-//        if (gap <= 1) {
-//            appendStr = " < 1 min";
-//            result = appendStr;
-//        } else if (gap > 60) {
-//            long hours = gap / 60;
-//            if (hours < 24) {
-//                appendStr = hours > 1 ? " hours" : " hour";
-//                result = hours + appendStr;
-//            } else {
-//                result = " > 1 day";
-//            }
-//        } else {
-//            result = gap + " mins";
-//        }
-//        return result;
-//    }
 
 }

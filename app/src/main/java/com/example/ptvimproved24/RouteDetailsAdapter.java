@@ -12,17 +12,8 @@ import androidx.annotation.Nullable;
 
 import com.example.ptvimproved24.datastructures.Pattern;
 import com.example.ptvimproved24.datastructures.Stop;
-import com.example.ptvimproved24.datastructures.Time;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class RouteDetailsAdapter extends ArrayAdapter<Stop> {
     private Context mContext;
