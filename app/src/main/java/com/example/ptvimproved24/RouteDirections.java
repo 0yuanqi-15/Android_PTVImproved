@@ -121,6 +121,9 @@ public class RouteDirections extends AppCompatActivity {
                     intent.putExtra("run_ref", clickedDirection.getDeparturesForNearestStop().get(0).getRun_ref());
                     intent.putExtra("route_type", clickedDirection.getRoute_type());
                     startActivity(intent);
+                } else{
+                    Snackbar.make(view, "No depature scheduled for this direction yet, \nplease check again later", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
                 }
             }
         });
