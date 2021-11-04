@@ -85,7 +85,7 @@ public class DepartureHttpRequestHandler {
     }
 
     //change this to additionally get destination name of the departure
-    private ArrayList<Departure> getDepartureArrayListFromJSONArray(JSONArray jsonArray) throws JSONException {
+    private ArrayList<Departure> getDestinationDepartureArrayListFromJSONArray(JSONArray jsonArray) throws JSONException {
         ArrayList<Departure> result = new ArrayList<>();
         for(int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -154,13 +154,13 @@ public class DepartureHttpRequestHandler {
         return result;
     }
 
-    private String restructureGtfsId(String gtfsId) {
-        String result = gtfsId.substring(2);
-        while (result.charAt(0) == '0') {
-            result = result.substring(1);
-        }
-        return result;
-    }
+//    private String restructureGtfsId(String gtfsId) {
+//        String result = gtfsId.substring(2);
+//        while (result.charAt(0) == '0') {
+//            result = result.substring(1);
+//        }
+//        return result;
+//    }
 
     public void getNextDepartureByStopid(Stop stop, ArrayAdapter adapter){
         int stopid = stop.getStop_id();
@@ -194,7 +194,7 @@ public class DepartureHttpRequestHandler {
                                     ArrayList<String> displayTime = new ArrayList<>();
                                     for(Map.Entry<Integer, ArrayList<String>> e : routeMap.entrySet()) {
                                         String name = routeNameMap.get(e.getKey());
-                                        displayRoute.add(restructureGtfsId(name));
+                                        displayRoute.add(GtfsId.getInstance().restructureGtfsId(name));
                                         displayTime.add(e.getValue().get(0));
                                     }
                                     stop.setRoutes(displayRoute);
@@ -259,7 +259,7 @@ public class DepartureHttpRequestHandler {
     }
 
     //add this method to show stop detail information
-    public void getNextDepartureByStopId(int stopId, int routeType, ArrayAdapter adapter){
+    public void getStopNextDepartureDetailByStopId(int stopId, int routeType, ArrayAdapter adapter){
         try{
             String url = commonDataRequest.nextDeparture(routeType, stopId);
 
@@ -283,7 +283,7 @@ public class DepartureHttpRequestHandler {
                             //get runs information
                             runs = jsonObj.getJSONObject("runs");
 
-                            ArrayList<Departure> departureArrayList = getDepartureArrayListFromJSONArray(departures);
+                            ArrayList<Departure> departureArrayList = getDestinationDepartureArrayListFromJSONArray(departures);
                             ArrayList<Route> routeArray = getRouteArrayFromJSONObject(routes);
 
                             activity.runOnUiThread(new Runnable() {
@@ -300,7 +300,7 @@ public class DepartureHttpRequestHandler {
                                         for (int i = 0; i < fetchedIndex; i ++) {
                                             Route newRoute = new Route(r);
                                             newRoute.setScheduleDepart(times.get(i));
-                                            String gtfsId = restructureGtfsId(newRoute.getRoute_gtfs_id());
+                                            String gtfsId = GtfsId.getInstance().restructureGtfsId(newRoute.getRoute_gtfs_id());
                                             newRoute.setRoute_gtfs_id(gtfsId);
 
                                             //record destination for the route
@@ -360,7 +360,7 @@ public class DepartureHttpRequestHandler {
                                     ArrayList<String> displayTime = new ArrayList<>();
                                     for(Map.Entry<Integer, ArrayList<String>> e : routeMap.entrySet()) {
                                         String name = routeNameMap.get(e.getKey());
-                                        displayRoute.add(restructureGtfsId(name));
+                                        displayRoute.add(GtfsId.getInstance().restructureGtfsId(name));
                                         displayTime.add(e.getValue().get(0));
                                     }
                                     stop.setRoutes(displayRoute);

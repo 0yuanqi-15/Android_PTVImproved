@@ -20,7 +20,6 @@ import androidx.core.content.ContextCompat;
 
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,7 +99,7 @@ public class stops extends AppCompatActivity {
 
         detail.setAdapter(adapter);
 
-        departureHttpRequestHandler.getNextDepartureByStopId(stopId, routeType, adapter);
+        departureHttpRequestHandler.getStopNextDepartureDetailByStopId(stopId, routeType, adapter);
 
         detail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
