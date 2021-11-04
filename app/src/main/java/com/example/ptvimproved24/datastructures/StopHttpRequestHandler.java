@@ -49,7 +49,6 @@ public class StopHttpRequestHandler {
     private ArrayList<String> getRoutesByStop(JSONArray routes) throws JSONException {
         ArrayList<String> result = new ArrayList<>();
         for (int i = 0; i < routes.length(); i ++) {
-            //String routeGtfsId = routes.getJSONObject(i).getString("route_gtfs_id");
             String routeGtfsId = "--";
             result.add(routeGtfsId);
         }
@@ -183,7 +182,6 @@ public class StopHttpRequestHandler {
                         JSONArray stops = jsonObj.getJSONArray("stops");
                         ArrayList<Stop> stopsArray = getStoppingList(stops);
                         fragment.getActivity().runOnUiThread(new Runnable() {
-//                        activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 mPinLayer.getElements().clear();

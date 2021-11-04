@@ -107,12 +107,8 @@ public class stops extends AppCompatActivity {
                 Intent intent = new Intent(view.getContext(), RouteDetails.class);
                 Route route = adapter.getItem(i);
 
-                //intent.putExtra("route_id", route.getRoute_id());
                 intent.putExtra("run_ref",route.getRun_ref());
                 intent.putExtra("route_type", route.getRoute_type());
-                //intent.putExtra("route_name", route.getRoute_name());
-                //intent.putExtra("route_gtfs_id", route.getRoute_gtfs_id());
-
                 startActivity(intent);
 
             }
@@ -169,10 +165,6 @@ public class stops extends AppCompatActivity {
                         }
                     });
 
-
-
-//                    Snackbar.make(view, "You have already saved this stop!", Snackbar.LENGTH_LONG)
-//                            .setAction("Action", null).show();
                     return;
                 }
 
@@ -198,13 +190,6 @@ public class stops extends AppCompatActivity {
             }
         });
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_stops, menu);
-//        return true;
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

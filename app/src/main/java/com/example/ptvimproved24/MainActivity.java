@@ -209,37 +209,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-////        return super.onOptionsItemSelected(item);
-//
-//        Intent intent = new Intent();
-//        switch (item.getItemId()) {
-//            case R.id.menuact_disruption:
-//                intent = new Intent(MainActivity.this, Disruptions.class);
-//                startActivity(intent);
-//                break;
-//            case R.id.menuact_stops:
-//                intent = new Intent(MainActivity.this, stops.class);
-//                intent.putExtra("stop_id", 1000);
-//                startActivity(intent);
-//                break;
-//            case R.id.menuact_routedirections:
-//                intent = new Intent(MainActivity.this, RouteDirections.class);
-//                intent.putExtra("route_id", 1);
-//                intent.putExtra("route_type",0);
-//                startActivity(intent);
-//                break;
-//            case R.id.menuact_routedetails:
-//                intent = new Intent(MainActivity.this, RouteDetails.class);
-//                intent.putExtra("route_id", 2);
-//                intent.putExtra("route_type",0);
-//                startActivity(intent);
-//                break;
-//        }
-//        return true;
-//    }
-
     private void Location() {
         LocationRequest request = LocationRequest.create();
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);

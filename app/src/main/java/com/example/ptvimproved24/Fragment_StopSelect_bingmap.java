@@ -66,8 +66,6 @@ public class Fragment_StopSelect_bingmap extends Fragment{
                 System.out.println("PinElement:"+e.mapElements);
                 if(e.mapElements.size()>0){
                     MapIcon pushpin = (MapIcon) e.mapElements.get(0);
-//                    System.out.println("FlyoutT:"+pushpin.getFlyout().getTitle());
-//                    System.out.println("FlyoutD:"+pushpin.getFlyout().getDescription().split("\\:"));
                     String[] stopdetails = pushpin.getFlyout().getDescription().split("\\:");
                     int stopid = Integer.parseInt(stopdetails[stopdetails.length-1]);
                     System.out.println("stopid:"+stopid);
@@ -114,8 +112,6 @@ public class Fragment_StopSelect_bingmap extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-//        mMapView.setScene(MapScene.createFromLocationAndZoomLevel(new Geopoint(longitude,latitude),14), MapAnimationKind.DEFAULT);
     }
 
     private void getGeoLocation() {

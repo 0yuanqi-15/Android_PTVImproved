@@ -30,7 +30,6 @@ public class SearchListAdapter extends ArrayAdapter<SearchResults> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//        return super.getView(position, convertView, parent);
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
         TextView search_service=convertView.findViewById(R.id.search_service);

@@ -188,7 +188,6 @@ public class Fragment_StopSelect extends Fragment implements
         isCanceled = true;  // Set to clear the map when dragging starts again.
         currPolylineOptions = null;
         Log.d(TAG, "onCameraMoveCancelled");
-//        getGeoLocation();
     }
 
     @Override
@@ -200,9 +199,7 @@ public class Fragment_StopSelect extends Fragment implements
         currPolylineOptions = null;
         isCanceled = false;  // Set to *not* clear the map when dragging starts again.
         Log.d(TAG, "onCameraIdle");
-//        System.out.println("Camera Centre:"+getCameraCentre().latitude+"\t"+getCameraCentre().longitude);
         getStopsFromLocation((float) map.getCameraPosition().target.latitude, (float) map.getCameraPosition().target.longitude);
-//        getStopsFromLocation(-37.8060656f, 145.1571894f);
     }
 
     private void addCameraTargetToPath() {
@@ -247,32 +244,6 @@ public class Fragment_StopSelect extends Fragment implements
                                         System.out.println(stopsArray.get(i));
                                         map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
                                                 title(stopsArray.get(i).getStop_name()).snippet(stopsArray.get(i).getRouteType()+","+stopsArray.get(i).getStop_id()));
-//                                        switch (stopsArray.get(i).getRouteType()){
-//                                            case 0:
-//                                                map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
-//                                                        title(stopsArray.get(i).getStop_name()).snippet("stop id:" + stopsArray.get(i).getStop_id()));
-//                                                break;
-//                                            case 1:
-//                                                map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
-//                                                        title(stopsArray.get(i).getStop_name()).snippet("stop id:" + stopsArray.get(i).getStop_id()));
-//                                                break;
-//                                            case 2:
-//                                                map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
-//                                                        title(stopsArray.get(i).getStop_name()).snippet("stop id:" + stopsArray.get(i).getStop_id()));
-//                                                break;
-//                                            case 3:
-//                                                map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
-//                                                        title(stopsArray.get(i).getStop_name()).snippet("stop id:" + stopsArray.get(i).getStop_id()));
-//                                                break;
-//                                            case 4:
-//                                                map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
-//                                                        title(stopsArray.get(i).getStop_name()).snippet("stop id:" + stopsArray.get(i).getStop_id()));
-//                                                break;
-//                                            default:
-//                                                map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
-//                                                        title(stopsArray.get(i).getStop_name()).snippet("stop id:" + stopsArray.get(i).getStop_id()));
-//
-//                                        }
                                     }
                                 }
                             });

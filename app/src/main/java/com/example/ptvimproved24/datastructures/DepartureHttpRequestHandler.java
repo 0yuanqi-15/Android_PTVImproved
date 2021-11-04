@@ -37,7 +37,6 @@ public class DepartureHttpRequestHandler {
     private HashMap<Integer, ArrayList<String>> routeRunMap;
 
     private JSONObject runs;
-    //private HashMap<Integer, String> routeDirectionMap;
 
     public DepartureHttpRequestHandler(FragmentActivity act) {
         client = new OkHttpClient();
@@ -48,8 +47,6 @@ public class DepartureHttpRequestHandler {
         runDestinationMap = new HashMap<>();
         routeRunMap = new HashMap<>();
         runs = new JSONObject();
-
-       // routeDirectionMap = new HashMap<>();
     }
 
     private ArrayList<Departure> getDepartureListFromJSONArray(JSONArray jsonArray) throws JSONException {
@@ -108,7 +105,6 @@ public class DepartureHttpRequestHandler {
                     routeMap.put(route_id, newArray);
 
                     ArrayList<String> newRunArray = new ArrayList<>();
-                    //System.out.println(runs);
                     JSONObject run = runs.getJSONObject(run_ref);
                     String runDestination = run.getString("destination_name");
                     newRunArray.add(run_ref);
@@ -143,9 +139,6 @@ public class DepartureHttpRequestHandler {
             String routeNumber = route.getString("route_number");
             String routeGtfsId = route.getString("route_gtfs_id");
 
-            //String[] direction = routeName.split("-");
-            //String[] routeDirection = direction[1].split("via");
-
             routeNameMap.put(routeId, routeGtfsId);
             //routeDirectionMap.put(routeId, routeDirection[0]);
             Route r = new Route(routeType, routeId, routeName, routeNumber, routeGtfsId, "");
@@ -153,14 +146,6 @@ public class DepartureHttpRequestHandler {
         }
         return result;
     }
-
-//    private String restructureGtfsId(String gtfsId) {
-//        String result = gtfsId.substring(2);
-//        while (result.charAt(0) == '0') {
-//            result = result.substring(1);
-//        }
-//        return result;
-//    }
 
     public void getNextDepartureByStopid(Stop stop, ArrayAdapter adapter){
         int stopid = stop.getStop_id();

@@ -30,14 +30,6 @@ public class SearchRequestHandler {
         activity = act;
     }
 
-//    private String restructureGtfsId(String gtfsId) {
-//        String result = gtfsId.substring(2);
-//        while (result.charAt(0) == '0') {
-//            result = result.substring(1);
-//        }
-//        return result;
-//    }
-
     private ArrayList<Stop> getStopsFromSearch(JSONArray jsonArray) throws JSONException {
         ArrayList<Stop> stopsList = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
