@@ -64,4 +64,26 @@
         app:tint="@android:color/white"
         app:srcCompat="@android:drawable/star_on" />
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/loadingLayout">
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:id="@+id/loading_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/progress_circular"
+            android:layout_marginTop="@dimen/places_autocomplete_progress_size"
+            android:text="Please wait while the data is loading"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

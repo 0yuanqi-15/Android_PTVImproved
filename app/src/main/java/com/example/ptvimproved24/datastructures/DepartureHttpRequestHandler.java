@@ -1,11 +1,13 @@
 package com.example.ptvimproved24.datastructures;
 
+import android.view.View;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.ptvimproved24.Direction;
+import com.example.ptvimproved24.R;
 import com.example.ptvimproved24.commonDataRequest;
 
 import org.json.JSONArray;
@@ -310,6 +312,8 @@ public class DepartureHttpRequestHandler {
                                     adapter.clear();
                                     adapter.addAll(resultArray);
                                     adapter.notifyDataSetChanged();
+                                    activity.findViewById(R.id.loading_text).setVisibility(View.GONE);
+                                    activity.findViewById(R.id.progress_circular).setVisibility(View.GONE);
                                 }
                             });
                         } catch (Exception e) {
