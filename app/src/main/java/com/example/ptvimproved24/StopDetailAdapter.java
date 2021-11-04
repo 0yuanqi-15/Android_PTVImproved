@@ -54,22 +54,26 @@ public class StopDetailAdapter extends ArrayAdapter<Route> {
 
 
         if (routeType == 0) {
-            route.setBackgroundColor(Color.rgb(0, 114, 206));
+//            route.setBackgroundColor(Color.rgb(0, 114, 206));
+            route.setBackgroundResource(R.drawable.hzt_ridiotext_blue);
             DrawableCompat.setTint(wrappedDrawable, Color.rgb(0, 114, 206));
             //image.setBackgroundColor(Color.rgb(0, 114, 206));
         }
         else if (routeType == 1) {
-            route.setBackgroundColor(Color.rgb(120, 190, 32));
+//            route.setBackgroundColor(Color.rgb(120, 190, 32));
+            route.setBackgroundResource(R.drawable.hzt_ridiotext_green);
             DrawableCompat.setTint(wrappedDrawable, Color.rgb(120, 190, 32));
             //image.setBackgroundColor(Color.rgb(120, 190, 32));
         }
         else if (routeType == 2 || routeType == 4) {
-            route.setBackgroundColor(Color.rgb(255, 130, 0));
+//            route.setBackgroundColor(Color.rgb(255, 130, 0));
+            route.setBackgroundResource(R.drawable.hzt_ridiotext_orange);
             DrawableCompat.setTint(wrappedDrawable, Color.rgb(255, 130, 0));
             //image.setBackgroundColor(Color.rgb(255, 130, 0));
         }
         else if (routeType == 3) {
-            route.setBackgroundColor(Color.rgb(127, 13, 130));
+//            route.setBackgroundColor(Color.rgb(127, 13, 130));
+            route.setBackgroundResource(R.drawable.hzt_ridiotext_purple);
             DrawableCompat.setTint(wrappedDrawable, Color.rgb(127, 13, 130));
             //image.setBackgroundColor(Color.rgb(127, 13, 130));
         }
