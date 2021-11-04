@@ -27,6 +27,7 @@ import com.example.ptvimproved24.databinding.ActivityMainBinding;
 import com.example.ptvimproved24.datastructures.SearchListAdapter;
 import com.example.ptvimproved24.datastructures.SearchRequestHandler;
 import com.example.ptvimproved24.datastructures.SearchResults;
+import com.example.ptvimproved24.datastructures.Time;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -41,8 +42,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     SearchRequestHandler searchRequestHandler = new SearchRequestHandler(this);
     private ListView mListView;
     private SearchListAdapter searchDetailsAdapter;
+    private Instant lastInstant = Instant.now();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,13 +192,15 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                System.out.println(newText);
-                if (newText.length() >=3){
+                Instant instant = Instant.now();
+                if (instant.getEpochSecond() - lastInstant.getEpochSecond() > 0 && newText.length() >= 3) {
+                    System.out.println("Searching:"+newText);
                     try {
-                        searchRequestHandler.getSearchResults(newText,searchDetailsAdapter);
+                        searchRequestHandler.getSearchResults(newText, searchDetailsAdapter);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    return false;
                 }
                 return false;
             }
