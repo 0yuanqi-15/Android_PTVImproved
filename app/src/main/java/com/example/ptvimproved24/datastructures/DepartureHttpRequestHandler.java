@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.ptvimproved24.Direction;
-import com.example.ptvimproved24.SavedStop;
 import com.example.ptvimproved24.commonDataRequest;
 
 import org.json.JSONArray;

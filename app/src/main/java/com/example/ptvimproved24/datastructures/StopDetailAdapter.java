@@ -1,4 +1,4 @@
-package com.example.ptvimproved24;
+package com.example.ptvimproved24.datastructures;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import com.example.ptvimproved24.R;
 import com.example.ptvimproved24.datastructures.Route;
 import com.example.ptvimproved24.datastructures.Time;
 

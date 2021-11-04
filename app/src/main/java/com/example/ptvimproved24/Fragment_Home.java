@@ -3,11 +3,8 @@ package com.example.ptvimproved24;
 
 import android.content.Intent;
 
-import static android.content.Context.SENSOR_SERVICE;
-
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -28,9 +25,12 @@ import androidx.fragment.app.Fragment;
 
 import com.example.ptvimproved24.databinding.FragmentHomeBinding;
 import com.example.ptvimproved24.datastructures.DepartureHttpRequestHandler;
+import com.example.ptvimproved24.datastructures.SavedRoute;
+import com.example.ptvimproved24.datastructures.SavedRouteListAdapter;
+import com.example.ptvimproved24.datastructures.SavedStop;
+import com.example.ptvimproved24.datastructures.SavedStopListAdapter;
 import com.example.ptvimproved24.datastructures.Stop;
 import com.example.ptvimproved24.datastructures.StopHttpRequestHandler;
-import com.squareup.seismic.ShakeDetector;
 
 import org.json.JSONException;
 import org.json.JSONObject;

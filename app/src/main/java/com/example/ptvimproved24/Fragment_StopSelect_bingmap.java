@@ -36,7 +36,6 @@ public class Fragment_StopSelect_bingmap extends Fragment{
     private MapView mMapView;
     private MapCamera mapCamera;
     private MapElementLayer mPinLayer = new MapElementLayer();
-    OnMapCameraChangedListener onMapCameraChangedListener;
 
     private Float cameraLat=-37.818078f;
     private Float cameraLng=144.96681f;
@@ -129,8 +128,10 @@ public class Fragment_StopSelect_bingmap extends Fragment{
             });
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             System.out.println("locationfragStopselect:" + location);
-            cameraLat = (float) location.getLatitude();
-            cameraLng = (float) location.getLongitude();
+            if(location!=null) {
+                cameraLat = (float) location.getLatitude();
+                cameraLng = (float) location.getLongitude();
+            }
         } catch (SecurityException e) {
             Toast.makeText(getActivity(),
                     "Default geolocation is used, please retry after enable location service.",

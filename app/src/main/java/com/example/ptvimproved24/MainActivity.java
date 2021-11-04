@@ -10,8 +10,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.Manifest;
-import android.app.Dialog;
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -26,10 +24,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.ptvimproved24.databinding.ActivityMainBinding;
-import com.example.ptvimproved24.datastructures.PatternRequestHandler;
+import com.example.ptvimproved24.datastructures.SearchListAdapter;
 import com.example.ptvimproved24.datastructures.SearchRequestHandler;
 import com.example.ptvimproved24.datastructures.SearchResults;
-import com.example.ptvimproved24.datastructures.Stop;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;

@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ptvimproved24.databinding.ActivityRoutedetailsBinding;
 import com.example.ptvimproved24.datastructures.PatternRequestHandler;
+import com.example.ptvimproved24.datastructures.RouteDetailsAdapter;
 import com.example.ptvimproved24.datastructures.RouteDirectionsRequestsHandler;
 import com.example.ptvimproved24.datastructures.Stop;
 import com.gun0912.tedpermission.PermissionListener;
@@ -162,8 +163,10 @@ public class RouteDetails extends AppCompatActivity {
             });
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             System.out.println("locationfragStopselect:"+location);
-            latitude = (float) location.getLatitude();
-            longitude = (float) location.getLongitude();
+            if(location != null) {
+                latitude = (float) location.getLatitude();
+                longitude = (float) location.getLongitude();
+            }
         } catch (SecurityException e) {
             Toast.makeText(this, "GPS Permission has been disabled", Toast.LENGTH_LONG).show();
             e.printStackTrace();
