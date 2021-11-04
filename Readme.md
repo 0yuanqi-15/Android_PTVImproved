@@ -1,6 +1,4 @@
-# Improved Public Transport Victoria App (Android)
-
-** Project intended implementation & support period: From 01 August 2021 until 31 December 2021
+# Improved Public Transport Victoria App (Android Version)
 
 ## Project info
 
@@ -16,6 +14,16 @@ End user can download APK directly from [release](https://github.com/DanistyWuKi
 
 This application is implemented based on Java
 
-## Update log:
+## Basic Feature
 
-## Additional Information
+ 1. Save your favorite routes, stops
+ 2. Search any routes and stops as you preferred
+ 3. Select the stops to lookup timetable from map
+ 4. Open PTV journey planner
+ 5. Show disruptions on networks
+ 6. Show route path and timetable of specific service
+ 7. Show your nearest stops based on your location
+ 8. Show your closet stops to a route
+
+
+* At this stage, we are trail of using Bing maps to showing the interest so that it can be suitable for future development of worldwide map access and GTFS information implementation.
