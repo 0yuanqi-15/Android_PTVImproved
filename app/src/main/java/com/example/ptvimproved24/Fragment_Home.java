@@ -107,10 +107,12 @@ public class Fragment_Home extends Fragment {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
-                    if(latitude != (float) location.getLatitude() || longitude != (float) location.getLongitude()) {
-                        latitude = (float) location.getLatitude();
-                        longitude = (float) location.getLongitude();
-                        generateNearStopList();
+                    if (location != null) {
+                        if (latitude != (float) location.getLatitude() || longitude != (float) location.getLongitude()) {
+                            latitude = (float) location.getLatitude();
+                            longitude = (float) location.getLongitude();
+                            generateNearStopList();
+                        }
                     }
                 }
             });

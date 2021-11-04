@@ -328,8 +328,10 @@ public class RouteDirections extends AppCompatActivity {
             });
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             System.out.println("locationfragStopselect:" + location);
-            latitude = (float) location.getLatitude();
-            longitude = (float) location.getLongitude();
+            if (location != null) {
+                latitude = (float) location.getLatitude();
+                longitude = (float) location.getLongitude();
+            }
         } catch (SecurityException e) {
             Toast.makeText(this,
                     "GPS Has been disabled to determine the nearest stops",
