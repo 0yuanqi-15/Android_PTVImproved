@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 Instant instant = Instant.now();
                 if (instant.getEpochSecond() - lastInstant.getEpochSecond() > 0 && newText.length() >= 3) {
-                    System.out.println("Searching:"+newText);
+                    Log.d("","Searching:"+newText);
                     try {
                         searchRequestHandler.getSearchResults(newText, searchDetailsAdapter);
                     } catch (Exception e) {

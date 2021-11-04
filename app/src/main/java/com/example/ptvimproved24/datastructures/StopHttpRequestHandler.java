@@ -1,6 +1,7 @@
 package com.example.ptvimproved24.datastructures;
 
 import android.location.Location;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
@@ -104,7 +105,7 @@ public class StopHttpRequestHandler {
     public void getStopsFromLocation(ArrayAdapter adapter, float latitude, float longitude) {
         try {
             String url = commonDataRequest.nearByStops(latitude, longitude);
-            System.out.println(url);
+            Log.d("",url);
             Request request = new Request.Builder().url(url).build();
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -164,7 +165,7 @@ public class StopHttpRequestHandler {
         if (ZoomLevel<=8000){
             url = commonDataRequest.nearByStopsOnSelect(latitude,longitude);
         }
-        System.out.println("RequestURL:"+url);
+        Log.d("","RequestURL:"+url);
         Request request = new Request.Builder().url(url).build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -178,7 +179,7 @@ public class StopHttpRequestHandler {
                     String responseBody = response.body().string();
                     try {
                         JSONObject jsonObj = new JSONObject(responseBody);
-                        System.out.println(responseBody);
+                        Log.d("",responseBody);
                         JSONArray stops = jsonObj.getJSONArray("stops");
                         ArrayList<Stop> stopsArray = getStoppingList(stops);
                         fragment.getActivity().runOnUiThread(new Runnable() {
@@ -365,7 +366,7 @@ public class StopHttpRequestHandler {
     public void getStopFromId(int stopId, int routeType) {
         try {
             String url = commonDataRequest.showStopsInfo(stopId, routeType);
-            System.out.println(url);
+            Log.d("",url);
             Request request = new Request.Builder().url(url).build();
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -380,7 +381,7 @@ public class StopHttpRequestHandler {
                         try {
                             JSONObject jsonObj = new JSONObject(responseBody);
                             StopDetail stopDetail = parseStopDetailFromJson(jsonObj.getJSONObject("stop"));
-                            System.out.println(stopDetail.toString());
+                            Log.d("",stopDetail.toString());
 
                             activity.runOnUiThread(new Runnable() {
                                 @Override
@@ -424,7 +425,7 @@ public class StopHttpRequestHandler {
             int routeType = direction.getRoute_type();
             int directionId = direction.getDirection_id();
             String url = commonDataRequest.showRoutesStopByDirectionId(routeId, routeType, directionId);
-            System.out.println(url);
+            Log.d("",url);
             Request request = new Request.Builder().url(url).build();
             client.newCall(request).enqueue(new Callback() {
                 @Override

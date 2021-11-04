@@ -1,5 +1,6 @@
 package com.example.ptvimproved24.datastructures;
 
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
@@ -67,7 +68,7 @@ public class SearchRequestHandler {
 
     public void getSearchResults(String string, ArrayAdapter adapter) throws Exception {
         String url = commonDataRequest.showSearchResults(string);
-        System.out.println("Request:"+url);
+        Log.d("","Request:"+url);
         try {
             Request request = new Request.Builder().url(url).build();
             client.newCall(request).enqueue(new Callback() {

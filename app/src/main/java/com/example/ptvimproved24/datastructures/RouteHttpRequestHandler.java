@@ -1,5 +1,6 @@
 package com.example.ptvimproved24.datastructures;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
@@ -37,7 +38,7 @@ public class RouteHttpRequestHandler {
 
     public void getRoutePathById(int routeid, ArrayAdapter adapter, MapView map) throws Exception {
         String url = commonDataRequest.showRouteInfoWithPath(routeid);
-        System.out.println("Request:"+url);
+        Log.d("","Request:"+url);
         try {
             Request request = new Request.Builder().url(url).build();
             client.newCall(request).enqueue(new Callback() {
@@ -77,7 +78,7 @@ public class RouteHttpRequestHandler {
 
     public void getRoutePathByIdwoGeoPath(int routeid, View view) throws Exception {
         String url = commonDataRequest.showRouteInfoWithPath(routeid);
-        System.out.println("Request:"+url);
+        Log.d("","Request:"+url);
         try {
             Request request = new Request.Builder().url(url).build();
             client.newCall(request).enqueue(new Callback() {
@@ -115,7 +116,7 @@ public class RouteHttpRequestHandler {
 
     public void getRoutePathByIdwGeoPath(int routeid, MapView map) throws Exception {
         String url = commonDataRequest.showRouteInfoWithPath(routeid);
-        System.out.println("Request:"+url);
+        Log.d("","Request:"+url);
         try {
             Request request = new Request.Builder().url(url).build();
             client.newCall(request).enqueue(new Callback() {

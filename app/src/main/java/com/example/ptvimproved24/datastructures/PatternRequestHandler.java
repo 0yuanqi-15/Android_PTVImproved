@@ -1,5 +1,6 @@
 package com.example.ptvimproved24.datastructures;
 
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
@@ -81,7 +82,7 @@ public class PatternRequestHandler {
 
     public void getPatternRequest(int route_type, String run_ref, ArrayAdapter adapter, MapElementLayer mPinLayer, MapView mapView) throws Exception {
         String url = commonDataRequest.showPatternonRoute(run_ref, route_type);
-        System.out.println("PatternURL:"+url);
+        Log.d("","PatternURL:"+url);
         Request request = new Request.Builder().url(url).build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -112,7 +113,7 @@ public class PatternRequestHandler {
                             JSONObject stop=jsonObj.getJSONObject("stops").getJSONObject(Integer.toString(departure.getStop_id()));
                             patterns.add(new Stop(stop.getString("stop_suburb"),stop.getString("stop_name"),stop.getInt("stop_id"),stop.getInt("route_type"),stop.getDouble("stop_latitude"),stop.getDouble("stop_longitude"),departure.getScheduled_departure_utc()));
                         }
-                        System.out.println("patternlen"+patterns.size());
+                        Log.d("","patternlen"+patterns.size());
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

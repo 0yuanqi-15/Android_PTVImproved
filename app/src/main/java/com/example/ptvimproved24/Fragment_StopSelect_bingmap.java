@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,12 +64,12 @@ public class Fragment_StopSelect_bingmap extends Fragment{
         mPinLayer.addOnMapElementTappedListener(new OnMapElementTappedListener() {
             @Override
             public boolean onMapElementTapped(MapElementTappedEventArgs e) {
-                System.out.println("PinElement:"+e.mapElements);
+                Log.d("","PinElement:"+e.mapElements);
                 if(e.mapElements.size()>0){
                     MapIcon pushpin = (MapIcon) e.mapElements.get(0);
                     String[] stopdetails = pushpin.getFlyout().getDescription().split("\\:");
                     int stopid = Integer.parseInt(stopdetails[stopdetails.length-1]);
-                    System.out.println("stopid:"+stopid);
+                    Log.d("","stopid:"+stopid);
                     if(stopid == lastSelectedStopId){
                         Intent i = new Intent(getContext(),stops.class);
                         Stop s = (Stop) pushpin.getTag();
@@ -78,7 +79,7 @@ public class Fragment_StopSelect_bingmap extends Fragment{
                         i.putExtra("suburb",s.getStop_suburb());
                         startActivity(i);
                     }
-                    System.out.println("Last click stopid:"+lastSelectedStopId);
+                    Log.d("","Last click stopid:"+lastSelectedStopId);
                     lastSelectedStopId = stopid;
                     Toast.makeText(getContext(),"Click again to see next departures of "+pushpin.getFlyout().getTitle(),Toast.LENGTH_SHORT);
                 }
@@ -92,7 +93,7 @@ public class Fragment_StopSelect_bingmap extends Fragment{
                 cameraLat = (float) mapCameraChangedEventArgs.camera.getLocation().getPosition().getLatitude();
                 cameraLng = (float) mapCameraChangedEventArgs.camera.getLocation().getPosition().getLongitude();
                 float camAltitude = (float) mapCameraChangedEventArgs.camera.getLocation().getPosition().getAltitude();
-                System.out.println("Camera:"+cameraLat+","+cameraLng+"\t"+camAltitude);
+                Log.d("","Camera:"+cameraLat+","+cameraLng+"\t"+camAltitude);
                 try {
                     stopHttpRequestHandler.getStopsToBingmap(cameraLat, cameraLng, mPinLayer, mMapView, camAltitude);
                 } catch (Exception e) {
@@ -126,7 +127,7 @@ public class Fragment_StopSelect_bingmap extends Fragment{
                 }
             });
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            System.out.println("locationfragStopselect:" + location);
+            Log.d("","locationfragStopselect:" + location);
             if(location!=null) {
                 cameraLat = (float) location.getLatitude();
                 cameraLng = (float) location.getLongitude();

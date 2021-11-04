@@ -1,5 +1,6 @@
 package com.example.ptvimproved24.datastructures;
 
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
@@ -36,7 +37,7 @@ public class RouteDirectionsRequestsHandler {
     public void getRouteDirectionById(int route_id,  ArrayAdapter adapter, double latitude, double longitude) {
         try {
             String url = commonDataRequest.showDirectionsOnRoute(route_id);
-            System.out.println("Request:"+url);
+            Log.d("","Request:"+url);
             Request request = new Request.Builder().url(url).build();
             client.newCall(request).enqueue(new Callback() {
                 @Override

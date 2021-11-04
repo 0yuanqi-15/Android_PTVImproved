@@ -106,7 +106,7 @@ public class Fragment_StopSelect extends Fragment implements
                 }
             });
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            System.out.println("locationfragStopselect:" + location);
+            Log.d("","locationfragStopselect:" + location);
             latitude = (float) location.getLatitude();
             longitude = (float) location.getLongitude();
         } catch (SecurityException e) {
@@ -241,7 +241,6 @@ public class Fragment_StopSelect extends Fragment implements
                                 @Override
                                 public void run() {
                                     for (int i = 0; i < stopsArray.size(); i++) {
-                                        System.out.println(stopsArray.get(i));
                                         map.addMarker(new MarkerOptions().position(new LatLng(stopsArray.get(i).getStop_latitude(), stopsArray.get(i).getStop_longitude())).
                                                 title(stopsArray.get(i).getStop_name()).snippet(stopsArray.get(i).getRouteType()+","+stopsArray.get(i).getStop_id()));
                                     }

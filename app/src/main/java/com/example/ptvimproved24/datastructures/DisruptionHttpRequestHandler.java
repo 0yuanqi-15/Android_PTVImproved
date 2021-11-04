@@ -1,5 +1,6 @@
 package com.example.ptvimproved24.datastructures;
 
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
@@ -143,7 +144,7 @@ public class DisruptionHttpRequestHandler {
 
     public void getAllDisruptions(ArrayAdapter adapter) {
         try {
-            System.out.println(commonDataRequest.disruptions());
+            Log.d("",commonDataRequest.disruptions());
             String url = commonDataRequest.disruptions();
             Request request = new Request.Builder().url(url).build();
             StringBuilder builder = new StringBuilder();

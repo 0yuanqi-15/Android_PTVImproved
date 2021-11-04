@@ -243,9 +243,9 @@ public class Fragment_Home extends Fragment {
                             routeinfoMap.put(key, value);
                         }
                     }
-                    System.out.println("gtfs is " + routeinfoMap.get("gtfs_id"));
-                    System.out.println("route name is " + routeinfoMap.get("route_name"));
-                    System.out.println("id is " + routeid);
+                    Log.d("","gtfs is " + routeinfoMap.get("gtfs_id"));
+                    Log.d("","route name is " + routeinfoMap.get("route_name"));
+                    Log.d("","id is " + routeid);
                     SavedRoute route=new SavedRoute(routeinfoMap.get("gtfs_id"), Integer.parseInt(routeid), routeinfoMap.get("route_name"), Integer.parseInt(routeinfoMap.get("route_type")));
                     savedRouteArrayList.add(route);
                     Log.d("values", "saved route loaded success");

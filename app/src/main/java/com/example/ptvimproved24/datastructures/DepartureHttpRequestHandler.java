@@ -1,5 +1,6 @@
 package com.example.ptvimproved24.datastructures;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
@@ -152,7 +153,7 @@ public class DepartureHttpRequestHandler {
         int route_type = stop.getRouteType();
         try{
             String url = commonDataRequest.nextDeparture(route_type, stopid);
-            System.out.println(url);
+            Log.d("",url);
             Request request = new Request.Builder().url(url).build();
 
             client.newCall(request).enqueue(new Callback() {
@@ -204,7 +205,7 @@ public class DepartureHttpRequestHandler {
         try{
             String url = commonDataRequest.showRouteDepartureOnStop(direction.getRoute_type(),
                     direction.getNearestStop().getStop_id(), direction.getRoute_id(), direction.getDirection_id());
-            System.out.println(url);
+            Log.d("",url);
             Request request = new Request.Builder().url(url).build();
 
             client.newCall(request).enqueue(new Callback() {
@@ -248,7 +249,7 @@ public class DepartureHttpRequestHandler {
         try{
             String url = commonDataRequest.nextDeparture(routeType, stopId);
 
-            System.out.println(url);
+            Log.d("",url);
             Request request = new Request.Builder().url(url).build();
 
             client.newCall(request).enqueue(new Callback() {
@@ -319,7 +320,7 @@ public class DepartureHttpRequestHandler {
         int route_type = Integer.parseInt(stop.getRouteType());
         try{
             String url = commonDataRequest.nextDeparture(route_type, stopid);
-            System.out.println(url);
+            Log.d("",url);
             Request request = new Request.Builder().url(url).build();
 
             client.newCall(request).enqueue(new Callback() {
