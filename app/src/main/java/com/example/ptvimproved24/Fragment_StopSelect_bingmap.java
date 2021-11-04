@@ -124,6 +124,9 @@ public class Fragment_StopSelect_bingmap extends Fragment{
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, new LocationListener() {
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
+                    cameraLat = (float) location.getLatitude();
+                    cameraLng = (float) location.getLongitude();
+                    mMapView.setScene(MapScene.createFromLocationAndZoomLevel(new Geopoint(cameraLat,cameraLng),zoomLevel), MapAnimationKind.DEFAULT);
                 }
             });
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);

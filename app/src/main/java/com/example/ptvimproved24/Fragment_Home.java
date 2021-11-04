@@ -104,7 +104,7 @@ public class Fragment_Home extends Fragment {
 
     private void getGeoLocation() {
         try {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, new LocationListener() {
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
                     if (location != null) {
