@@ -188,7 +188,7 @@ public class Fragment_Home extends Fragment {
         savedStopListAdapter  = new SavedStopListAdapter(getContext(),R.layout.savedstops_view, savedStopList);
         savedStopListView.setAdapter(savedStopListAdapter);
 
-        resetListViewHeight(savedStopListView, savedStopListAdapter, 5);
+        resetListViewHeight(savedStopListView, savedStopListAdapter, 7);
 
         for (SavedStop eachSaveStop: savedStopList){
             if (eachSaveStop.getStopid().equals("-1")){
@@ -278,7 +278,7 @@ public class Fragment_Home extends Fragment {
         });
         savedRouteListView.setAdapter(savedRouteListAdapter);
 
-        resetListViewHeight(savedRouteListView, savedRouteListAdapter, 10);
+        resetListViewHeight(savedRouteListView, savedRouteListAdapter, 7);
     }
 
     @Override
