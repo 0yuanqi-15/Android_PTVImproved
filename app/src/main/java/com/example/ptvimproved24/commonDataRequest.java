@@ -7,32 +7,10 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class commonDataRequest {
 
-    private static final int devId = 3001136;
-    private static final String devKey = "5d246d05-f36d-4606-96df-829d509a4e60";
-    private static final String baseURL = "https://timetableapi.ptv.vic.gov.au";
-
+    private static final String baseURL = "https://ptv-dataconnect.herokuapp.com";
     public static String buildAPIrequest(final String uri) throws Exception
     {
-        String HMAC_SHA1_ALGORITHM = "HmacSHA1";
-        StringBuffer uriWithDeveloperID = new StringBuffer().append(uri).append(uri.contains("?") ? "&" : "?").append("devid=" + devId);
-        byte[] keyBytes = devKey.getBytes();
-        byte[] uriBytes = uriWithDeveloperID.toString().getBytes();
-        Key signingKey = new SecretKeySpec(keyBytes, HMAC_SHA1_ALGORITHM);
-        Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
-        mac.init(signingKey);
-        byte[] signatureBytes = mac.doFinal(uriBytes);
-        StringBuffer signature = new StringBuffer(signatureBytes.length * 2);
-        for (byte signatureByte : signatureBytes)
-        {
-            int intVal = signatureByte & 0xff;
-            if (intVal < 0x10)
-            {
-                signature.append("0");
-            }
-            signature.append(Integer.toHexString(intVal));
-        }
-        StringBuffer url = new StringBuffer(baseURL).append(uri).append(uri.contains("?") ? "&" : "?").append("devid=" + devId).append("&signature=" + signature.toString().toUpperCase());
-
+        StringBuffer url = new StringBuffer(baseURL).append(uri);
         return url.toString();
     }
 
