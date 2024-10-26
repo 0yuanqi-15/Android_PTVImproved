@@ -1,29 +1,26 @@
 # Improved Public Transport Victoria App (Android Version)
 
-## Project info
+## Project Information
 
-This is a Android version of PTV timetable lookup software. Data source and copyright are belong to Public Transport Victoria
+This is the Android version of the PTV timetable lookup software. The data source and copyright belong to Public Transport Victoria. For the iOS version, check [here](https://github.com/DanistyWuKids/iOS_PTV_Improved).
 
-For iOS version check [here](https://github.com/DanistyWuKids/iOS_PTV_Improved)
+## Application Installation & Requirements
 
-## Application installation & requirements
+The application requires Android 7.0.0 or higher to run. End users can download the APK directly from the [release](https://github.com/DanistyWuKids/Android_PTVImproved/releases/) tab. This application is implemented in Java.
 
-Application is requiring Android 7.0.0 or higher to run the app.
+## Basic Features
 
-End user can download APK directly from [release](https://github.com/DanistyWuKids/Android_PTVImproved/releases/) tab.
+1. Save your favorite routes and stops.
+2. Search for any routes and stops as you prefer.
+3. Select stops to look up timetables from the map.
+4. Open the PTV journey planner.
+5. Display disruptions on networks.
+6. Show route paths and timetables for specific services.
+7. Display your nearest stops based on your location.
+8. Show the closest stops to a route.
 
-This application is implemented based on Java
+* We are currently trialing the use of Bing Maps to display points of interest. This is intended to support future development for worldwide map access and GTFS information implementation.
 
-## Basic Feature
+## Demo
 
- 1. Save your favorite routes, stops
- 2. Search any routes and stops as you preferred
- 3. Select the stops to lookup timetable from map
- 4. Open PTV journey planner
- 5. Show disruptions on networks
- 6. Show route path and timetable of specific service
- 7. Show your nearest stops based on your location
- 8. Show your closet stops to a route
-
-
-* At this stage, we are trail of using Bing maps to showing the interest so that it can be suitable for future development of worldwide map access and GTFS information implementation.
+Check out the demo of the application [here](https://www.youtube.com/watch?v=6yDhzzaMiPI), recorded by @0yuanqi-15.
