@@ -2,7 +2,7 @@
 
 ## Project Information
 
-This is the Android version of the PTV timetable lookup software. The data source and copyright belong to Public Transport Victoria. For the iOS version, check [here](https://github.com/DanistyWuKids/iOS_PTV_Improved).
+This is the Android version of the PTV timetable lookup software, designed for users in Victoria, Australia. The data source and copyright belong to Public Transport Victoria. For the iOS version, check [here](https://github.com/DanistyWuKids/iOS_PTV_Improved).
 
 ## Application Installation & Requirements
 
